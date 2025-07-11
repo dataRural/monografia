@@ -27,13 +27,42 @@ Para incluir documentos sem quebra de páginas, utilize:
 \section{Citações}
 % ---
 
-AQUI FALAR SOBRE CITACOES
+Ao redigir textos científicos, é importante utilizar corretamente as diferentes formas de citação para garantir clareza, fluidez e adequação às normas. Uma citação comum ocorre ao final da frase, quando se apresenta uma informação e se associa a referência entre parênteses, como em: A adoção de sistemas híbridos melhora a acurácia das recomendações \cite{braida2015transforming}.
+
+Quando todo o conteúdo de um parágrafo deriva de uma mesma fonte, é possível posicionar a citação apenas ao final do parágrafo: Os sistemas de recomendação evoluíram para incorporar múltiplas fontes de dados, como perfil do usuário, histórico de interações e contexto de uso. Essa combinação visa aumentar a relevância dos resultados gerados, superando limitações dos métodos tradicionais. \cite{braida2015transforming}
+
+Também é comum usar o autor como parte integrante da frase, especialmente quando se deseja destacar a contribuição de um pesquisador. Nesse caso, utiliza-se o comando \verb|\citeonline|. É fundamental prestar atenção à concordância verbal: se o autor for único, o verbo deve estar no singular, como em ``\citeonline{abntex2classe} propõe uma abordagem baseada em fatores latentes''; se houver múltiplos autores, o verbo vai para o plural, como em ``\citeonline{braida2015transforming} propuseram um modelo robusto para classificação supervisionada'' .
+
+Em situações que exigem a reprodução literal das palavras do autor, utiliza-se uma citação direta, que pode ser feita com aspas ou com o ambiente \verb|quote|. Por exemplo:
+
+\begin{quote}
+``A combinação de técnicas colaborativas e baseadas em conteúdo tem se mostrado eficaz para sistemas de recomendação personalizados'' \cite{braida2015transforming}.
+\end{quote}
+
+Quando o autor é apresentado como sujeito da primeira frase do parágrafo, e todas as ideias subsequentes derivam logicamente da mesma fonte, não há necessidade de repetir a citação a cada sentença. Por exemplo:
+
+\citeonline{braida2015transforming} analisam os principais desafios enfrentados pelos sistemas de recomendação híbridos. Os autores destacam a complexidade de combinar diferentes abordagens sem aumentar significativamente o custo computacional. Além disso, apontam que a personalização pode ser prejudicada se os dados contextuais não forem bem integrados. Por fim, propõem um modelo que equilibra desempenho e escalabilidade, aplicável a diversos domínios.
+
+Essas diferentes formas de citação devem ser usadas estrategicamente ao longo do texto, promovendo coesão e evitando repetições desnecessárias. Além disso, respeitar a concordância entre autor e verbo demonstra atenção aos detalhes e contribui para a qualidade da escrita acadêmica.
+
+Por fim, é importante lembrar que há casos que requerem atenção especial, como quando o trecho citado foi originalmente escrito em outro idioma e o autor da monografia opta por traduzi-lo. Nessas situações, deve-se indicar que a tradução é livre ou do próprio autor (por exemplo, tradução nossa ou tradução do autor), conforme as regras da ABNT. Diante de situações específicas como essa, é sempre recomendável consultar diretamente a norma vigente ou o manual de normalização da instituição para garantir a conformidade formal do trabalho.
 
 % ---
 \section{Imagens e Tabelas}\label{sec:LABEL_CHP_2_SEC_A}
 % ---
 
-Toda tabela~\ref{tab:MATRIX_NOTAS_EXEMPLO}
+Toda tabela inserida em um trabalho deve obrigatoriamente ser referenciada e explicada no corpo do texto. Não é aceitável incluir uma tabela isoladamente, sem que o leitor seja orientado sobre seu conteúdo, sua relevância ou os dados que ela apresenta.
+
+A referência à tabela deve ocorrer de forma clara e integrada ao parágrafo. Por exemplo:
+
+A Tabela~\ref{tab:MATRIX_NOTAS_EXEMPLO} e a Imagem~\ref{fig:LABEL_FIG_1} resumem as médias obtidas pelos grupos ao longo da disciplina, permitindo uma comparação direta entre os diferentes métodos aplicados.
+
+Note que, no exemplo acima, foi utilizado o símbolo \verb|~| entre a palavra \verb|Tabela| e o comando \verb|\ref|. Isso garante que o LaTeX não quebre a linha entre esses dois elementos, mantendo a referência legível e correta. O mesmo princípio vale para figuras, seções e outros elementos numerados: recomenda-se sempre usar o ~ para manter a unidade da referência.
+
+Além disso, é recomendável evitar expressões genéricas como ``a tabela acima'' ou ``a tabela abaixo'', pois a posição pode variar com alterações no layout. O uso do comando \verb|\ref{}| é a forma correta e robusta de referenciar tabelas, figuras e equações no LaTeX.
+
+No LaTeX, ao inserir uma tabela ou figura, é necessário informar ao compilador sugestões de posicionamento por meio de letras dentro de colchetes, como em  \verb|\begin{table}[!htb]| . Nesse caso, o  \verb|h| indica que o ideal é posicionar o elemento no local exato onde foi declarado (\textit{here}),  \verb|t| permite o topo da página (\textit{top}) e  \verb|b| permite o rodapé (\textit{bottom}). O símbolo de exclamação  \verb|!| serve para flexibilizar as restrições internas do LaTeX, aumentando as chances de o elemento ser posicionado conforme desejado. O uso de  \verb|!htb| costuma produzir bons resultados, equilibrando controle e harmonia visual. No entanto, há situações em que é necessário que a tabela ou figura apareça exatamente onde foi inserida no código, sem qualquer movimentação. Nesses casos, pode-se utilizar o modificador  \verb|[H]| (com  \verb|H| maiúsculo), fornecido pelo pacote  \verb|float|, que força o posicionamento exato no ponto de inserção. Essa abordagem deve ser usada com cautela, pois pode afetar a estética e a organização do documento.
+
 
 \begin{table}[!htb]
   \centering
@@ -51,9 +80,6 @@ Toda tabela~\ref{tab:MATRIX_NOTAS_EXEMPLO}
     \bottomrule
   \end{tabular}
 \end{table}
-
-\section{Images}\label{sec:LABEL_CHP_2_SEC_B}
-Reference: \url{http://en.wikibooks.org/wiki/LaTeX/Importing_Graphics}
 
 \begin{figure}
   \centering
@@ -84,14 +110,28 @@ $R^{*} \gets R^{*} \cup \{(u,i,r)\}$
 \end{algorithm}
 
 \section{Equações}
-Reference: \url{http://en.wikibooks.org/wiki/LaTeX/Mathematics}
 
-Also: \url{http://en.wikibooks.org/wiki/LaTeX/Advanced_Mathematics}
+Equações em textos científicos devem ser tratadas com o mesmo cuidado dedicado a figuras e tabelas. Isso significa que toda equação inserida no documento precisa ser referenciada e explicada no corpo do texto, jamais aparecendo isoladamente ou sem contexto. Assim como escrevemos ``A Figura~\ref{fig:LABEL_FIG_1} mostra...'' ou ``A Tabela~\ref{tab:MATRIX_NOTAS_EXEMPLO} apresenta...'’, também é necessário dizer, por exemplo, ``A equação~\ref{eq:LABEL_EQ_1} descreve...''. Como mostra a equação~\ref{eq:LABEL_EQ_1}, a identidade fundamental do quadrado da soma pode ser expressa da seguinte forma:
 
 \begin{equation}
   (x + y)^2 = x^2 + 2xy + y^2
   \label{eq:LABEL_EQ_1}
 \end{equation}
+
+Uma equação pode ser incorporada ao texto de diferentes maneiras. Quando for curta e direta, pode ser inserida no próprio parágrafo, delimitada por cifrões simples (\verb|$|), como em: a fórmula da área do círculo é $A = \pi r^2$. Essa modalidade é conhecida como equação em linha.
+
+Por outro lado, quando se deseja evidenciar a equação em uma linha destacada, utiliza-se o ambiente \verb|equation|, como no exemplo a seguir:
+\begin{equation}
+  (x + y)^2 = x^2 + 2xy + y^2 \: ,
+  \label{eq:LABEL_EQ_2}
+\end{equation}
+onde $x$ e $y$ representam variáveis reais quaisquer.
+
+Embora apareça destacada visualmente, essa equação ainda faz parte do parágrafo e, portanto, deve seguir a mesma pontuação e estrutura do texto. Isso significa que a frase deve continuar normalmente após a equação, com vírgula, ponto final ou qualquer outro sinal de pontuação adequado.
+
+É importante reforçar que nenhuma equação deve ser apresentada sem uma explicação clara. O leitor precisa compreender o seu propósito, a interpretação dos símbolos utilizados e a sua relação com a argumentação desenvolvida no texto. Equações bem contextualizadas contribuem para a clareza, a precisão e a força do raciocínio científico.
+
+
 
 \section{Listings}\label{sec:LABEL_CHP_2_SEC_D}
 Reference: \url{http://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings}
