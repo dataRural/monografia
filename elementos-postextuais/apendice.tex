@@ -105,7 +105,7 @@ $\tilde{r} \gets \varphi(u,i)$\;
 $R^{*} \gets R^{*} \cup \{(u,i,r)\}$
 }
 }
-\caption{Filtragem das avaliações com ruído proposto por \cite{OMahony2006}.}
+\caption{Filtragem das avaliações com ruído proposto por \citeonline{braida2015transforming}.}
 \label{alg:mahony}
 \end{algorithm}
 
@@ -140,22 +140,21 @@ Reference: \url{http://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings}
 
 \codejava{Java}{alg:LABEL_CODE_2}{codigos/codigo-java.txt}
 
-\section{References}\label{sec:LABEL_CHP_2_SEC_E}
+\section{Referências Cruzadas}\label{sec:LABEL_CHP_2_SEC_E}
 
-\begin{alineas}
-  \item Referencing \refchapter{chp:LABEL_CHP_1}
-  \item Referencing \refsection{sec:LABEL_CHP_1_SEC_A}
-  \item Referencing \refsection{sec:LABEL_CHP_1_SEC_C}
-  \item Referencing \reftable{tab:LABEL_TAB_1}
-  \item Referencing \reffigure{fig:LABEL_FIG_1}
-  \item Referencing \refequation{eq:LABEL_EQ_1}
-  \item Referencing \reflisting{alg:LABEL_CODE_1}
-  \item Article \cite{braida2015transforming}
-  \item Segundo \citeonline{braida2015transforming}, ....
-  \item Referencing \refappendix{chp:LABEL_APP_1}  
-\end{alineas}
+Em documentos acadêmicos escritos em \LaTeX, é altamente recomendável utilizar referências cruzadas automáticas para manter a consistência na numeração e facilitar a leitura. Para isso, utiliza-se o sistema de marcação com rótulos (\verb|\label|) e comandos específicos para cada tipo de elemento.
 
+Embora seja possível referenciar manualmente com comandos como \verb|Tabela~\ref|, o uso de comandos específicos torna o processo mais organizado e facilita alterações em todo o documento, especialmente quando se deseja padronizar os prefixos como ``Capítulo'', ``Seção'' ou ``Equação'' automaticamente.
 
+Para capítulos, utiliza-se o comando \verb|\refchapter|, que gera automaticamente o número correspondente do capítulo referenciado. Da mesma forma, para seções, o comando \verb|\refsection| insere o número da seção associada ao rótulo definido.
+
+Tabelas devem ser referenciadas com o comando \verb|\reftable|, e figuras com \verb|\reffigure|. Esses comandos inserem os números correspondentes às legendas das respectivas tabelas e figuras, respeitando a numeração automática do documento.
+
+No caso das equações, utiliza-se \verb|\refequation|, garantindo que a equação seja mencionada corretamente no texto. Para algoritmos, especialmente ao utilizar o pacote \verb|algorithm2e|, a referência deve ser feita com \verb|\reflisting|.
+
+Por fim, quando for necessário referenciar apêndices, pode-se usar \verb|\refappendix|, mantendo a padronização também nas seções posteriores do trabalho.
+
+Esses comandos não apenas facilitam a manutenção do documento como também evitam erros de numeração, garantindo que todas as referências se atualizem automaticamente a cada compilação.
 
 \section{Definições, Teoremas}
 
