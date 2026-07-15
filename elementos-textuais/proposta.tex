@@ -1,9 +1,328 @@
-\chapter{Proposta}\label{chp:PROPOSTA}
+\chapter{DataRural}\label{chp:PROPOSTA}
 
-Esse capítulo será responsável por explicar como será a sua solução.
-Ele deverá explicar o problema em que a sua solução irá resolver.
-Nele irá conter COMO deverá ser a sua solução, ou seja, neste momento você não está preocupado com a implementação ou ferramentas.
-Aqui será relatado o problema e a sua proposta. 
-Nela será incluída a modelagem da solução, sua arquitetura e tudo o que for necessário para que o leitor consiga entender COMO será a solução e como ela resolverá o problema relatado.
+A gestão de dados tornou-se uma dimensão cada vez mais relevante para universidades, sobretudo em instituições que produzem informações acadêmicas, administrativas e experimentais em diferentes setores. Ainda assim, é comum que esses dados permaneçam distribuídos em arquivos locais, planilhas compartilhadas informalmente, sistemas internos pouco integrados ou repositórios que não oferecem documentação suficiente para sua interpretação posterior. Quando isso ocorre, o valor dos dados diminui com o tempo, pois sua reutilização passa a depender do conhecimento individual de quem os produziu ou armazenou.
 
-Além disso, uma parte fundamental, é tratar de trabalhos relacionados. Dependendo da forma de escrita, o trabalho relacionado pode estar explicado no capítulo de Fundamentação ou ser uma seção dentro da proposta antes de entrar na proposta em si.
+No contexto da UFRRJ, esse problema pode afetar tanto atividades de pesquisa quanto ações de gestão institucional. Dados de experimentos, levantamentos, projetos de extensão, indicadores acadêmicos ou registros administrativos podem ter utilidade para diferentes públicos, desde que estejam descritos, licenciados e organizados de maneira compreensível. Assim, a simples existência de arquivos digitais não garante transparência, reprodutibilidade ou reaproveitamento científico. É necessário oferecer um ambiente que trate o conjunto de dados como um artefato institucional, com autoria, histórico, metadados, permissões e condições claras de uso.
+
+Com base nessa necessidade, este trabalho propõe a Plataforma Institucional de Datasets da UFRRJ, chamada neste projeto de \textit{DataRural}. A proposta consiste em uma aplicação web voltada à publicação, consulta, atualização e organização de datasets institucionais, tendo o formato CSV como ponto de partida. A escolha por esse formato se justifica por sua simplicidade, ampla adoção e compatibilidade com ferramentas de análise de dados, sem impedir que a plataforma evolua futuramente para outros formatos ou para integrações diretas com bases de dados.
+
+O DataRural parte de referências conhecidas no ecossistema de dados, como Kaggle, portais de dados abertos e repositórios científicos. No entanto, seu foco não é reproduzir integralmente nenhuma dessas soluções. A intenção é adaptar conceitos consolidados, como publicação de datasets, metadados e licenciamento, para uma realidade universitária específica. Dessa forma, a plataforma busca apoiar tanto a divulgação pública de dados quanto o trabalho colaborativo de grupos, laboratórios e unidades acadêmicas.
+
+\section{Visão geral do sistema}
+
+O DataRural foi planejado como uma plataforma acessada por meio de autenticação. Após criar uma conta, o usuário passa a interagir com os datasets disponíveis conforme suas permissões. No nível geral da aplicação, são previstos dois perfis principais: o usuário comum e o administrador. O primeiro corresponde ao público responsável por publicar, consultar e reutilizar datasets. O segundo possui atribuições administrativas, como gerenciamento de usuários, acompanhamento da plataforma e suporte a operações que exigem maior controle.
+
+A principal unidade de informação do sistema é o dataset. Ao publicar um novo conjunto de dados, o usuário deve enviar um arquivo CSV e preencher informações capazes de contextualizar seu conteúdo. Esses dados descritivos incluem título, descrição, área temática, unidade responsável, região de abrangência, período de coleta, palavras-chave, licença e configuração de visibilidade. A presença desses campos busca evitar que o arquivo seja interpretado de forma isolada, pois um dataset sem contexto pode ser difícil de validar, comparar ou reutilizar.
+
+A visibilidade é tratada como parte essencial da publicação. Um dataset pode ser configurado como público, quando se pretende disponibilizá-lo aos usuários da plataforma, ou como privado, quando seu acesso deve permanecer limitado ao proprietário. Essa distinção permite contemplar situações distintas: dados já prontos para ampla divulgação, dados ainda em processo de curadoria ou materiais vinculados a projetos em andamento.
+
+Outro aspecto importante é o controle de versões. A plataforma não considera a atualização de um dataset como uma simples substituição de arquivo. Sempre que houver uma nova coleta, correção ou reorganização dos dados, uma nova versão pode ser registrada, mantendo-se o histórico das versões anteriores. Com isso, torna-se possível recuperar a trajetória de evolução de um dataset e identificar qual versão foi utilizada em uma análise, relatório ou pesquisa.
+
+O sistema também incorpora a noção de grupos colaborativos. Um grupo pode representar um laboratório, projeto de pesquisa, equipe técnica, departamento ou unidade institucional. Dentro dele, usuários podem assumir papéis diferentes, como proprietário, administrador, editor ou visualizador. Essa organização permite que o DataRural seja usado não apenas como vitrine pública de datasets, mas também como espaço de trabalho compartilhado para equipes que precisam organizar dados antes, durante ou depois de sua divulgação.
+
+\section{Trabalhos relacionados}
+
+Antes da definição das funcionalidades do DataRural, foram observadas plataformas que já atuam no compartilhamento, preservação ou exploração de dados. Essa análise contribui para compreender quais recursos são relevantes e, ao mesmo tempo, quais limitações aparecem quando essas soluções são consideradas para um uso institucional específico. Entre as referências analisadas, destacam-se Kaggle, Zenodo e Figshare, por representarem abordagens distintas para publicação e reutilização de dados.
+
+\subsection{Kaggle}
+
+O Kaggle é reconhecido por reunir datasets, competições, notebooks e interações entre usuários interessados em ciência de dados. Sua relevância para este trabalho está na forma como coloca o dataset no centro da experiência: os usuários podem localizar dados, avaliá-los, reutilizá-los em análises e produzir materiais derivados dentro da própria plataforma. Esse modelo reforça a ideia de que um conjunto de dados pode ser tratado como um recurso ativo, capaz de gerar colaboração e novos estudos.
+
+Apesar dessa contribuição conceitual, o Kaggle não foi pensado como um repositório institucional universitário. Sua lógica está associada a uma comunidade ampla e heterogênea, e não a estruturas administrativas, unidades acadêmicas, grupos internos de pesquisa ou políticas locais de acesso. Além disso, a plataforma não oferece, como foco principal, uma governança voltada à curadoria de dados produzidos dentro de uma universidade. O DataRural se diferencia justamente por trazer a centralidade dos datasets para um ambiente controlado pela instituição.
+
+\subsection{Zenodo}
+
+O Zenodo é amplamente utilizado para preservar e divulgar artefatos científicos, incluindo artigos, softwares e conjuntos de dados. Seu papel é relevante no contexto da ciência aberta, principalmente por possibilitar a publicação de materiais com identificação persistente e condições formais de citação. Para este projeto, o Zenodo evidencia a importância de registrar autoria, licença e informações que favoreçam a preservação de longo prazo.
+
+Entretanto, o uso do Zenodo está mais próximo da publicação de artefatos concluídos do que da gestão cotidiana de datasets em uma instituição. A plataforma não prioriza funcionalidades como pré-visualização tabular, estatísticas descritivas por coluna, controle de acesso por grupos internos ou atualização incremental orientada a equipes de trabalho. Assim, embora seja uma referência importante para preservação científica, não contempla integralmente as necessidades operacionais previstas para o DataRural.
+
+\subsection{Figshare}
+
+O Figshare também se insere no campo dos repositórios científicos, oferecendo armazenamento, compartilhamento e métricas relacionadas a diferentes tipos de arquivo. Sua proposta contribui para a disseminação de resultados de pesquisa e para a valorização de dados como produtos acadêmicos. Nesse sentido, aproxima-se da preocupação deste trabalho com documentação, licenciamento e reutilização.
+
+Ainda assim, o Figshare não resolve, por si só, demandas específicas de uma plataforma institucional customizada. Em uma universidade, pode ser necessário definir papéis internos, organizar grupos, restringir acesso a determinados datasets, associar registros a unidades acadêmicas e planejar integrações futuras com sistemas próprios. O DataRural é proposto para atuar nesse espaço, articulando práticas de repositórios científicos com necessidades locais de gestão e colaboração.
+
+\section{Requisitos do sistema}
+
+Os requisitos apresentados nesta seção organizam as capacidades esperadas para a plataforma. Eles foram definidos a partir dos objetivos do projeto e procuram traduzir, em funcionalidades e restrições, a proposta de uma solução institucional para publicação e gestão de datasets. Para facilitar sua leitura, os requisitos foram separados em funcionais, não funcionais e regras de negócio.
+
+\subsection{Requisitos funcionais}
+
+\begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
+\caption{Requisitos funcionais do DataRural.}\\
+\toprule
+\textbf{Código} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Descrição} \\
+\midrule
+\endhead
+RF-01 & Permitir que novos usuários criem conta informando dados básicos de identificação e credenciais de acesso. \\
+RF-02 & Disponibilizar mecanismos de login, logout e recuperação de senha. \\
+RF-03 & Possibilitar a atualização de informações do perfil, incluindo nome, senha e imagem de usuário. \\
+RF-04 & Oferecer ao administrador recursos para consultar, convidar, alterar permissões e remover usuários. \\
+RF-05 & Permitir que administradores acessem temporariamente a visão de outro usuário para fins de suporte técnico. \\
+RF-06 & Permitir a criação de datasets a partir do envio de arquivo CSV, acompanhado de metadados, licença e visibilidade. \\
+RF-07 & Autorizar a edição dos metadados de datasets pelo proprietário do conjunto de dados. \\
+RF-08 & Registrar novas versões de um dataset sem apagar as versões anteriores. \\
+RF-09 & Apresentar a listagem de datasets conforme visibilidade pública e vínculo com o usuário autenticado. \\
+RF-10 & Exibir uma página de detalhes contendo metadados, licença, versões, prévia tabular dos dados e informações estatísticas por coluna. \\
+RF-11 & Permitir o download de arquivos de datasets. \\
+RF-12 & Possibilitar a criação, edição e organização de grupos colaborativos. \\
+RF-13 & Associar usuários a grupos com papéis definidos, como proprietário, administrador, editor e visualizador. \\
+RF-14 & Permitir que datasets sejam vinculados a grupos para compartilhamento. \\
+RF-15 & Disponibilizar licenças pré-configuradas para associação aos datasets. \\
+RF-16 & Oferecer filtros por status e busca textual por nome no painel do usuário, e filtro por categoria na listagem pública. \\
+RF-17 & Gerar estatísticas descritivas básicas para colunas numéricas presentes em arquivos CSV, incluindo média, desvio padrão, valor mínimo e valor máximo. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Requisitos não funcionais}
+
+\begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
+\caption{Requisitos não funcionais do DataRural.}\\
+\toprule
+\textbf{Código} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Descrição} \\
+\midrule
+\endhead
+RNF-01 & A solução deve ser disponibilizada como aplicação web responsiva e compatível com navegadores atuais. \\
+RNF-02 & As senhas devem ser armazenadas por meio de representação criptográfica segura. \\
+RNF-03 & O acesso a rotas protegidas deve ser controlado por middleware de autenticação. \\
+RNF-04 & Os arquivos enviados devem ser validados, considerando inicialmente apenas o formato CSV. \\
+RNF-05 & O código deve manter separação entre interface, regras de negócio, persistência e armazenamento de arquivos. \\
+RNF-06 & A estrutura da plataforma deve permitir evolução para novos formatos e novas fontes de dados. \\
+RNF-07 & O histórico de versões deve ser preservado para manter rastreabilidade das alterações. \\
+RNF-08 & A interface deve apresentar metadados, permissões e licenças de forma clara ao usuário. \\
+RNF-09 & As principais entidades devem registrar datas de criação e atualização. \\
+RNF-10 & A organização modular do sistema deve favorecer manutenção e expansão gradual. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Regras de negócio}
+
+\begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
+\caption{Regras de negócio do DataRural.}\\
+\toprule
+\textbf{Código} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Código} & \textbf{Descrição} \\
+\midrule
+\endhead
+RN-01 & Cada dataset deve possuir um usuário responsável por sua criação. \\
+RN-02 & Datasets públicos podem ser consultados por usuários autenticados. \\
+RN-03 & As versões de um dataset devem seguir identificação sequencial. \\
+RN-04 & Apenas o proprietário do dataset pode editar seus metadados, substituir arquivos ou registrar novas versões. \\
+RN-05 & Todo grupo deve possuir um proprietário. \\
+RN-06 & A participação em grupos deve indicar o papel exercido por cada membro. \\
+\bottomrule
+\end{longtable}
+
+\section{Modelagem de dados}
+
+A modelagem de dados foi organizada para refletir as principais responsabilidades do DataRural. O dataset ocupa a posição central do modelo, enquanto as demais entidades oferecem suporte a autenticação, autoria, licenciamento, versionamento e colaboração. Essa estrutura permite que a plataforma trate o arquivo enviado e suas informações descritivas como partes de um mesmo registro institucional.
+
+A adoção de um banco de dados relacional se mostra adequada porque as relações do domínio são bem definidas. Usuários publicam datasets, datasets possuem versões, licenças são associadas a datasets e grupos reúnem usuários. Além disso, o modelo facilita a aplicação de restrições de integridade e a consulta estruturada das informações utilizadas pela plataforma.
+
+\subsection{Entidade \textit{users}}
+
+A entidade \textit{users} concentra os dados dos usuários cadastrados. Ela participa dos fluxos de autenticação, autoria, administração e associação com grupos.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade users.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária do usuário. \\
+role\_id & Integer & Papel global atribuído ao usuário. \\
+full\_name & Varchar & Nome completo exibido na plataforma. \\
+email & Varchar & E-mail utilizado para identificação e acesso. \\
+password & Varchar & Senha armazenada em formato protegido. \\
+avatar\_url & Varchar & Referência para imagem de perfil. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{roles}}
+
+A entidade \textit{roles} define os papéis globais disponíveis na aplicação, distinguindo usuários comuns de administradores.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade roles.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária do papel. \\
+name & Varchar & Nome atribuído ao papel. \\
+description & Text & Explicação das permissões associadas. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{groups}}
+
+A entidade \textit{groups} representa espaços colaborativos vinculados a equipes, laboratórios, projetos ou unidades institucionais.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade groups.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária do grupo. \\
+name & Varchar & Nome do grupo colaborativo. \\
+owner\_id & Integer & Usuário responsável pelo grupo. \\
+description & Text & Descrição da finalidade do grupo. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{group\_members}}
+
+A entidade \textit{group\_members} registra a participação de usuários em grupos e informa o papel exercido por cada membro naquele contexto.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade group\_members.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária da associação. \\
+group\_id & Integer & Grupo ao qual o usuário pertence. \\
+user\_id & Integer & Usuário associado ao grupo. \\
+role & Varchar & Papel exercido no grupo. \\
+created\_at & Timestamp & Data de entrada no grupo. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{licenses}}
+
+A entidade \textit{licenses} mantém as licenças que podem ser vinculadas aos datasets, tornando explícitas as condições de uso e redistribuição.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade licenses.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária da licença. \\
+name & Varchar & Nome resumido da licença. \\
+description & Text & Termos ou explicação da licença. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{datasets}}
+
+A entidade \textit{datasets} reúne os metadados e configurações centrais de cada conjunto de dados publicado. Por meio dela são definidos autoria, licença, visibilidade, status, área, unidade responsável e demais informações necessárias para contextualização.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade datasets.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária do dataset. \\
+user\_id & Integer & Usuário responsável pela publicação. \\
+group\_id & Integer & Grupo associado ao dataset, quando houver. \\
+license\_id & Integer & Licença aplicada ao dataset, quando definida. \\
+name & Varchar & Título do conjunto de dados. \\
+path & Varchar & Referência lógica ao local de armazenamento. \\
+is\_public & Boolean & Indica se o acesso é público ou privado. \\
+status & Varchar & Situação atual do dataset. \\
+area & Varchar & Área temática relacionada aos dados. \\
+unit & Varchar & Unidade acadêmica ou administrativa responsável. \\
+region & Varchar & Abrangência geográfica dos registros. \\
+period & Varchar & Intervalo temporal coberto pelos dados. \\
+tags & Json & Palavras-chave utilizadas para indexação. \\
+usability\_score & Numeric & Indicador de completude calculado a partir da análise do arquivo enviado. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{dataset\_versions}}
+
+A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a um dataset. Com essa separação, uma atualização não elimina o histórico anterior e o sistema preserva a rastreabilidade do arquivo utilizado.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade dataset\_versions.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Serial & Chave primária da versão. \\
+dataset\_id & Integer & Dataset ao qual a versão pertence. \\
+name & Varchar & Identificador sequencial da versão. \\
+path & Json & Metadados do arquivo correspondente. \\
+created\_at & Timestamp & Data de criação da versão. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\section{Arquitetura proposta}
+
+A arquitetura proposta para o DataRural segue uma organização em camadas, com separação entre interface, regras de aplicação, persistência e armazenamento dos arquivos enviados. Essa divisão busca facilitar a manutenção do sistema e permitir que novas funcionalidades sejam incorporadas sem exigir mudanças profundas em toda a aplicação.
+
+Na camada de apresentação, concentram-se as telas utilizadas pelos usuários, como autenticação, painel inicial, listagem de datasets, formulário de publicação, página de detalhes e gestão de grupos. Essa camada deve apresentar as informações de maneira clara, principalmente quando envolver licença, visibilidade e metadados, pois esses elementos influenciam diretamente a decisão de reutilizar ou não um conjunto de dados.
+
+A camada de aplicação reúne as regras que coordenam o funcionamento do sistema. Nela são verificadas permissões de acesso, validação de arquivos CSV, criação de versões, associação de licenças e gerenciamento de grupos. Concentrar essas decisões em uma camada própria reduz duplicações e evita que regras importantes fiquem dependentes apenas da interface.
+
+A persistência dos dados estruturados é realizada em banco relacional. Já os arquivos enviados podem ser mantidos em sistema de arquivos ou em serviço de armazenamento apropriado, enquanto o banco conserva os metadados e referências necessárias para localização e auditoria. Essa estratégia separa o conteúdo físico dos datasets das informações administrativas que permitem organizá-los dentro da plataforma.
+
+Embora a primeira versão do DataRural seja orientada ao upload de CSV, a arquitetura permanece aberta a evoluções. Futuramente, a plataforma poderá incluir suporte a outros formatos, rotinas de importação automática, conectores com bases institucionais e mecanismos de atualização periódica. Essa possibilidade é importante porque a gestão de dados universitários tende a crescer em complexidade conforme novas demandas surgem.
+
+\section{Fluxo principal de uso}
+
+O uso da plataforma começa com a autenticação do usuário. Após o acesso, ele pode buscar datasets, aplicar filtros, visualizar metadados, consultar informações de licença, observar prévias tabulares e realizar download. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados.
+
+Para publicar um dataset, o usuário acessa o formulário de criação, envia o arquivo CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação.
+
+Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O proprietário de um grupo pode organizar membros e definir papéis. Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários e suporte operacional.
+
+\section{Considerações do capítulo}
+
+Este capítulo apresentou a proposta do DataRural como uma plataforma institucional voltada à organização e reutilização de datasets da UFRRJ. A solução foi descrita a partir de sua motivação, visão geral, referências relacionadas, requisitos, regras de negócio, modelagem de dados, arquitetura e fluxo de uso.
+
+A proposta procura responder a um problema prático: dados universitários só se tornam efetivamente reutilizáveis quando são acompanhados de contexto, licença, histórico e mecanismos adequados de acesso. Nesse sentido, o DataRural busca oferecer uma base inicial para uma gestão mais estruturada desses dados, permitindo que a instituição avance em direção a práticas de transparência, colaboração científica e preservação de informações. Nos capítulos seguintes, são detalhadas as decisões de implementação, as tecnologias utilizadas, as telas desenvolvidas e os resultados obtidos com a construção da plataforma.
