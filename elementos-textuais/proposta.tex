@@ -12,11 +12,11 @@ O DataRural parte de referências conhecidas no ecossistema de dados, como Kaggl
 
 O DataRural foi planejado como uma plataforma acessada por meio de autenticação. Após criar uma conta, o usuário passa a interagir com os datasets disponíveis conforme suas permissões. No nível geral da aplicação, são previstos dois perfis principais: o usuário comum e o administrador. O primeiro corresponde ao público responsável por publicar, consultar e reutilizar datasets. O segundo possui atribuições administrativas, como gerenciamento de usuários, acompanhamento da plataforma e suporte a operações que exigem maior controle.
 
-A principal unidade de informação do sistema é o dataset. Ao publicar um novo conjunto de dados, o usuário deve enviar um arquivo CSV e preencher informações capazes de contextualizar seu conteúdo. Esses dados descritivos incluem título, descrição, área temática, unidade responsável, região de abrangência, período de coleta, palavras-chave, licença e configuração de visibilidade. A presença desses campos busca evitar que o arquivo seja interpretado de forma isolada, pois um dataset sem contexto pode ser difícil de validar, comparar ou reutilizar.
+A principal unidade de informação do sistema é o dataset. Ao publicar um novo conjunto de dados, o usuário deve enviar um ou mais arquivos CSV e preencher informações capazes de contextualizar seu conteúdo. Esses dados descritivos incluem título, descrição, área temática, unidade responsável, região de abrangência, período de coleta, palavras-chave, licença e configuração de visibilidade. A presença desses campos busca evitar que o arquivo seja interpretado de forma isolada, pois um dataset sem contexto pode ser difícil de validar, comparar ou reutilizar.
 
-A visibilidade é tratada como parte essencial da publicação. Um dataset pode ser configurado como público, quando se pretende disponibilizá-lo aos usuários da plataforma, ou como privado, quando seu acesso deve permanecer limitado ao proprietário. Essa distinção permite contemplar situações distintas: dados já prontos para ampla divulgação, dados ainda em processo de curadoria ou materiais vinculados a projetos em andamento.
+A visibilidade é tratada como parte essencial da publicação. Um dataset pode ser configurado como público, quando se pretende disponibilizá-lo aos usuários da plataforma, ou como privado, quando seu acesso deve permanecer limitado ao proprietário ou ao grupo associado. Essa distinção permite contemplar situações distintas: dados já prontos para ampla divulgação, dados ainda em processo de curadoria ou materiais vinculados a projetos em andamento.
 
-Outro aspecto importante é o controle de versões. A plataforma não considera a atualização de um dataset como uma simples substituição de arquivo. Sempre que houver uma nova coleta, correção ou reorganização dos dados, uma nova versão pode ser registrada, mantendo-se o histórico das versões anteriores. Com isso, torna-se possível recuperar a trajetória de evolução de um dataset e identificar qual versão foi utilizada em uma análise, relatório ou pesquisa.
+Outro aspecto importante é o controle de versões. A plataforma não considera a atualização de um dataset como uma simples substituição de arquivo. Sempre que houver uma nova coleta, correção ou reorganização dos dados, uma nova versão pode ser registrada, mantendo-se o histórico das versões anteriores. Com isso, torna-se possível recuperar a trajetória de evolução de um dataset e identificar qual versão foi utilizada em uma análise, relatório ou pesquisa. A exclusão de versões é lógica, preservando os registros no sistema.
 
 O sistema também incorpora a noção de grupos colaborativos. Um grupo pode representar um laboratório, projeto de pesquisa, equipe técnica, departamento ou unidade institucional. Dentro dele, usuários podem assumir papéis diferentes, como proprietário, administrador, editor ou visualizador. Essa organização permite que o DataRural seja usado não apenas como vitrine pública de datasets, mas também como espaço de trabalho compartilhado para equipes que precisam organizar dados antes, durante ou depois de sua divulgação.
 
@@ -58,23 +58,30 @@ Os requisitos apresentados nesta seção organizam as capacidades esperadas para
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
 \endhead
-RF-01 & Permitir que novos usuários criem conta informando dados básicos de identificação e credenciais de acesso. \\
-RF-02 & Disponibilizar mecanismos de login, logout e recuperação de senha. \\
-RF-03 & Possibilitar a atualização de informações do perfil, incluindo nome, senha e imagem de usuário. \\
-RF-04 & Oferecer ao administrador recursos para consultar, convidar, alterar permissões e remover usuários. \\
-RF-05 & Permitir que administradores acessem temporariamente a visão de outro usuário para fins de suporte técnico. \\
-RF-06 & Permitir a criação de datasets a partir do envio de arquivo CSV, acompanhado de metadados, licença e visibilidade. \\
-RF-07 & Autorizar a edição dos metadados de datasets pelo proprietário do conjunto de dados. \\
-RF-08 & Registrar novas versões de um dataset sem apagar as versões anteriores. \\
-RF-09 & Apresentar a listagem de datasets conforme visibilidade pública e vínculo com o usuário autenticado. \\
-RF-10 & Exibir uma página de detalhes contendo metadados, licença, versões, prévia tabular dos dados e informações estatísticas por coluna. \\
-RF-11 & Permitir o download de arquivos de datasets. \\
-RF-12 & Possibilitar a criação, edição e organização de grupos colaborativos. \\
-RF-13 & Associar usuários a grupos com papéis definidos, como proprietário, administrador, editor e visualizador. \\
-RF-14 & Permitir que datasets sejam vinculados a grupos para compartilhamento. \\
-RF-15 & Disponibilizar licenças pré-configuradas para associação aos datasets. \\
-RF-16 & Oferecer filtros por status e busca textual por nome no painel do usuário, e filtro por categoria na listagem pública. \\
-RF-17 & Gerar estatísticas descritivas básicas para colunas numéricas presentes em arquivos CSV, incluindo média, desvio padrão, valor mínimo e valor máximo. \\
+RF-01 & Permitir o upload de \textit{datasets} em formato CSV. \\
+RF-02 & Permitir o upload de múltiplos arquivos CSV por versão do dataset. \\
+RF-03 & Permitir a criação de grupos de usuários com papéis (dono, admin, editor, visualizador). \\
+RF-04 & Permitir a criação de \textit{datasets} privados. \\
+RF-05 & Permitir alternar a visibilidade (público/privado) de um dataset. \\
+RF-06 & Permitir o versionamento de \textit{datasets}. \\
+RF-07 & Permitir a restauração de versões anteriores de um dataset. \\
+RF-08 & Permitir a exclusão lógica (\textit{soft delete}) de versões. \\
+RF-09 & Permitir a descrição e o licenciamento de \textit{datasets} publicados. \\
+RF-10 & Permitir a classificação de datasets por metadados (área, unidade, período, região, tags). \\
+RF-11 & Permitir o download individual de arquivos de um dataset. \\
+RF-12 & Permitir o download de todos os arquivos de uma versão em formato ZIP. \\
+RF-13 & Permitir o registro e autenticação de usuários. \\
+RF-14 & Permitir a edição de perfil do usuário (nome, bio, avatar, instituição, localização). \\
+RF-15 & Permitir que usuários curtam datasets. \\
+RF-16 & Permitir que usuários favoritem datasets para acesso rápido. \\
+RF-17 & Permitir a exploração e busca de datasets com filtro por área temática. \\
+RF-18 & Exibir uma prévia das primeiras linhas dos arquivos CSV de um dataset. \\
+RF-19 & Permitir a atribuição de datasets a grupos. \\
+RF-20 & Permitir a exclusão de datasets pelo proprietário ou membro autorizado do grupo. \\
+RF-21 & Oferecer um painel administrativo para gestão de usuários e áreas temáticas. \\
+RF-22 & Registrar trilha de auditoria para alterações nas entidades principais. \\
+RF-23 & Oferecer suporte a internacionalização (i18n). \\
+RF-24 & Exibir perfis públicos de usuários. \\
 \bottomrule
 \end{longtable}
 
@@ -115,12 +122,15 @@ RNF-10 & A organização modular do sistema deve favorecer manutenção e expans
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
 \endhead
-RN-01 & Cada dataset deve possuir um usuário responsável por sua criação. \\
-RN-02 & Datasets públicos podem ser consultados por usuários autenticados. \\
-RN-03 & As versões de um dataset devem seguir identificação sequencial. \\
-RN-04 & Apenas o proprietário do dataset pode editar seus metadados, substituir arquivos ou registrar novas versões. \\
-RN-05 & Todo grupo deve possuir um proprietário. \\
-RN-06 & A participação em grupos deve indicar o papel exercido por cada membro. \\
+RN-01 & A publicação de \textit{datasets} é restrita a usuários autenticados. \\
+RN-02 & Usuários não registrados podem visualizar e fazer download de \textit{datasets} públicos. \\
+RN-03 & Todo \textit{dataset} publicado deve possuir uma licença associada. \\
+RN-04 & \textit{Datasets} não publicados são visíveis apenas pelo usuário proprietário ou membros do grupo associado. \\
+RN-05 & Nomes de \textit{datasets} devem ser únicos no sistema. \\
+RN-06 & Cada arquivo CSV enviado deve ter no máximo 25 MB. \\
+RN-07 & Membros de grupo com papel de dono, admin ou editor podem editar datasets do grupo. \\
+RN-08 & Apenas membros com papel de dono ou admin podem excluir versões de um dataset do grupo. \\
+RN-09 & A exclusão de versões é lógica (\textit{soft delete}), preservando os dados no sistema. \\
 \bottomrule
 \end{longtable}
 
@@ -144,12 +154,17 @@ A entidade \textit{users} concentra os dados dos usuários cadastrados. Ela part
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária do usuário. \\
-role\_id & Integer & Papel global atribuído ao usuário. \\
-full\_name & Varchar & Nome completo exibido na plataforma. \\
+id & Integer & Chave primária do usuário. \\
 email & Varchar & E-mail utilizado para identificação e acesso. \\
 password & Varchar & Senha armazenada em formato protegido. \\
-avatar\_url & Varchar & Referência para imagem de perfil. \\
+full\_name & Varchar & Nome completo exibido na plataforma. \\
+username & Varchar & Nome de usuário único para identificação na plataforma. \\
+bio & Text & Biografia do usuário. \\
+avatar & JSON & Metadados do avatar enviado (attachment). \\
+avatar\_url & Varchar & URL do avatar externo (login social). \\
+institution & Varchar & Instituição à qual o usuário pertence. \\
+location & Varchar & Localização do usuário. \\
+role\_id & Integer & Papel global atribuído ao usuário. \\
 created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
@@ -169,7 +184,7 @@ A entidade \textit{roles} define os papéis globais disponíveis na aplicação,
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária do papel. \\
+id & Integer & Chave primária do papel. \\
 name & Varchar & Nome atribuído ao papel. \\
 description & Text & Explicação das permissões associadas. \\
 created\_at & Timestamp & Data de criação do registro. \\
@@ -191,10 +206,10 @@ A entidade \textit{groups} representa espaços colaborativos vinculados a equipe
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária do grupo. \\
+id & Integer & Chave primária do grupo. \\
 name & Varchar & Nome do grupo colaborativo. \\
-owner\_id & Integer & Usuário responsável pelo grupo. \\
 description & Text & Descrição da finalidade do grupo. \\
+owner\_id & Integer & Usuário responsável pelo grupo. \\
 created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
@@ -214,10 +229,10 @@ A entidade \textit{group\_members} registra a participação de usuários em gru
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária da associação. \\
+id & Integer & Chave primária da associação. \\
 group\_id & Integer & Grupo ao qual o usuário pertence. \\
 user\_id & Integer & Usuário associado ao grupo. \\
-role & Varchar & Papel exercido no grupo. \\
+role & Varchar & Papel exercido no grupo (owner, admin, editor). \\
 created\_at & Timestamp & Data de entrada no grupo. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
@@ -237,9 +252,34 @@ A entidade \textit{licenses} mantém as licenças que podem ser vinculadas aos d
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária da licença. \\
+id & Integer & Chave primária da licença. \\
 name & Varchar & Nome resumido da licença. \\
 description & Text & Termos ou explicação da licença. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{dataset\_areas}}
+
+A entidade \textit{dataset\_areas} armazena as áreas temáticas disponíveis para classificação dos datasets, permitindo filtragem e navegação por categoria.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade dataset\_areas.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Integer & Chave primária da área. \\
+name & Varchar & Nome da área temática. \\
+code & Varchar & Código identificador da área. \\
+description & Text & Descrição da área. \\
+icon & Varchar & Ícone representativo da área. \\
+color & Varchar & Cor associada à área. \\
 created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
@@ -259,19 +299,20 @@ A entidade \textit{datasets} reúne os metadados e configurações centrais de c
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária do dataset. \\
+id & Integer & Chave primária do dataset. \\
 user\_id & Integer & Usuário responsável pela publicação. \\
 group\_id & Integer & Grupo associado ao dataset, quando houver. \\
 license\_id & Integer & Licença aplicada ao dataset, quando definida. \\
 name & Varchar & Título do conjunto de dados. \\
+description & Text & Descrição detalhada do dataset. \\
 path & Varchar & Referência lógica ao local de armazenamento. \\
 is\_public & Boolean & Indica se o acesso é público ou privado. \\
 status & Varchar & Situação atual do dataset. \\
-area & Varchar & Área temática relacionada aos dados. \\
+area & Integer & Área temática do dataset (referência a dataset\_areas). \\
 unit & Varchar & Unidade acadêmica ou administrativa responsável. \\
 region & Varchar & Abrangência geográfica dos registros. \\
 period & Varchar & Intervalo temporal coberto pelos dados. \\
-tags & Json & Palavras-chave utilizadas para indexação. \\
+tags & JSON & Palavras-chave utilizadas para indexação. \\
 usability\_score & Numeric & Indicador de completude calculado a partir da análise do arquivo enviado. \\
 created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
@@ -280,7 +321,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_versions}}
 
-A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a um dataset. Com essa separação, uma atualização não elimina o histórico anterior e o sistema preserva a rastreabilidade do arquivo utilizado.
+A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a um dataset. Com essa separação, uma atualização não elimina o histórico anterior e o sistema preserva a rastreabilidade do arquivo utilizado. Versões excluídas são mantidas com marcação lógica.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
 \caption{Entidade dataset\_versions.}\\
@@ -292,34 +333,156 @@ A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
 \endhead
-id & Serial & Chave primária da versão. \\
+id & Integer & Chave primária da versão. \\
 dataset\_id & Integer & Dataset ao qual a versão pertence. \\
 name & Varchar & Identificador sequencial da versão. \\
-path & Json & Metadados do arquivo correspondente. \\
+path & JSON & Metadados do arquivo principal da versão (attachment). \\
+is\_deleted & Boolean & Indica se a versão foi marcada como excluída (\textit{soft delete}). \\
 created\_at & Timestamp & Data de criação da versão. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{dataset\_version\_files}}
+
+A entidade \textit{dataset\_version\_files} armazena os arquivos individuais de cada versão do dataset, suportando múltiplos arquivos CSV por versão.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade dataset\_version\_files.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Integer & Chave primária do arquivo. \\
+dataset\_version\_id & Integer & Referência à versão do dataset. \\
+name & Varchar & Nome original do arquivo enviado. \\
+path & JSON & Metadados do arquivo armazenado (attachment). \\
+is\_primary & Boolean & Indica se é o arquivo principal da versão. \\
+sort\_order & Integer & Ordem de exibição do arquivo dentro da versão. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{dataset\_likes}}
+
+A entidade \textit{dataset\_likes} registra as curtidas dos usuários em datasets, permitindo a valorização social dos conjuntos de dados.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade dataset\_likes.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Integer & Chave primária da curtida. \\
+dataset\_id & Integer & Referência ao dataset curtido. \\
+user\_id & Integer & Referência ao usuário que curtiu. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{dataset\_favorites}}
+
+A entidade \textit{dataset\_favorites} registra os datasets favoritados por cada usuário, possibilitando acesso rápido a conjuntos de dados de interesse.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade dataset\_favorites.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Integer & Chave primária do favorito. \\
+dataset\_id & Integer & Referência ao dataset favoritado. \\
+user\_id & Integer & Referência ao usuário que favoritou. \\
+created\_at & Timestamp & Data de criação do registro. \\
+updated\_at & Timestamp & Data da alteração mais recente. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Entidade \textit{audits}}
+
+A entidade \textit{audits} registra as alterações realizadas nas entidades do sistema para fins de auditoria e rastreabilidade.
+
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Entidade audits.}\\
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
+\midrule
+\endhead
+id & Integer & Chave primária do registro de auditoria. \\
+auditable\_id & BigInt & ID da entidade auditada. \\
+auditable\_type & Varchar & Tipo da entidade auditada. \\
+event & Varchar & Tipo de evento (created, updated, deleted). \\
+old\_values & JSON & Valores anteriores à alteração. \\
+new\_values & JSON & Valores posteriores à alteração. \\
+user\_id & Varchar & ID do usuário responsável pela alteração. \\
+url & Varchar & URL da requisição que gerou a alteração. \\
+ip\_address & Varchar & Endereço IP da requisição. \\
+user\_agent & Varchar & User Agent da requisição. \\
+created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
 \end{longtable}
 
 \section{Arquitetura proposta}
 
-A arquitetura proposta para o DataRural segue uma organização em camadas, com separação entre interface, regras de aplicação, persistência e armazenamento dos arquivos enviados. Essa divisão busca facilitar a manutenção do sistema e permitir que novas funcionalidades sejam incorporadas sem exigir mudanças profundas em toda a aplicação.
+A arquitetura do DataRural é estruturada como um \textbf{monorepo} gerenciado com \textbf{Turborepo} e \textbf{pnpm workspaces}, adotando uma abordagem \textit{fullstack} que prioriza a integridade dos dados e a performance na entrega de grandes volumes de informação.
 
-Na camada de apresentação, concentram-se as telas utilizadas pelos usuários, como autenticação, painel inicial, listagem de datasets, formulário de publicação, página de detalhes e gestão de grupos. Essa camada deve apresentar as informações de maneira clara, principalmente quando envolver licença, visibilidade e metadados, pois esses elementos influenciam diretamente a decisão de reutilizar ou não um conjunto de dados.
+A aplicação principal reside em \texttt{apps/web} e utiliza o \textit{framework} AdonisJS integrado ao React via Inertia.js, eliminando a necessidade de uma API REST separada para o \textit{frontend}. O servidor renderiza as páginas com suporte a SSR (\textit{Server-Side Rendering}), reduzindo a latência percebida pelo usuário e facilitando a indexação do conteúdo. Os componentes de interface são mantidos em um pacote compartilhado (\texttt{packages/ui}) baseado em Shadcn UI, Radix UI e Tailwind CSS, garantindo uma interface modular, customizável e responsiva.
 
-A camada de aplicação reúne as regras que coordenam o funcionamento do sistema. Nela são verificadas permissões de acesso, validação de arquivos CSV, criação de versões, associação de licenças e gerenciamento de grupos. Concentrar essas decisões em uma camada própria reduz duplicações e evita que regras importantes fiquem dependentes apenas da interface.
+O gerenciamento de arquivos dos datasets é feito pelo AdonisJS Drive em conjunto com o pacote \texttt{@jrmc/adonis-attachment}, que cuida do armazenamento no sistema de arquivos local (\texttt{storage/uploads}) e da associação dos anexos aos modelos. O banco de dados utilizado é o PostgreSQL, executado em contêiner Docker, acompanhado de pgAdmin para administração e Mailpit para captura de e-mails em ambiente de desenvolvimento.
 
-A persistência dos dados estruturados é realizada em banco relacional. Já os arquivos enviados podem ser mantidos em sistema de arquivos ou em serviço de armazenamento apropriado, enquanto o banco conserva os metadados e referências necessárias para localização e auditoria. Essa estratégia separa o conteúdo físico dos datasets das informações administrativas que permitem organizá-los dentro da plataforma.
+O versionamento de dados é implementado por meio dos modelos \textit{DatasetVersion} e \textit{DatasetVersionFile}, que rastreiam cada versão e seus respectivos arquivos. Um arquivo \texttt{README.md} é gerado automaticamente para cada nova versão, consolidando os metadados do dataset no momento da publicação.
 
-Embora a primeira versão do DataRural seja orientada ao upload de CSV, a arquitetura permanece aberta a evoluções. Futuramente, a plataforma poderá incluir suporte a outros formatos, rotinas de importação automática, conectores com bases institucionais e mecanismos de atualização periódica. Essa possibilidade é importante porque a gestão de dados universitários tende a crescer em complexidade conforme novas demandas surgem.
+A estrutura do monorepo está organizada conforme apresentado a seguir:
+
+\begin{verbatim}
+Raiz/
+\u251C\u2500\u2500 apps/
+\u2502   \u2514\u2500\u2500 web/               # Aplicação AdonisJS + Inertia + React
+\u2502       \u251C\u2500\u2500 app/
+\u2502       \u2502   \u251C\u2500\u2500 auth/       # Módulo de autenticação
+\u2502       \u2502   \u251C\u2500\u2500 common/     # Utilitários e modelos base
+\u2502       \u2502   \u251C\u2500\u2500 core/       # Hooks, middleware, políticas, UI base
+\u2502       \u2502   \u251C\u2500\u2500 dataset/    # Módulo de datasets
+\u2502       \u2502   \u251C\u2500\u2500 groups/     # Módulo de grupos (times)
+\u2502       \u2502   \u251C\u2500\u2500 marketing/  # Páginas de marketing
+\u2502       \u2502   \u2514\u2500\u2500 users/      # Módulo de usuários
+\u2502       \u251C\u2500\u2500 config/         # Configurações do AdonisJS
+\u2502       \u251C\u2500\u2500 database/       # Schemas e migrações
+\u2502       \u251C\u2500\u2500 resources/      # Views Edge e assets estáticos
+\u2502       \u2514\u2500\u2500 storage/        # Arquivos enviados pelos usuários
+\u251C\u2500\u2500 packages/
+\u2502   \u251C\u2500\u2500 ui/                 # Componentes compartilhados (Shadcn UI)
+\u2502   \u251C\u2500\u2500 eslint-config/      # Configuração compartilhada de lint
+\u2502   \u2514\u2500\u2500 typescript-config/  # Configuração compartilhada de TypeScript
+\u2514\u2500\u2500 docker-compose.yaml
+\end{verbatim}
 
 \section{Fluxo principal de uso}
 
-O uso da plataforma começa com a autenticação do usuário. Após o acesso, ele pode buscar datasets, aplicar filtros, visualizar metadados, consultar informações de licença, observar prévias tabulares e realizar download. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados.
+O uso da plataforma começa com a autenticação do usuário. Após o acesso, ele pode buscar datasets, aplicar filtros por área temática, visualizar metadados, consultar informações de licença, observar prévias tabulares das primeiras linhas dos arquivos CSV e realizar download individual ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados, sendo que datasets públicos também podem ser acessados e baixados por visitantes não autenticados.
 
-Para publicar um dataset, o usuário acessa o formulário de criação, envia o arquivo CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação.
+Para publicar um dataset, o usuário acessa o formulário de criação, envia um ou mais arquivos CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset, gera automaticamente um arquivo \texttt{README.md} com os metadados e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas de forma lógica, mantendo os dados preservados no sistema.
 
-Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O proprietário de um grupo pode organizar membros e definir papéis. Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários e suporte operacional.
+Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O acesso aos datasets privados de um grupo é validado por middleware que verifica a associação do usuário logado ao grupo proprietário, respeitando os papéis de membro (owner, admin, editor). Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários, áreas temáticas e suporte operacional.
 
 \section{Considerações do capítulo}
 
