@@ -28,13 +28,19 @@ jobs:
           name: monografia-pdf
           path: main.pdf
 
+      - name: Prepare Pages directory
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p public
+          cp main.pdf public/
+          touch public/.nojekyll
+
       - name: Deploy PDF to GitHub Pages
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          destination_dir: .
+          publish_dir: public
           publish_branch: gh-pages
           keep_files: false
           force_orphan: true
