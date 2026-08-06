@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir -p public
           cp main.pdf public/
-          touch public/.nojekyll
+          echo '<meta http-equiv="refresh" content="0; url=main.pdf">' > public/index.html
 
       - name: Deploy PDF to GitHub Pages
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
