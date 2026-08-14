@@ -2,23 +2,22 @@
 
 A gestão de dados tornou-se uma dimensão cada vez mais relevante para universidades, sobretudo em instituições que produzem informações acadêmicas, administrativas e experimentais em diferentes setores. Ainda assim, é comum que esses dados permaneçam distribuídos em arquivos locais, planilhas compartilhadas informalmente, sistemas internos pouco integrados ou repositórios que não oferecem documentação suficiente para sua interpretação posterior. Quando isso ocorre, o valor dos dados diminui com o tempo, pois sua reutilização passa a depender do conhecimento individual de quem os produziu ou armazenou.
 
-No contexto da UFRRJ, esse problema pode afetar tanto atividades de pesquisa quanto ações de gestão institucional. Dados de experimentos, levantamentos, projetos de extensão, indicadores acadêmicos ou registros administrativos podem ter utilidade para diferentes públicos, desde que estejam descritos, licenciados e organizados de maneira compreensível. Assim, a simples existência de arquivos digitais não garante transparência, reprodutibilidade ou reaproveitamento científico. É necessário oferecer um ambiente que trate o conjunto de dados como um artefato institucional, com autoria, histórico, metadados, permissões e condições claras de uso.
+No contexto da UFRRJ, esse problema pode afetar tanto atividades de pesquisa quanto ações de gestão institucional. Dados de experimentos, levantamentos, projetos de extensão, indicadores acadêmicos ou registros administrativos podem ter utilidade para diferentes públicos, desde que estejam descritos, licenciados e organizados de maneira compreensível. Assim, a simples existência de arquivos digitais não garante transparência, reprodutibilidade ou reaproveitamento científico. É necessário oferecer um ambiente que trate o conjunto de dados como um artefato institucional, com autoria, histórico, permissões e condições claras de uso.
 
 Com base nessa necessidade, este trabalho propõe a Plataforma Institucional de Datasets da UFRRJ, chamada neste projeto de \textit{DataRural}. A proposta consiste em uma aplicação web voltada à publicação, consulta, atualização e organização de datasets institucionais, tendo o formato CSV como ponto de partida. A escolha por esse formato se justifica por sua simplicidade, ampla adoção e compatibilidade com ferramentas de análise de dados, sem impedir que a plataforma evolua futuramente para outros formatos ou para integrações diretas com bases de dados.
 
-O DataRural parte de referências conhecidas no ecossistema de dados, como Kaggle, portais de dados abertos e repositórios científicos. No entanto, seu foco não é reproduzir integralmente nenhuma dessas soluções. A intenção é adaptar conceitos consolidados, como publicação de datasets, metadados e licenciamento, para uma realidade universitária específica. Dessa forma, a plataforma busca apoiar tanto a divulgação pública de dados quanto o trabalho colaborativo de grupos, laboratórios e unidades acadêmicas.
+O DataRural parte de referências conhecidas no ecossistema de dados, como Kaggle, portais de dados abertos e repositórios científicos. No entanto, seu foco não é reproduzir integralmente nenhuma dessas soluções. A intenção é adaptar conceitos consolidados, como publicação de datasets, hierarquia de usuários e licenciamento, para uma realidade universitária específica. Dessa forma, a plataforma busca apoiar tanto a divulgação pública de dados quanto o trabalho colaborativo de grupos, laboratórios e unidades acadêmicas.
 
 \section{Visão geral do sistema}
 
-O DataRural foi planejado como uma plataforma acessada por meio de autenticação. Após criar uma conta, o usuário passa a interagir com os datasets disponíveis conforme suas permissões. No nível geral da aplicação, são previstos dois perfis principais: o usuário comum e o administrador. O primeiro corresponde ao público responsável por publicar, consultar e reutilizar datasets. O segundo possui atribuições administrativas, como gerenciamento de usuários, acompanhamento da plataforma e suporte a operações que exigem maior controle.
+O DataRural é uma aplicação web que centraliza a publicação, consulta e gestão de datasets institucionais. A plataforma foi concebida para atender a dois perfis principais de usuário: o usuário comum, que publica e reutiliza dados, e o administrador, responsável pela manutenção da plataforma, gerenciamento de usuários e configuração de áreas temáticas. A aplicação foi pensada para ser acessada por meio de autenticação, no entanto, alguns recursos, como a consulta e o download de datasets públicos, estão disponíveis mesmo para usuários não autenticados, ampliando o alcance da informação.
 
-A principal unidade de informação do sistema é o dataset. Ao publicar um novo conjunto de dados, o usuário deve enviar um ou mais arquivos CSV e preencher informações capazes de contextualizar seu conteúdo. Esses dados descritivos incluem título, descrição, área temática, unidade responsável, região de abrangência, período de coleta, palavras-chave, licença e configuração de visibilidade. A presença desses campos busca evitar que o arquivo seja interpretado de forma isolada, pois um dataset sem contexto pode ser difícil de validar, comparar ou reutilizar.
+A unidade central do sistema é o dataset. Cada conjunto de dados é descrito por um conjunto de metadados — título, descrição, área temática, unidade responsável, região, período, palavras-chave e licença — que fornecem o contexto necessário para sua compreensão e reutilização. A visibilidade controla o acesso: datasets públicos são acessíveis a qualquer visitante, enquanto datasets privados ficam restritos ao proprietário ou ao grupo ao qual estão vinculados.
 
-A visibilidade é tratada como parte essencial da publicação. Um dataset pode ser configurado como público, quando se pretende disponibilizá-lo aos usuários da plataforma, ou como privado, quando seu acesso deve permanecer limitado ao proprietário ou ao grupo associado. Essa distinção permite contemplar situações distintas: dados já prontos para ampla divulgação, dados ainda em processo de curadoria ou materiais vinculados a projetos em andamento.
+O sistema adota o versionamento como princípio estrutural. Cada atualização de um conjunto de dados gera uma nova versão, preservando o histórico completo de modificações e permitindo rastrear qual versão foi utilizada em determinada análise ou relatório. Versões podem ser excluídas de forma lógica e restauradas quando necessário.
 
-Outro aspecto importante é o controle de versões. A plataforma não considera a atualização de um dataset como uma simples substituição de arquivo. Sempre que houver uma nova coleta, correção ou reorganização dos dados, uma nova versão pode ser registrada, mantendo-se o histórico das versões anteriores. Com isso, torna-se possível recuperar a trajetória de evolução de um dataset e identificar qual versão foi utilizada em uma análise, relatório ou pesquisa. A exclusão de versões é lógica, preservando os registros no sistema.
+Os grupos colaborativos constituem outro elemento central da plataforma. Eles representam laboratórios, equipes ou unidades institucionais e permitem que múltiplos usuários trabalhem de forma coordenada sobre os mesmos datasets, com papéis bem definidos — dono, administrador, editor e leitor. Essa estrutura de colaboração diferencia o DataRural de repositórios de uso individual, tornando-o adequado tanto para a divulgação pública de dados quanto para o trabalho interno de equipes acadêmicas.
 
-O sistema também incorpora a noção de grupos colaborativos. Um grupo pode representar um laboratório, projeto de pesquisa, equipe técnica, departamento ou unidade institucional. Dentro dele, usuários podem assumir papéis diferentes, como proprietário, administrador, editor ou visualizador. Essa organização permite que o DataRural seja usado não apenas como vitrine pública de datasets, mas também como espaço de trabalho compartilhado para equipes que precisam organizar dados antes, durante ou depois de sua divulgação.
 
 \section{Trabalhos relacionados}
 
@@ -44,7 +43,7 @@ Ainda assim, o Figshare não resolve, por si só, demandas específicas de uma p
 
 \section{Requisitos do sistema}
 
-Os requisitos apresentados nesta seção organizam as capacidades esperadas para a plataforma. Eles foram definidos a partir dos objetivos do projeto e procuram traduzir, em funcionalidades e restrições, a proposta de uma solução institucional para publicação e gestão de datasets. Para facilitar sua leitura, os requisitos foram separados em funcionais, não funcionais e regras de negócio.
+Os requisitos apresentados nesta seção organizam as capacidades esperadas para a plataforma. Eles foram definidos a partir dos objetivos do projeto e procuram traduzir, em funcionalidades e restrições, a proposta de uma solução institucional para publicação e gestão de datasets. Para facilitar a leitura, os requisitos foram separados em funcionais, não funcionais e regras de negócio.
 
 \subsection{Requisitos funcionais}
 
@@ -77,7 +76,7 @@ RF-16 & Permitir que usuários favoritem datasets para acesso rápido. \\
 RF-17 & Permitir a exploração e busca de datasets com filtro por área temática. \\
 RF-18 & Exibir uma prévia das primeiras linhas dos arquivos CSV de um dataset. \\
 RF-19 & Permitir a atribuição de datasets a grupos. \\
-RF-20 & Permitir a exclusão de datasets pelo proprietário ou membro autorizado do grupo. \\
+RF-20 & Permitir a exclusão de datasets apenas pelo proprietário ou membro autorizado do grupo. \\
 RF-21 & Oferecer um painel administrativo para gestão de usuários e áreas temáticas. \\
 RF-22 & Registrar trilha de auditoria para alterações nas entidades principais. \\
 RF-23 & Oferecer suporte a internacionalização (i18n). \\
@@ -99,13 +98,13 @@ RF-24 & Exibir perfis públicos de usuários. \\
 \endhead
 RNF-01 & A solução deve ser disponibilizada como aplicação web responsiva e compatível com navegadores atuais. \\
 RNF-02 & As senhas devem ser armazenadas por meio de representação criptográfica segura. \\
-RNF-03 & O acesso a rotas protegidas deve ser controlado por middleware de autenticação. \\
+RNF-03 & O acesso a rotas protegidas deve ser controlado por \textit{middleware} de autenticação. \\
 RNF-04 & Os arquivos enviados devem ser validados, considerando inicialmente apenas o formato CSV. \\
 RNF-05 & O código deve manter separação entre interface, regras de negócio, persistência e armazenamento de arquivos. \\
 RNF-06 & A estrutura da plataforma deve permitir evolução para novos formatos e novas fontes de dados. \\
 RNF-07 & O histórico de versões deve ser preservado para manter rastreabilidade das alterações. \\
 RNF-08 & A interface deve apresentar metadados, permissões e licenças de forma clara ao usuário. \\
-RNF-09 & As principais entidades devem registrar datas de criação e atualização. \\
+RNF-09 & As principais entidades devem ser auditáveis. \\
 RNF-10 & A organização modular do sistema deve favorecer manutenção e expansão gradual. \\
 \bottomrule
 \end{longtable}
@@ -453,36 +452,36 @@ O versionamento de dados é implementado por meio dos modelos \textit{DatasetVer
 
 A estrutura do monorepo está organizada conforme apresentado a seguir:
 
-\begin{verbatim}
+\begin{lstlisting}
 Raiz/
-\u251C\u2500\u2500 apps/
-\u2502   \u2514\u2500\u2500 web/               # Aplicação AdonisJS + Inertia + React
-\u2502       \u251C\u2500\u2500 app/
-\u2502       \u2502   \u251C\u2500\u2500 auth/       # Módulo de autenticação
-\u2502       \u2502   \u251C\u2500\u2500 common/     # Utilitários e modelos base
-\u2502       \u2502   \u251C\u2500\u2500 core/       # Hooks, middleware, políticas, UI base
-\u2502       \u2502   \u251C\u2500\u2500 dataset/    # Módulo de datasets
-\u2502       \u2502   \u251C\u2500\u2500 groups/     # Módulo de grupos (times)
-\u2502       \u2502   \u251C\u2500\u2500 marketing/  # Páginas de marketing
-\u2502       \u2502   \u2514\u2500\u2500 users/      # Módulo de usuários
-\u2502       \u251C\u2500\u2500 config/         # Configurações do AdonisJS
-\u2502       \u251C\u2500\u2500 database/       # Schemas e migrações
-\u2502       \u251C\u2500\u2500 resources/      # Views Edge e assets estáticos
-\u2502       \u2514\u2500\u2500 storage/        # Arquivos enviados pelos usuários
-\u251C\u2500\u2500 packages/
-\u2502   \u251C\u2500\u2500 ui/                 # Componentes compartilhados (Shadcn UI)
-\u2502   \u251C\u2500\u2500 eslint-config/      # Configuração compartilhada de lint
-\u2502   \u2514\u2500\u2500 typescript-config/  # Configuração compartilhada de TypeScript
-\u2514\u2500\u2500 docker-compose.yaml
-\end{verbatim}
+├── apps/
+│   └── web/               # Aplicação AdonisJS + Inertia + React
+│       ├── app/
+│       │   ├── auth/      # Módulo de autenticação
+│       │   ├── common/    # Utilitários e modelos base
+│       │   ├── core/      # Hooks, middleware, políticas, UI base
+│       │   ├── dataset/   # Módulo de datasets
+│       │   ├── groups/    # Módulo de grupos (times)
+│       │   ├── marketing/ # Páginas de marketing
+│       │   └── users/     # Módulo de usuários
+│       ├── config/        # Configurações do AdonisJS
+│       ├── database/      # Schemas e migrações
+│       ├── resources/     # Views Edge e assets estáticos
+│       └── storage/       # Arquivos enviados pelos usuários
+├── packages/
+│   ├── ui/                # Componentes compartilhados (Shadcn UI)
+│   ├── eslint-config/     # Configuração compartilhada de lint
+│   └── typescript-config/ # Configuração compartilhada de TypeScript
+└── docker-compose.yaml
+\end{lstlisting}
 
 \section{Fluxo principal de uso}
 
-O uso da plataforma começa com a autenticação do usuário. Após o acesso, ele pode buscar datasets, aplicar filtros por área temática, visualizar metadados, consultar informações de licença, observar prévias tabulares das primeiras linhas dos arquivos CSV e realizar download individual ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados, sendo que datasets públicos também podem ser acessados e baixados por visitantes não autenticados.
+Após o acesso da plataforma, um usuário pode buscar datasets, aplicar filtros por área temática, visualizar metadados, consultar informações de licença, observar prévias tabulares das primeiras linhas dos arquivos CSV e realizar download individual ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados. e não necessita de autenticação. Usuários autenticados pode ainda curtir datasets, salvá-los e participar de grupos.
 
-Para publicar um dataset, o usuário acessa o formulário de criação, envia um ou mais arquivos CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset, gera automaticamente um arquivo \texttt{README.md} com os metadados e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas de forma lógica, mantendo os dados preservados no sistema.
+Para publicar um dataset, o usuário acessa o formulário de criação, envia um ou mais arquivos CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset, gera automaticamente um arquivo \texttt{README.md} com a descrição provida e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas e restauradas.
 
-Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O acesso aos datasets privados de um grupo é validado por middleware que verifica a associação do usuário logado ao grupo proprietário, respeitando os papéis de membro (owner, admin, editor). Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários, áreas temáticas e suporte operacional.
+Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O acesso aos datasets privados de um grupo é validado por middleware que verifica a associação do usuário autenticado ao grupo proprietário, respeitando os papéis de membro (dono, administrador, editor e leitor). Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários, áreas temáticas e suporte operacional.
 
 \section{Considerações do capítulo}
 
