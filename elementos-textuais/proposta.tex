@@ -452,28 +452,28 @@ O versionamento de dados é implementado por meio dos modelos \textit{DatasetVer
 
 A estrutura do monorepo está organizada conforme apresentado a seguir:
 
-\begin{lstlisting}
-Raiz/
-├── apps/
-│   └── web/               # Aplicação AdonisJS + Inertia + React
-│       ├── app/
-│       │   ├── auth/      # Módulo de autenticação
-│       │   ├── common/    # Utilitários e modelos base
-│       │   ├── core/      # Hooks, middleware, políticas, UI base
-│       │   ├── dataset/   # Módulo de datasets
-│       │   ├── groups/    # Módulo de grupos (times)
-│       │   ├── marketing/ # Páginas de marketing
-│       │   └── users/     # Módulo de usuários
-│       ├── config/        # Configurações do AdonisJS
-│       ├── database/      # Schemas e migrações
-│       ├── resources/     # Views Edge e assets estáticos
-│       └── storage/       # Arquivos enviados pelos usuários
-├── packages/
-│   ├── ui/                # Componentes compartilhados (Shadcn UI)
-│   ├── eslint-config/     # Configuração compartilhada de lint
-│   └── typescript-config/ # Configuração compartilhada de TypeScript
-└── docker-compose.yaml
-\end{lstlisting}
+\dirtree{%
+.1 Raiz/.
+.2 apps/.
+.3 web/ \DTcomment{Aplicação AdonisJS + Inertia + React}.
+.4 app/.
+.5 auth/ \DTcomment{Módulo de autenticação}.
+.5 common/ \DTcomment{Utilitários e modelos base}.
+.5 core/ \DTcomment{Hooks, middleware, políticas, UI base}.
+.5 dataset/ \DTcomment{Módulo de datasets}.
+.5 groups/ \DTcomment{Módulo de grupos (times)}.
+.5 marketing/ \DTcomment{Páginas de marketing}.
+.5 users/ \DTcomment{Módulo de usuários}.
+.4 config/ \DTcomment{Configurações do AdonisJS}.
+.4 database/ \DTcomment{Schemas e migrações}.
+.4 resources/ \DTcomment{Views Edge e assets estáticos}.
+.4 storage/ \DTcomment{Arquivos enviados pelos usuários}.
+.2 packages/.
+.3 ui/ \DTcomment{Componentes compartilhados (Shadcn UI)}.
+.3 eslint-config/ \DTcomment{Configuração compartilhada de lint}.
+.3 typescript-config/ \DTcomment{Configuração compartilhada de TypeScript}.
+.2 docker-compose.yaml.
+}
 
 \section{Fluxo principal de uso}
 
