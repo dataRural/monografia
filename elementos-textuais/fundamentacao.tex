@@ -1,11 +1,139 @@
-\chapter{Fundamentação}\label{chp:FUNDAMENTACAO}
+\chapter{Fundamentação Teórica}\label{chp:FUNDAMENTACAO}
 
-Esse capítulo será responsável por dar uma base teórica a proposta. 
-A ideia é que o leitor, 
-com um breve conhecimento prévio, 
-tenha a capacidade de ler esse material e consiga ter a capacidade de entender tecnicamente a proposta do projeto final.
-Dependendo do assunto,
-poderá ter mais de uma área de resumo, podendo ficar cada uma em uma seção ou serem capítulos separados.
+Este capítulo apresenta os conceitos necessários para compreender a proposta do DataRural. Inicialmente, são discutidos dados, datasets, metadados e gestão de dados de pesquisa. Em seguida, são abordados dados abertos, licenciamento, versionamento e controle de acesso. O capítulo também diferencia os principais tipos de plataformas de compartilhamento de dados e apresenta fundamentos de aplicações web, dados tabulares e organização de projetos de software.
 
-No caso de um único capítulo, deverá ter um breve resumo antes de iniciar a seção explicando o que este capítulo fará. 
-Caso seja capítulo separado, poderá introduzir a área diretamente sem a criação de uma seção ou criar uma seção chamada "Introdução" e o nome do capítulo pode ser o nome da área.
+O objetivo não é detalhar uma tecnologia específica, mas estabelecer o vocabulário utilizado nos capítulos seguintes. Dessa forma, as decisões de modelagem e arquitetura apresentadas no Capítulo~\ref{chp:PROPOSTA} podem ser compreendidas a partir dos problemas conceituais que procuram resolver.
+
+\section{Gestão de dados e metadados}
+
+Dados são representações de fatos, medições, observações ou eventos que podem ser registrados e processados. Um valor isolado, entretanto, possui utilidade limitada quando não se conhece seu contexto. Uma sequência numérica pode representar temperaturas, identificadores, coordenadas ou qualquer outra variável. Para que os dados adquiram significado, é necessário relacioná-los a informações sobre sua origem, estrutura e finalidade.
+
+Dados brutos correspondem aos registros obtidos diretamente de uma fonte, antes de etapas relevantes de limpeza, transformação ou organização. Dados estruturados, por sua vez, seguem uma organização previamente definida, como uma tabela composta por linhas e colunas. A informação surge quando esses dados são interpretados dentro de um contexto e passam a responder a uma questão ou sustentar uma decisão.
+
+Um \textit{dataset}, ou conjunto de dados, é uma coleção organizada de registros relacionados. Em uma representação tabular, cada linha geralmente corresponde a uma observação, enquanto as colunas representam atributos ou variáveis. A definição da unidade de observação é essencial: uma linha pode representar uma pessoa, uma propriedade rural, uma medição diária ou um evento administrativo, dependendo do domínio estudado.
+
+A utilidade de um dataset não depende apenas dos valores armazenados. Também é necessário conhecer quem produziu os dados, em qual período, com que finalidade, em qual região e segundo quais procedimentos. Essas informações são denominadas metadados. Em termos gerais, metadados são dados que descrevem outros dados, oferecendo elementos para sua localização, interpretação, administração e reutilização.
+
+Metadados descritivos incluem título, autoria, resumo e palavras-chave, facilitando a descoberta do conjunto. Metadados administrativos registram aspectos como licença, responsável e condições de acesso. Já metadados estruturais informam como os arquivos, tabelas e variáveis se relacionam. Embora essas categorias possam se sobrepor, a distinção demonstra que documentar um dataset envolve mais do que atribuir um nome ao arquivo.
+
+A gestão de dados de pesquisa, conhecida como \textit{Research Data Management} (RDM), reúne práticas aplicadas ao longo do ciclo de vida dos dados. Esse ciclo pode incluir planejamento, coleta, organização, documentação, armazenamento, controle de acesso, preservação, compartilhamento e descarte. Uma gestão adequada reduz a dependência do conhecimento individual de quem produziu os arquivos e aumenta a possibilidade de utilização futura por outras pessoas.
+
+Nesse contexto, os princípios FAIR propõem que dados e outros objetos digitais sejam localizáveis, acessíveis, interoperáveis e reutilizáveis. A sigla deriva dos termos em inglês \textit{Findable}, \textit{Accessible}, \textit{Interoperable} e \textit{Reusable}. Esses princípios não determinam uma ferramenta única, mas orientam a descrição e a disponibilização de recursos digitais de modo que possam ser encontrados e compreendidos por pessoas e sistemas computacionais \cite{wilkinson2016fair}.
+
+Ser localizável envolve utilizar identificadores e metadados que favoreçam a descoberta. A acessibilidade depende de procedimentos claros para recuperar os dados, mesmo quando alguma forma de autorização é necessária. A interoperabilidade busca permitir que diferentes sistemas interpretem e relacionem os registros. Por fim, a reutilização exige contexto, proveniência e condições de uso suficientemente explícitas.
+
+Outro conceito importante é a rastreabilidade. Ela corresponde à capacidade de identificar a origem e o histórico de um dado, incluindo as transformações ou versões pelas quais passou. Na pesquisa científica, a rastreabilidade ajuda a determinar qual conjunto sustentou um resultado. Sem essa informação, duas análises que utilizam arquivos com o mesmo nome podem produzir resultados diferentes sem que a causa seja facilmente identificada.
+
+A fragmentação prejudica todas essas propriedades. Quando arquivos permanecem distribuídos entre computadores pessoais, planilhas compartilhadas informalmente e sistemas sem integração, torna-se difícil localizar a versão correta e compreender seu conteúdo. A centralização não elimina a necessidade de documentação, mas oferece um ponto comum a partir do qual metadados, histórico e regras de acesso podem ser administrados.
+
+\section{Dados abertos e licenciamento}
+
+Dados abertos são dados disponibilizados de forma que qualquer pessoa possa acessá-los, utilizá-los, modificá-los e redistribuí-los, sujeitos, no máximo, a condições como atribuição e compartilhamento pela mesma licença \cite{openknowledge2015opendata}. A abertura favorece transparência, reprodução de estudos e criação de novos produtos ou análises a partir de informações já existentes.
+
+É importante distinguir dados públicos de dados abertos. Um arquivo pode estar disponível publicamente para leitura e ainda não apresentar permissão jurídica clara para reutilização ou redistribuição. A ausência de uma barreira técnica não implica, por si só, autorização para qualquer forma de uso. Para que o grau de abertura seja compreensível, o responsável deve declarar as condições aplicáveis por meio de uma licença.
+
+O licenciamento estabelece o que terceiros podem fazer com determinado material. Sem uma licença explícita, um possível reutilizador pode encontrar o dataset e conseguir baixá-lo, mas permanecer em dúvida sobre a possibilidade de incorporá-lo a outro trabalho, adaptá-lo ou redistribuí-lo. A licença reduz essa incerteza ao comunicar permissões e obrigações de forma padronizada.
+
+As licenças Creative Commons constituem uma família de instrumentos utilizados no compartilhamento de conteúdos. A CC BY permite cópia, redistribuição e adaptação, inclusive para fins comerciais, desde que seja atribuída a autoria. A CC BY-SA acrescenta a exigência de que materiais adaptados sejam compartilhados sob a mesma licença ou sob uma licença compatível. A CC0, por sua vez, é um instrumento de dedicação ao domínio público que procura permitir o uso do material sem condições de atribuição, na maior extensão admitida pela legislação aplicável \cite{creativecommons2026licenses,creativecommons2026cczero}.
+
+Nem todo tipo de licença é igualmente adequado a todo objeto digital. Bases de dados podem envolver direitos relacionados à seleção, à organização e ao conteúdo de seus registros. A Open Database License (ODbL) foi elaborada especificamente para bases de dados e permite compartilhamento, modificação e uso, desde que sejam observadas condições de atribuição e compartilhamento pela mesma licença \cite{opendatacommons2026odbl}.
+
+A escolha de uma licença deve considerar a natureza dos dados, os direitos existentes e os objetivos de compartilhamento. Também deve levar em conta restrições que não são resolvidas apenas por licenciamento, como privacidade, sigilo institucional, dados pessoais e compromissos assumidos durante a coleta. Um dataset não deve ser aberto quando sua divulgação viola obrigações legais, éticas ou contratuais.
+
+Assim, abertura e controle de acesso não são conceitos incompatíveis. Uma mesma plataforma pode reunir conjuntos abertos, conjuntos públicos com condições específicas e conjuntos privados destinados a uma equipe. O aspecto central é que o nível de acesso e as condições de reutilização sejam apresentados de maneira explícita.
+
+\section{Versionamento de dados}
+
+Versionamento é o processo de preservar estados sucessivos de um recurso ao longo do tempo. Em vez de substituir definitivamente um arquivo a cada alteração, o sistema cria uma nova versão e mantém uma relação com as anteriores. Essa abordagem permite recuperar estados passados, comparar mudanças e informar com precisão qual versão foi utilizada.
+
+A simples substituição pode ser suficiente para arquivos temporários, mas apresenta riscos quando os dados já foram publicados ou utilizados em análises. Corrigir um valor ou acrescentar novos registros sem preservar o estado anterior pode impedir a reprodução de resultados obtidos antes da mudança. O versionamento transforma a atualização em um evento rastreável, e não em uma sobrescrita invisível.
+
+Os identificadores de versão podem seguir diferentes estratégias. Projetos de software frequentemente adotam o versionamento semântico, representado por números de versão maior, menor e de correção. Datasets podem utilizar uma estrutura semelhante ou identificadores sequenciais, como \textit{v1}, \textit{v2} e \textit{v3}. Mais importante do que o formato escolhido é a existência de uma regra consistente e de uma associação clara entre cada identificador e seus arquivos.
+
+Em repositórios científicos, versões significativas podem receber identificadores próprios e manter relações explícitas entre si. A DataCite, por exemplo, recomenda distinguir versões relevantes de um recurso e registrar vínculos entre os respectivos identificadores persistentes \cite{datacite2026versioning}. Essa prática permite citar uma versão específica sem perder a relação com o conjunto ao qual ela pertence.
+
+O versionamento de datasets possui semelhanças com o versionamento de código, mas também diferenças importantes. Ferramentas como Git trabalham de forma eficiente com alterações textuais e permitem observar diferenças detalhadas entre linhas. Datasets podem conter arquivos grandes, formatos binários ou modificações em muitas observações, tornando menos útil a comparação linha a linha. Por isso, plataformas de dados frequentemente preservam versões completas e seus metadados, em vez de depender apenas de diferenças entre arquivos.
+
+Um mecanismo associado à preservação histórica é a exclusão lógica, também conhecida como \textit{soft delete}. Nessa estratégia, o registro não é removido imediatamente do banco de dados. Um campo indica que ele deve ser tratado como excluído pelas operações comuns, mantendo as informações necessárias para auditoria ou restauração.
+
+A exclusão lógica reduz o risco de perda acidental, mas exige regras claras. Registros marcados como excluídos não devem aparecer como ativos, e sua restauração precisa respeitar as mesmas permissões aplicadas às demais operações. Também pode existir uma política posterior de exclusão definitiva, especialmente quando houver obrigação legal de remover determinados dados.
+
+\section{Controle de acesso}
+
+Sistemas que armazenam dados públicos e privados precisam identificar usuários e restringir operações de acordo com suas responsabilidades. Para compreender esse processo, é necessário diferenciar autenticação de autorização. Autenticação responde à pergunta ``quem é o usuário?'', enquanto autorização determina ``o que esse usuário pode fazer?''.
+
+Em uma aplicação web, a autenticação normalmente ocorre quando o usuário apresenta uma credencial. Após a verificação, o servidor mantém a identidade autenticada entre diferentes requisições por meio de uma sessão. Um identificador de sessão é enviado ao navegador e utilizado nas interações seguintes, permitindo que o servidor reconheça o usuário sem solicitar novamente a senha em cada página.
+
+As senhas não devem ser armazenadas em texto simples. Em vez disso, utiliza-se uma função de derivação ou \textit{hash} apropriada, acompanhada de um valor aleatório denominado \textit{salt}. O resultado armazenado permite verificar uma tentativa de autenticação sem recuperar a senha original. As orientações do NIST recomendam que verificadores mantenham senhas de forma resistente a ataques fora de linha, utilizando esquemas de \textit{hashing} com \textit{salt} e custo configurável \cite{nist2025passwords}.
+
+Após a autenticação, a autorização pode ser organizada por meio do controle de acesso baseado em papéis, conhecido como RBAC (\textit{Role-Based Access Control}). Nesse modelo, permissões são associadas a papéis, e usuários recebem um ou mais desses papéis. O acesso é decidido a partir das funções atribuídas, evitando que cada permissão precise ser configurada individualmente para cada pessoa \cite{nist2012rbac}.
+
+Papéis podem ser globais ou contextuais. Um administrador global possui responsabilidades sobre todo o sistema, enquanto um papel contextual é válido apenas dentro de um grupo, projeto ou recurso. Assim, a mesma pessoa pode administrar uma equipe e atuar apenas como leitora em outra. Essa separação representa com maior precisão ambientes colaborativos nos quais as responsabilidades variam conforme o contexto.
+
+O \textit{middleware} é um componente frequentemente utilizado para aplicar verificações antes que a requisição alcance a operação principal. Um \textit{middleware} de autenticação pode impedir o acesso de visitantes a rotas protegidas. A autorização mais específica, entretanto, também precisa considerar o recurso solicitado, pois estar autenticado não significa possuir permissão para alterar qualquer registro.
+
+A interface pode ocultar ou desabilitar ações não permitidas, tornando o sistema mais compreensível. Essa medida, porém, não substitui a validação no servidor. Requisições podem ser construídas sem utilizar os botões da página, de modo que toda operação protegida deve confirmar as permissões antes de acessar ou modificar os dados.
+
+\section{Plataformas de compartilhamento de dados}
+
+Plataformas de dados assumem formatos diferentes de acordo com o público atendido e a finalidade dos conjuntos publicados. Entre as categorias mais comuns estão repositórios de dados de pesquisa, portais de dados abertos e plataformas colaborativas. Embora possam compartilhar funcionalidades, cada categoria enfatiza uma etapa distinta do ciclo de vida dos dados.
+
+Repositórios de dados de pesquisa são ambientes voltados ao depósito, à preservação e à divulgação de conjuntos relacionados à produção científica. Esses sistemas costumam valorizar metadados, autoria, licenciamento, citação e identificadores persistentes. O objetivo é permitir que o dataset seja reconhecido como resultado de pesquisa e permaneça acessível mesmo após o encerramento do projeto que o produziu.
+
+Portais de dados abertos são utilizados por governos e instituições para disponibilizar informações de interesse público. Em geral, organizam conjuntos por temas, órgãos responsáveis, regiões e períodos. A busca e o download possuem papel central, pois o público pode incluir pesquisadores, jornalistas, gestores, empresas e cidadãos.
+
+Plataformas colaborativas acrescentam recursos de exploração, interação e produção de materiais derivados. Além de hospedar arquivos, podem permitir avaliações, comentários, códigos de análise, competições ou formação de comunidades. Nesse caso, o valor da plataforma depende tanto do acervo quanto das atividades realizadas em torno dele.
+
+Um portal institucional pode combinar características dessas categorias. Ele pode apoiar a divulgação pública, preservar informações descritivas e, simultaneamente, oferecer espaços privados para o trabalho de grupos. A combinação escolhida depende das políticas da instituição, do público esperado e do nível de governança necessário.
+
+Independentemente da categoria, uma plataforma de compartilhamento precisa tratar o dataset como algo mais amplo do que um arquivo para download. Autoria, licença, versão, descrição, condições de acesso e histórico fazem parte do objeto publicado e influenciam diretamente sua interpretação e reutilização.
+
+\section{Aplicações web e organização em camadas}
+
+Uma aplicação web é um software acessado por meio de um navegador. Diferentemente de aplicações instaladas diretamente no dispositivo do usuário, sua interface e seus dados são obtidos por comunicação com um servidor. Esse modelo facilita a atualização centralizada, pois novas versões podem ser disponibilizadas no servidor sem exigir uma instalação manual em cada computador.
+
+A arquitetura cliente-servidor divide responsabilidades entre as duas partes. O cliente, representado pelo navegador, apresenta a interface e envia requisições. O servidor recebe essas requisições, executa regras de negócio, consulta os dados e produz uma resposta. A distribuição exata das responsabilidades varia conforme a arquitetura adotada.
+
+O padrão MVC (\textit{Model-View-Controller}) organiza o código em três responsabilidades principais. O \textit{Model} representa dados e regras relacionadas ao domínio. A \textit{View} apresenta informações ao usuário. O \textit{Controller} recebe as ações solicitadas e coordena a comunicação entre as outras partes. A separação reduz o acoplamento e evita que persistência, interface e fluxo de requisição sejam implementados no mesmo componente.
+
+Aplicações de múltiplas páginas, ou MPA (\textit{Multi-Page Applications}), normalmente solicitam um novo documento ao servidor a cada navegação. Em uma SPA (\textit{Single Page Application}), a página inicial carrega a estrutura necessária e as navegações posteriores são controladas principalmente no cliente. A SPA pode oferecer transições mais fluidas, mas exige mecanismos adicionais para sincronizar estado, rotas e dados com o servidor.
+
+Na renderização no lado servidor, conhecida como SSR (\textit{Server-Side Rendering}), o servidor produz o HTML inicial da página. Também existem abordagens híbridas, nas quais o servidor permanece responsável por rotas e dados, enquanto o cliente atualiza os componentes sem recarregar integralmente o documento. Esse modelo procura combinar uma organização semelhante à de aplicações tradicionais com uma experiência de navegação mais dinâmica.
+
+O acesso a bancos relacionais pode ser realizado por meio de um ORM (\textit{Object-Relational Mapper}). Essa camada representa tabelas e relacionamentos como objetos ou classes utilizados no código. O ORM simplifica operações frequentes e centraliza relações entre entidades, embora o desenvolvedor ainda precise compreender o modelo relacional e o comportamento das consultas geradas.
+
+As migrações complementam esse processo ao descrever alterações no esquema do banco de dados. Em vez de modificar tabelas manualmente em cada ambiente, scripts registram a criação ou alteração de colunas, índices e restrições. As migrações tornam a evolução do esquema reproduzível e permitem associá-la às versões do código da aplicação.
+
+Também é comum utilizar transações em operações que modificam múltiplas tabelas. Uma transação agrupa alterações em uma unidade atômica: ou todas são confirmadas, ou todas são desfeitas. Esse mecanismo evita estados incompletos, como a existência de um registro principal sem os registros dependentes que deveriam ter sido criados na mesma operação.
+
+\section{Formato CSV e dados tabulares}
+
+CSV é a abreviação de \textit{Comma-Separated Values}, ou valores separados por vírgulas. Trata-se de um formato textual para representar dados tabulares, no qual cada linha corresponde a um registro e os campos são separados por um delimitador. O RFC~4180 documenta um formato comum para arquivos CSV e registra o tipo de mídia \texttt{text/csv} \cite{shafranovich2005csv}.
+
+Apesar do nome, diferentes contextos utilizam ponto e vírgula, tabulação ou outros caracteres como delimitadores. Campos que contêm o próprio delimitador, aspas ou quebras de linha precisam de tratamento específico. Essas variações explicam por que dois arquivos identificados como CSV podem exigir configurações diferentes durante a importação.
+
+A principal vantagem do CSV é sua simplicidade. O arquivo pode ser produzido e lido por planilhas eletrônicas, bancos de dados e linguagens como Python e R. Por ser textual, também pode ser inspecionado com ferramentas básicas. Essas características reduzem a barreira de entrada para usuários com diferentes níveis de conhecimento técnico.
+
+O formato também apresenta limitações. Ele não define obrigatoriamente os tipos das colunas, não mantém relacionamentos entre tabelas e não possui um esquema embutido capaz de descrever cada variável. Datas, números decimais, valores ausentes, delimitadores e codificações de caracteres podem ser interpretados de formas diferentes por aplicações distintas.
+
+Por essas razões, os metadados são especialmente importantes no uso de CSV. O nome de uma coluna nem sempre explica sua unidade de medida, os valores permitidos ou o procedimento utilizado na coleta. Um arquivo simples pode ser amplamente compatível, mas sua reutilização ainda depende de documentação externa e de convenções consistentes.
+
+Uma prévia tabular permite ler um subconjunto inicial do arquivo e apresentar suas colunas e primeiras linhas. Esse recurso auxilia a inspeção rápida, pois o usuário pode observar a estrutura antes de realizar o download completo. A prévia, entretanto, não substitui uma análise de qualidade, uma vez que problemas podem existir em linhas não apresentadas ou depender do significado científico dos valores.
+
+\section{Monorepo e espaços de trabalho}
+
+Um monorepo é um repositório único que contém múltiplas aplicações ou pacotes relacionados. Em vez de manter cada parte em um repositório independente, os componentes são versionados em conjunto. Essa organização pode facilitar mudanças que afetam simultaneamente a aplicação principal, bibliotecas compartilhadas e configurações de desenvolvimento.
+
+Os espaços de trabalho, ou \textit{workspaces}, permitem que um gerenciador de pacotes trate subdiretórios como pacotes independentes dentro do mesmo repositório. Cada pacote pode manter suas próprias responsabilidades e dependências, ao mesmo tempo que reutiliza código local sem necessidade de publicá-lo externamente.
+
+Entre as vantagens do monorepo estão o compartilhamento de componentes, a centralização de configurações e a execução coordenada de tarefas. Como contrapartida, o crescimento do repositório exige ferramentas capazes de identificar dependências e evitar a execução desnecessária de todas as tarefas a cada alteração. Por esse motivo, gerenciadores de \textit{workspace} e ferramentas de orquestração são frequentemente combinados nessa arquitetura.
+
+O monorepo é uma decisão de organização do desenvolvimento, não uma característica percebida diretamente pelo usuário final. Sua importância está na manutenção do sistema e na possibilidade de separar responsabilidades sem perder a integração entre os pacotes que formam a aplicação.
+
+\section{Considerações do capítulo}
+
+Este capítulo apresentou os fundamentos que sustentam uma plataforma institucional de datasets. A gestão de dados e os princípios FAIR evidenciam a importância de metadados, documentação e rastreabilidade. Os conceitos de dados abertos e licenciamento esclarecem que disponibilidade pública e permissão de reutilização não são equivalentes.
+
+O versionamento e a exclusão lógica oferecem mecanismos para preservar o histórico, enquanto autenticação, autorização e RBAC permitem controlar as ações de usuários e grupos. As categorias de plataformas de dados mostram que preservação científica, abertura institucional e colaboração podem receber ênfases distintas.
+
+Por fim, os conceitos de aplicações web, organização em camadas, CSV e monorepo fornecem a base técnica para compreender a arquitetura da solução. A partir desses elementos, o próximo capítulo apresenta a proposta do DataRural, seus requisitos, sua modelagem de dados e seu fluxo principal de uso.
