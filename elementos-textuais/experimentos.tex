@@ -2,7 +2,7 @@
 
 Este capítulo apresenta a implementação do DataRural a partir da proposta e dos requisitos definidos no Capítulo~\ref{chp:PROPOSTA}. São descritas as tecnologias empregadas, a organização interna da aplicação e as decisões adotadas para transformar o modelo conceitual em uma plataforma web funcional. Também são detalhados os principais fluxos do sistema, desde a autenticação até a publicação, consulta e atualização de datasets.
 
-A implementação foi orientada por três preocupações principais. A primeira foi preservar a rastreabilidade dos dados publicados, evitando que uma atualização substituísse definitivamente os arquivos anteriores. A segunda foi permitir diferentes formas de acesso, contemplando tanto datasets públicos quanto conteúdos privados mantidos por usuários ou grupos. A terceira foi manter uma arquitetura modular, capaz de receber novas funcionalidades sem concentrar todas as regras de negócio em um único componente.
+A implementação foi orientada por três preocupações principais. A primeira foi preservar a rastreabilidade dos dados publicados, evitando que uma atualização substituísse definitivamente os arquivos anteriores. A segunda foi permitir diferentes formas de acesso, contemplando tanto datasets públicos quanto conteúdos privados mantidos por usuários ou grupos. E a terceira foi manter uma arquitetura modular, capaz de receber novas funcionalidades sem concentrar todas as regras de negócio em um único componente.
 
 \section{Tecnologias utilizadas}
 
@@ -20,7 +20,7 @@ A aplicação segue a separação de responsabilidades oferecida pelo AdonisJS. 
 
 \subsection{React e Inertia.js}
 
-O React foi adotado para a construção da interface. Sua organização baseada em componentes permite reutilizar elementos como campos de formulário, tabelas, cartões de dataset, seletores de área e indicadores de visibilidade. A reutilização é importante para manter consistência entre as páginas públicas, a área autenticada e o painel administrativo.
+O React foi adotado para a construção da interface. Sua organização baseada em componentes permite reutilizar elementos como campos de formulário, tabelas e cartões de dataset. A reutilização é importante para manter consistência entre as diferentes páginas da aplicação.
 
 A comunicação entre o AdonisJS e o React é realizada pelo Inertia.js. Em vez de expor uma API REST específica para cada tela, o servidor resolve a rota, consulta os dados necessários e entrega as propriedades da página ao componente React correspondente. As navegações seguintes são realizadas sem uma recarga integral do documento, aproximando a experiência daquela oferecida por aplicações de página única.
 
@@ -36,7 +36,7 @@ Embora os arquivos CSV sejam a matéria principal publicada no DataRural, seu co
 
 \subsection{Armazenamento de arquivos}
 
-O envio e a recuperação dos arquivos são tratados pelo AdonisJS Drive em conjunto com o pacote \texttt{@jrmc/adonis-attachment}. Na configuração adotada, os anexos são mantidos em \texttt{storage/uploads}, e o banco registra os metadados necessários para localizá-los. A camada de armazenamento impede que os controladores dependam diretamente de operações específicas do sistema de arquivos.
+O envio e a recuperação dos arquivos são tratados utilizando o pacote \texttt{@jrmc/adonis-attachment}. Na configuração adotada, os anexos são mantidos em \texttt{storage/uploads}, e o banco registra os metadados necessários para localizá-los. A camada de armazenamento impede que os controladores dependam diretamente de operações específicas do sistema de arquivos.
 
 Cada versão pode possuir mais de um CSV, conforme previsto pelo requisito RF-02. A entidade \textit{dataset\_version\_files} registra cada anexo individualmente, incluindo seu nome, posição e indicação de arquivo principal. Essa separação permite apresentar, baixar e ordenar os arquivos sem tratar uma versão como um único bloco indivisível.
 
@@ -44,15 +44,15 @@ Além dos CSV enviados, o sistema gera um arquivo \texttt{README.md} para cada n
 
 \subsection{Interface e componentes visuais}
 
-A interface utiliza um sistema de design próprio, desenvolvido com CSS convencional e variáveis CSS. Os componentes compartilhados seguem a identidade visual do DataRural e adotam classes como \texttt{dr-btn}, \texttt{dr-panel} e \texttt{dr-card}. Essa abordagem permite controlar diretamente cores, espaçamentos, tipografia e estados de interação, sem depender de uma biblioteca visual completa de terceiros.
+A interface utiliza um sistema de design próprio, desenvolvido com CSS convencional e variáveis CSS. Os componentes compartilhados seguem a identidade visual do DataRural e adotam classes para a estilização. Essa abordagem permite controlar diretamente cores, espaçamentos, tipografia e estados de interação, sem depender de uma biblioteca visual completa de terceiros.
 
-Os componentes reutilizáveis ficam no pacote \texttt{packages/ui}. Essa organização reduz a repetição de código e separa os elementos genéricos das páginas específicas da plataforma. O Radix UI é utilizado de forma pontual por meio de alguns pacotes menores, apenas nos componentes em que suas primitivas são necessárias, não constituindo a base de toda a interface. O conjunto também foi estruturado para responder a diferentes larguras de tela, requisito importante para consultas realizadas em computadores e dispositivos móveis.
+Os componentes reutilizáveis ficam no pacote \texttt{packages/ui}. Essa organização reduz a repetição de código e separa os elementos genéricos das páginas específicas da plataforma. O Radix UI é utilizado de forma pontual por meio de alguns pacotes menores, apenas nos componentes em que suas primitivas são necessárias, não constituindo a base de toda a interface. O conjunto também foi estruturado para responder a diferentes larguras de tela, oferecendo flexibilidade para acessos tanto em computadores quanto em dispositivos móveis.
 
 \subsection{Monorepo e ambiente de desenvolvimento}
 
-O código é mantido em um monorepo gerenciado com Turborepo e \textit{pnpm workspaces}. A aplicação web está localizada em \texttt{apps/web}, enquanto configurações e componentes reutilizáveis são mantidos em pacotes próprios. Essa organização centraliza as dependências do projeto e permite executar tarefas de desenvolvimento, verificação e construção a partir da raiz do repositório.
+O código é mantido em um monorepo, conforme a organização descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. Na prática, o Turborepo orquestra as tarefas e o \textit{pnpm} resolve as dependências entre os pacotes. A aplicação web reside em \texttt{apps/web}, enquanto componentes reutilizáveis e configurações compartilhadas ficam em diretórios sob \texttt{packages/}.
 
-No ambiente de desenvolvimento, o PostgreSQL, o pgAdmin e o Mailpit são executados em contêineres Docker. O pgAdmin auxilia na inspeção do banco de dados, e o Mailpit recebe as mensagens de e-mail geradas localmente sem encaminhá-las a destinatários reais. A utilização de contêineres torna esses serviços reproduzíveis e reduz diferenças de configuração entre as máquinas dos desenvolvedores.
+No ambiente de desenvolvimento, o PostgreSQL, o pgAdmin e o Mailpit são executados em contêineres Docker. O pgAdmin auxilia na inspeção do banco de dados, e o Mailpit recebe as mensagens de e-mail. A utilização de contêineres torna esses serviços reproduzíveis e reduz diferenças de configuração entre as máquinas dos desenvolvedores.
 
 \section{Organização da implementação}
 
@@ -64,13 +64,13 @@ As requisições seguem um fluxo comum. Inicialmente, a rota identifica a opera�
 
 \section{Autenticação e autorização}
 
-O DataRural permite a consulta de conteúdo público sem autenticação, mas exige uma conta para ações que alteram o estado da plataforma. Cadastro, autenticação e edição de perfil utilizam os recursos de sessão do AdonisJS. As senhas não são persistidas em texto simples; o sistema armazena sua representação produzida por uma função de hash apropriada para autenticação.
+O DataRural permite a consulta de conteúdo público sem autenticação, mas exige uma conta para ações que alteram o estado da plataforma. Cadastro, autenticação e edição de perfil utilizam os recursos de sessão do AdonisJS, seguindo os princípios de armazenamento seguro de credenciais apresentados no Capítulo~\ref{chp:FUNDAMENTACAO}.
 
-Rotas de publicação, gerenciamento de grupos, favoritos e administração são protegidas por \textit{middleware}. Essa camada impede o acesso de visitantes antes que a operação alcance o controlador. Entretanto, estar autenticado não é suficiente para modificar qualquer registro. A autorização também considera a autoria do dataset, o grupo associado e o papel exercido pelo usuário.
+Rotas de publicação, gerenciamento de grupos, favoritos e administração são protegidas por \textit{middleware} de autenticação. A autorização específica considera a autoria do dataset, o grupo associado e o papel exercido pelo usuário na tabela \textit{group\_members}.
 
 Nos datasets individuais, o proprietário controla edição, alteração de visibilidade e exclusão. Nos datasets vinculados a grupos, a permissão é calculada a partir do papel registrado em \textit{group\_members}. Donos, administradores e editores podem colaborar na manutenção dos dados, enquanto ações de maior impacto, como a exclusão de versões, são limitadas aos papéis previstos pelas regras de negócio.
 
-O painel administrativo aplica uma verificação adicional baseada no papel global do usuário. Desse modo, as permissões internas de um grupo não concedem acesso automático à administração de toda a plataforma. A separação entre papel global e papel contextual evita que responsabilidades distintas sejam representadas por um único campo de autorização.
+O painel administrativo aplica uma verificação adicional baseada no papel global registrado na tabela \textit{roles}. A separação entre papel global e papel contextual, fundamentada no Capítulo~\ref{chp:FUNDAMENTACAO}, é implementada por meio de duas consultas distintas: uma ao campo \textit{role\_id} do usuário e outra à associação em \textit{group\_members}.
 
 \section{Publicação e versionamento de datasets}
 
@@ -80,9 +80,9 @@ Os anexos aceitos nessa etapa são arquivos CSV com tamanho máximo de 25~MB por
 
 Quando os dados são válidos, a aplicação cria o registro do dataset, sua versão inicial e os registros correspondentes aos arquivos. Essas operações formam uma única unidade lógica: não é desejável manter um dataset sem versão ou uma versão sem seus anexos. Por esse motivo, as alterações relacionais são coordenadas para que uma falha interrompa a publicação antes de produzir um estado incompleto.
 
-Atualizações de conteúdo não substituem a versão anterior. O responsável acessa o dataset existente, envia os novos arquivos e cria uma versão subsequente. A página de detalhes apresenta o histórico disponível, possibilitando identificar o momento de criação e os arquivos pertencentes a cada versão. Esse mecanismo atende à necessidade de rastreabilidade e permite que análises futuras indiquem qual versão foi utilizada.
+Atualizações de conteúdo geram uma versão subsequente, conforme o mecanismo de versionamento fundamentado no Capítulo~\ref{chp:FUNDAMENTACAO}. O responsável acessa o dataset existente, envia os novos arquivos e confirma a criação. A página de detalhes apresenta o histórico disponível, possibilitando identificar o momento de criação e os arquivos pertencentes a cada versão.
 
-A exclusão de uma versão utiliza \textit{soft delete}. Em vez de remover imediatamente o registro e perder sua referência histórica, a aplicação altera o indicador \textit{is\_deleted}. Versões nessa condição deixam de aparecer nos fluxos comuns, mas podem ser restauradas por um usuário autorizado. A estratégia reduz o risco de perda acidental e mantém evidências das alterações realizadas no dataset.
+A exclusão de uma versão utiliza a estratégia de exclusão lógica descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. Na prática, a aplicação altera o indicador \textit{is\_deleted} da entidade \textit{dataset\_versions}. Versões nessa condição deixam de aparecer nos fluxos comuns, mas ainda podem ser restauradas caso seja necessário.
 
 Para download, o usuário pode selecionar um arquivo específico ou solicitar todos os arquivos da versão. No segundo caso, a aplicação reúne os anexos em um pacote ZIP. O download respeita a mesma política de acesso usada na visualização: arquivos de datasets públicos ficam disponíveis aos visitantes, enquanto arquivos privados exigem autorização.
 
@@ -92,7 +92,7 @@ A área de exploração apresenta os datasets públicos e oferece busca e filtra
 
 Na página de detalhes, os metadados são organizados para responder a questões básicas sobre o conjunto: quem o publicou, qual unidade é responsável, qual período e região são cobertos e sob qual licença os dados podem ser utilizados. A visibilidade dessas informações evita que o arquivo seja apresentado sem o contexto necessário para sua interpretação.
 
-Para arquivos CSV, a aplicação disponibiliza uma prévia tabular das primeiras linhas. Esse processamento é realizado no navegador pelo componente \textit{ViewerTab}, que interpreta o conteúdo do CSV no lado cliente e constrói a tabela apresentada ao usuário. A prévia tem finalidade de inspeção e não substitui o download ou uma ferramenta de análise. Sua função é permitir que o usuário reconheça as colunas, observe exemplos de valores e verifique se o conjunto parece adequado ao uso pretendido antes de transferir o arquivo completo.
+O componente \textit{ViewerTab} implementa a prévia tabular descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. O processamento é realizado no navegador: o componente interpreta o conteúdo do CSV no lado cliente e constrói a tabela apresentada ao usuário, permitindo reconhecer colunas e observar exemplos de valores antes do download completo.
 
 O indicador de usabilidade complementa essa apresentação ao sintetizar aspectos de completude observados no material publicado. Seu valor é calculado durante o envio do arquivo e armazenado no atributo \textit{usabilityScore} do dataset, evitando que a análise precise ser repetida sempre que a página for acessada. O indicador deve ser interpretado como um apoio à inspeção, e não como garantia de qualidade científica. A adequação de um dataset depende do método de coleta, da documentação e do contexto de uso, fatores que não podem ser avaliados apenas pela estrutura do CSV.
 
@@ -100,7 +100,7 @@ Usuários autenticados podem curtir ou favoritar datasets. As curtidas funcionam
 
 \section{Colaboração por grupos}
 
-Os grupos foram implementados para representar equipes, laboratórios, projetos ou unidades que compartilham a responsabilidade sobre datasets. Um grupo possui um proprietário e uma lista de membros. Para cada associação, é registrado um papel que determina as operações permitidas naquele contexto.
+Os grupos foram implementados para permitir o acesso de múltiplos usuários a um dataset privado. Um grupo possui um proprietário e uma lista de membros. Para cada associação, é registrado um papel que determina as operações permitidas naquele contexto.
 
 Ao publicar ou editar um dataset, o usuário pode vinculá-lo a um grupo no qual possua permissão. A partir desse vínculo, a autorização deixa de depender apenas do autor original e passa a considerar a equipe. Essa decisão evita que a continuidade de um conjunto institucional fique condicionada a uma única conta, além de permitir a divisão de responsabilidades entre os membros.
 
@@ -108,11 +108,11 @@ Datasets privados de grupo só são apresentados a usuários autorizados. A veri
 
 \section{Painel administrativo e auditoria}
 
-O painel administrativo reúne operações que afetam a organização global do DataRural. Administradores podem consultar e gerenciar usuários e áreas temáticas, mantendo as classificações usadas nos formulários e filtros. A centralização dessas operações evita que categorias equivalentes sejam cadastradas livremente com nomes diferentes por cada publicador.
+O painel administrativo reúne operações que afetam a organização global do DataRural. Administradores podem consultar e gerenciar usuários e áreas temáticas, mantendo as classificações usadas nos formulários e filtros. A centralização dessas operações permite um controle maior sobre as categorias cadastradas, e oferece uma seleção melhor de opções.
 
-As alterações sobre entidades relevantes produzem registros de auditoria. Para cada evento, podem ser armazenados o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição. Esses dados auxiliam a investigação de mudanças indevidas e complementam o histórico específico das versões.
+As alterações sobre entidades relevantes produzem registros de auditoria. Para cada evento, podem ser armazenados o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição. Esses dados auxiliam a investigação de mudanças indevidas e facilitam na moderação de ações suspeitas.
 
-Versionamento e auditoria possuem finalidades relacionadas, mas não idênticas. O primeiro preserva a evolução dos arquivos de um dataset; a segunda registra mudanças nas entidades da aplicação. Uma edição de descrição, por exemplo, pode gerar um evento de auditoria sem necessariamente criar uma nova versão de arquivos. A combinação dos dois mecanismos amplia a rastreabilidade da plataforma.
+Versionamento e auditoria possuem finalidades relacionadas, mas não idênticas. O primeiro preserva a evolução dos arquivos de um dataset; a segunda registra mudanças nas entidades da aplicação, e não está visível para todos os usuários. Uma edição de descrição, por exemplo, pode gerar um evento de auditoria sem necessariamente criar uma nova versão de arquivos. A combinação dos dois mecanismos amplia a rastreabilidade da plataforma.
 
 \section{Principais interfaces}
 
@@ -122,7 +122,7 @@ Na área autenticada, o formulário de publicação distribui as informações e
 
 As páginas de gerenciamento apresentam ações de acordo com o contexto. O proprietário de um dataset encontra opções de edição, nova versão e controle de visibilidade. Um membro de grupo visualiza apenas as operações compatíveis com seu papel. Visitantes, por sua vez, recebem acesso às informações e downloads públicos sem visualizar controles de manutenção.
 
-O perfil público reúne dados fornecidos pelo usuário e os datasets públicos associados a ele. Já a área pessoal inclui favoritos e registros sob responsabilidade da conta. Essa separação permite disponibilizar informações úteis à comunidade sem expor datasets privados ou recursos administrativos.
+O perfil público reúne dados fornecidos pelo usuário e os datasets públicos associados a ele. Já a área pessoal inclui favoritos e registros sob responsabilidade da conta. Essa separação permite disponibilizar informações úteis à comunidade.
 
 \section{Atendimento à proposta}
 
