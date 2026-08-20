@@ -1,11 +1,33 @@
 \chapter{Introdução}\label{chp:INTRODUCAO}
 
-Falará um breve introdução ao trabalho, explicando brevemente o contexto, motivação e problema.
+A produção de dados faz parte de diferentes atividades realizadas em uma universidade. Projetos de pesquisa, ações de extensão, experimentos, levantamentos de campo e procedimentos administrativos geram registros que podem apoiar novos estudos e decisões institucionais. Entretanto, a continuidade desse valor depende da forma como os arquivos são mantidos e disponibilizados. A gestão de dados ao longo de seu ciclo de vida envolve atividades como organização, documentação, armazenamento, preservação e compartilhamento \cite{higgins2008dcc}. Quando os arquivos permanecem dispersos entre computadores pessoais, serviços de armazenamento ou planilhas compartilhadas informalmente, sua localização e compreensão tornam-se dependentes das pessoas que participaram de sua produção.
+
+Essa dependência cria dificuldades que ultrapassam o simples armazenamento. Mesmo quando um arquivo pode ser encontrado, nem sempre estão disponíveis informações suficientes para esclarecer sua origem, o período representado, a unidade responsável ou as condições de utilização. Os metadados fornecem esse contexto ao descrever características necessárias à localização, à interpretação e à administração dos dados \cite{riley2017metadata}. Além disso, alterações realizadas diretamente sobre um mesmo documento podem apagar estados anteriores e dificultar a identificação do material utilizado em uma pesquisa. A preservação de versões permite reconhecer mudanças e indicar com maior precisão o estado do conjunto empregado em determinado resultado \cite{klump2021versioning}. Como consequência da ausência desses cuidados, dados potencialmente úteis podem permanecer inacessíveis, ser interpretados de maneira incorreta ou exigir um novo processo de coleta.
+
+O compartilhamento por meios genéricos também não atende, de forma integrada, às diferentes situações encontradas no ambiente acadêmico. Alguns conjuntos devem ser divulgados publicamente, enquanto outros precisam permanecer restritos durante determinada etapa do trabalho. Os princípios FAIR reconhecem que a acessibilidade pode envolver procedimentos de autenticação e autorização, não exigindo que todos os dados sejam abertos indistintamente \cite{wilkinson2016fair}. Em atividades desenvolvidas por laboratórios, equipes ou unidades, ainda é necessário distinguir as responsabilidades de cada participante. Desse modo, uma solução institucional precisa conciliar descoberta, colaboração e controle, sem reduzir o conjunto de dados a um arquivo isolado de seu contexto.
+
+Na Universidade Federal Rural do Rio de Janeiro (UFRRJ), a diversidade de áreas de atuação amplia a possibilidade de produção e reaproveitamento desses registros. Dados originados em diferentes setores podem interessar a pesquisadores, estudantes, gestores e ao público externo, desde que sejam apresentados de maneira organizada. Repositórios de dados contribuem para tornar os materiais de pesquisa mais visíveis e localizáveis, favorecendo sua reutilização \cite{pampel2013making}. Nesse contexto, este trabalho considera a necessidade de um ambiente próprio para reunir os conjuntos produzidos na instituição e apoiar a formação de um acervo que permaneça útil para além do projeto ou atividade que o originou.
+
+Diante desse cenário, este trabalho apresenta o DataRural, uma plataforma web para a publicação e a gestão de datasets da UFRRJ. A solução busca estabelecer um ponto comum no qual os conjuntos possam ser descritos, consultados, atualizados e compartilhados conforme as permissões definidas por seus responsáveis. Ao reunir essas operações, o projeto procura reduzir a dispersão dos arquivos e favorecer a continuidade do uso dos dados produzidos na instituição.
 
 \section{Objetivo}\label{sec:INTRODUCAO_OBJETIVO}
 
-Nesta subseção seria definido os objetivos do projeto final.
+O objetivo geral deste trabalho é projetar e desenvolver uma plataforma institucional de datasets para a UFRRJ, denominada DataRural, capaz de apoiar a publicação, a organização, a consulta e o compartilhamento de conjuntos de dados em formato CSV. A plataforma deve permitir que cada dataset seja acompanhado das informações necessárias à sua identificação e que seu acesso seja adequado tanto à divulgação pública quanto ao trabalho restrito de usuários e equipes.
+
+Para alcançar esse objetivo, o sistema deve oferecer mecanismos de autenticação e autorização, possibilitar a formação de grupos com diferentes papéis e manter o histórico das atualizações realizadas nos datasets. Também deve fornecer recursos que auxiliem a descoberta e a inspeção do material publicado, como busca, classificação por área temática, apresentação de metadados, visualização prévia e download dos arquivos.
+
+Além da disponibilização das funcionalidades, pretende-se estruturar a aplicação de maneira modular, separando as responsabilidades relacionadas à interface, às regras do sistema, à persistência das informações e ao armazenamento dos arquivos. Essa organização busca permitir a evolução gradual da plataforma e sua futura adaptação a novos formatos ou formas de integração institucional.
 
 \section{Organização do Trabalho}
 
-Nesta parte, será explicada como será a organização do trabalho.
+Este trabalho está organizado da seguinte forma:
+
+\begin{compactitem}
+    \item \textbf{Capítulo~\ref{chp:FUNDAMENTACAO}:} apresenta a fundamentação teórica necessária à compreensão do projeto, abordando a gestão e o compartilhamento de dados, os mecanismos de preservação do histórico e do acesso, além dos conceitos técnicos que sustentam a aplicação;
+
+    \item \textbf{Capítulo~\ref{chp:PROPOSTA}:} descreve a proposta do DataRural, sua visão geral, os trabalhos relacionados, os requisitos estabelecidos e a modelagem das entidades que compõem o sistema;
+
+    \item \textbf{Capítulo~\ref{chp:EXPERIMENTOS}:} detalha a implementação da plataforma, as tecnologias adotadas, a organização do código e os principais fluxos disponibilizados aos usuários;
+
+    \item \textbf{Capítulo~\ref{chp:CONCLUSAO}:} apresenta as considerações finais, as limitações identificadas e as possibilidades de continuidade e ampliação do trabalho.
+\end{compactitem}
