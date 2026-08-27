@@ -131,9 +131,3 @@ A implementação concretiza os elementos centrais definidos no capítulo anteri
 Em relação aos trabalhos relacionados, o DataRural incorpora práticas encontradas em plataformas de dados, mas as aplica a um escopo institucional. A exploração e as interações lembram recursos presentes em plataformas comunitárias; o registro de metadados e licenças aproxima a solução de repositórios científicos; e os grupos acrescentam uma camada voltada ao trabalho interno de equipes da universidade. Essa combinação não pretende substituir repositórios de alcance internacional, mas oferecer um fluxo adaptado à produção e à gestão local dos dados.
 
 O estágio atual também delimita o alcance da solução. O CSV é o formato inicialmente suportado, o armazenamento utiliza o sistema de arquivos local e a análise apresentada na interface é intencionalmente limitada a uma prévia. Essas decisões mantêm a implementação compatível com o escopo do projeto e deixam pontos de extensão para formatos adicionais, armazenamento de objetos e mecanismos mais avançados de validação e visualização.
-
-\section{Considerações do capítulo}
-
-Este capítulo descreveu como a proposta do DataRural foi implementada. Foram apresentadas a pilha tecnológica, a organização modular, o armazenamento dos arquivos, os mecanismos de autenticação e autorização e os fluxos de publicação, versionamento, consulta e colaboração.
-
-A arquitetura adotada mantém os metadados relacionais separados dos anexos, preserva versões anteriores e aplica as permissões no servidor. Ao mesmo tempo, React e Inertia.js oferecem uma interface integrada ao AdonisJS, evitando a necessidade de uma API separada nesta etapa. O resultado é uma base funcional para a publicação institucional de datasets, preparada para receber as evoluções discutidas no capítulo seguinte.
