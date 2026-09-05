@@ -66,6 +66,18 @@ As requisições seguem um fluxo comum. Inicialmente, a rota identifica a opera�
 
 O DataRural permite a consulta de conteúdo público sem autenticação, mas exige uma conta para ações que alteram o estado da plataforma. Cadastro, autenticação e edição de perfil utilizam os recursos de sessão do AdonisJS, seguindo os princípios de armazenamento seguro de credenciais apresentados no Capítulo~\ref{chp:FUNDAMENTACAO}.
 
+Para ter acesso aos módulos restritos de publicação e administração, o usuário deve se autenticar na aplicação por meio da interface de login apresentada na \reffigure{fig:tela_login}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{imagens/login.jpeg}
+    \caption{Tela de autenticação de usuários do DataRural.}
+    \label{fig:tela_login}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+A interface de autenticação adota um cartão centralizado com campos para e-mail e senha, oferecendo recursos de recuperação de acesso e integração com provedores de autenticação externa (\textit{OAuth}), como o Google. Os dados informados são transmitidos sob proteção contra \textit{Cross-Site Request Forgery} (CSRF) gerenciada pelo módulo Shield do AdonisJS, assegurando que apenas requisições originadas na própria aplicação possam estabelecer sessões autenticadas.
+
 Rotas de publicação, gerenciamento de grupos, favoritos e administração são protegidas por \textit{middleware} de autenticação. A autorização específica considera a autoria do dataset, o grupo associado e o papel exercido pelo usuário na tabela \textit{group\_members}.
 
 Nos datasets individuais, o proprietário controla edição, alteração de visibilidade e exclusão. Nos datasets vinculados a grupos, a permissão é calculada a partir do papel registrado em \textit{group\_members}. Donos, administradores e editores podem colaborar na manutenção dos dados, enquanto ações de maior impacto, como a exclusão de versões, são limitadas aos papéis previstos pelas regras de negócio.
@@ -74,11 +86,69 @@ O painel administrativo aplica uma verificação adicional baseada no papel glob
 
 \section{Publicação e versionamento de datasets}
 
-O fluxo de publicação começa no formulário de criação. O usuário informa o título, a descrição, a licença, a área temática e os demais metadados definidos no Capítulo~\ref{chp:PROPOSTA}. Também escolhe a visibilidade e, quando aplicável, o grupo responsável. Antes da persistência, o servidor verifica os campos obrigatórios, a unicidade do nome e as características dos arquivos enviados.
+O fluxo de publicação começa no formulário de criação. Para assegurar a integridade dos dados, a completude dos metadados e a conformidade com as diretrizes institucionais, o processo de publicação foi estruturado na forma de um assistente guiado (\textit{wizard}) composto por cinco etapas sequenciais.
 
-Os anexos aceitos nessa etapa são arquivos CSV com tamanho máximo de 25~MB por arquivo. A validação no servidor é necessária mesmo quando o navegador já apresenta restrições no campo de envio, pois requisições podem ser produzidas fora da interface. Caso algum arquivo não satisfaça as regras, o fluxo é interrompido e o formulário retorna mensagens de erro sem publicar parcialmente o dataset.
+Na primeira etapa do assistente, apresentada na \reffigure{fig:publicar_etapa1}, o usuário realiza o envio do arquivo CSV inicial por meio de uma área interativa de carregamento.
 
-Quando os dados são válidos, a aplicação cria o registro do dataset, sua versão inicial e os registros correspondentes aos arquivos. Essas operações formam uma única unidade lógica: não é desejável manter um dataset sem versão ou uma versão sem seus anexos. Por esse motivo, as alterações relacionais são coordenadas para que uma falha interrompa a publicação antes de produzir um estado incompleto.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-01.png}
+    \caption{Assistente de publicação — Etapa 1: Envio do arquivo CSV, detecção e pré-visualização tabular.}
+    \label{fig:publicar_etapa1}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Ao selecionar o arquivo tabular, a aplicação executa imediatamente uma inspeção no lado cliente. São identificadas as dimensões do arquivo (como 12 colunas e 1.000 linhas no exemplo demonstrado), os tipos primitivos dos atributos (numérico, texto ou data) e uma prévia das primeiras linhas do conteúdo. Conforme ilustrado na parte inferior da \reffigure{fig:publicar_etapa1}, o sistema calcula uma validação preliminar de qualidade, verificando ausência de linhas vazias, caracteres inválidos e presença de cabeçalhos nomeados, gerando uma nota inicial de usabilidade (9,5/10). Os anexos aceitos nessa etapa são arquivos CSV com limite máximo de 25~MB por arquivo, respeitando a regra de negócio RN-06.
+
+Após a validação do arquivo, o usuário avança para a segunda etapa do assistente, exibida na \reffigure{fig:publicar_etapa2}, na qual são informados os metadados contextuais e institucionais do conjunto de dados.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-02.png}
+    \caption{Assistente de publicação — Etapa 2: Preenchimento de metadados descritivos, temporais e espaciais.}
+    \label{fig:publicar_etapa2}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Nessa etapa, são fornecidos o título descritivo do conjunto, a unidade ou instituto de vínculo (como o Instituto Multidisciplinar ou Instituto de Ciências Exatas), a descrição detalhada das variáveis e métodos de coleta, a área de conhecimento cadastrada, a cobertura temporal (período de medição), a cobertura espacial (região geográfica) e palavras-chave (\textit{tags}). Esses campos atendem ao requisito funcional RF-10 e garantem que o dataset possua a contextualização necessária para posterior catalogação e busca.
+
+A terceira etapa do assistente, ilustrada na \reffigure{fig:publicar_etapa3}, é dedicada ao refinamento do esquema e à elaboração do dicionário de dados.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-03.png}
+    \caption{Assistente de publicação — Etapa 3: Refinamento de esquema e dicionário de dados.}
+    \label{fig:publicar_etapa3}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Nessa tela, a aplicação lista cada uma das colunas detectadas no arquivo CSV, permitindo que o usuário valide ou altere o tipo inferido (número, texto ou data) e forneça uma descrição em linguagem natural para cada variável. Essa funcionalidade eleva o índice de usabilidade da publicação, alinhando a plataforma às diretrizes FAIR de reusabilidade de dados ao evitar atributos enigmáticos ou sem significado documentado.
+
+Na quarta etapa, apresentada na \reffigure{fig:publicar_etapa4}, são definidas a licença de uso e a visibilidade do conjunto de dados.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-04.png}
+    \caption{Assistente de publicação — Etapa 4: Seleção de licença de uso e visibilidade.}
+    \label{fig:publicar_etapa4}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+O sistema oferece cartões visuais para a seleção entre as licenças padronizadas, incluindo \textit{Creative Commons} Atribuição (CC BY 4.0, recomendada para dados acadêmicos abertos), Compartilhamento pela mesma Licença (CC BY-SA 4.0), Uso Não Comercial (CC BY-NC 4.0), Domínio Público (CC0), Base de Dados Aberta (ODbL) e Licença Personalizada. No bloco de visibilidade, o usuário escolhe entre o modo público (acessível a qualquer pessoa para busca e download) e o modo privado (com acesso restrito ao autor ou aos grupos institucionais autorizados), cumprindo os requisitos RF-04, RF-05, RF-09 e a regra de negócio RN-03.
+
+Por fim, a quinta etapa do assistente consolida todas as informações cadastradas para conferência, conforme ilustrado na \reffigure{fig:publicar_etapa5}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-05.png}
+    \caption{Assistente de publicação — Etapa 5: Revisão geral e declaração de conformidade.}
+    \label{fig:publicar_etapa5}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+A interface de revisão agrupa cartões com o resumo dos arquivos anexados, dos metadados gerais e das configurações de licença e visibilidade, disponibilizando atalhos para edição rápida caso algum ajuste seja necessário. Antes do envio definitivo, o usuário deve assinalar o termo de conformidade institucional, confirmando autorização para divulgação pública e atestando que os dados atendem à Política de Dados Abertos da UFRRJ e à Lei Geral de Proteção de Dados (LGPD), sem exposição indevida de dados pessoais identificáveis.
+
+Quando os dados são submetidos e validados pelo servidor, a aplicação cria o registro do dataset, sua versão inicial e os registros correspondentes aos arquivos em uma única transação relacional. Essas operações formam uma unidade lógica atômica: não é permitido manter um dataset sem versão ou uma versão sem seus anexos físicos correspondentes.
 
 Atualizações de conteúdo geram uma versão subsequente, conforme o mecanismo de versionamento fundamentado no Capítulo~\ref{chp:FUNDAMENTACAO}. O responsável acessa o dataset existente, envia os novos arquivos e confirma a criação. A página de detalhes apresenta o histórico disponível, possibilitando identificar o momento de criação e os arquivos pertencentes a cada versão.
 
@@ -90,11 +160,28 @@ Para download, o usuário pode selecionar um arquivo específico ou solicitar to
 
 A área de exploração apresenta os datasets públicos e oferece busca e filtragem por área temática. Cada item exibe informações resumidas que auxiliam a decisão de abrir o registro, como título, responsável, categoria e indicadores de interação. A filtragem reduz o conjunto apresentado sem exigir que o usuário conheça previamente o nome exato do dataset.
 
-Na página de detalhes, os metadados são organizados para responder a questões básicas sobre o conjunto: quem o publicou, qual unidade é responsável, qual período e região são cobertos e sob qual licença os dados podem ser utilizados. A visibilidade dessas informações evita que o arquivo seja apresentado sem o contexto necessário para sua interpretação.
+Ao selecionar um conjunto de dados, o usuário é direcionado para a página de detalhes e exploração, demonstrada na \reffigure{fig:dataset_dashboard}.
 
-O componente \textit{ViewerTab} implementa a prévia tabular descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. O processamento é realizado no navegador: o componente interpreta o conteúdo do CSV no lado cliente e constrói a tabela apresentada ao usuário, permitindo reconhecer colunas e observar exemplos de valores antes do download completo.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/dataset-detalhes-dashboard.png}
+    \caption{Página de visualização detalhada e exploração de um dataset publicado.}
+    \label{fig:dataset_dashboard}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
 
-O indicador de usabilidade complementa essa apresentação ao sintetizar aspectos de completude observados no material publicado. Seu valor é calculado durante o envio do arquivo e armazenado no atributo \textit{usabilityScore} do dataset, evitando que a análise precise ser repetida sempre que a página for acessada. O indicador deve ser interpretado como um apoio à inspeção, e não como garantia de qualidade científica. A adequação de um dataset depende do método de coleta, da documentação e do contexto de uso, fatores que não podem ser avaliados apenas pela estrutura do CSV.
+Na página de detalhes, os metadados são organizados para responder a questões básicas sobre o conjunto: quem o publicou, qual unidade é responsável, qual período e região são cobertos e sob qual licença os dados podem ser utilizados. Como visível no cabeçalho da \reffigure{fig:dataset_dashboard}, o dataset ``Estudantes do RU no IM(2025)'' exibe seu identificador, unidade responsável (Instituto de Ciências Sociais Aplicadas / Instituto Multidisciplinar), badge de licença aberta (CC BY 4.0), tamanho total (167,2~KB), contagem de linhas e colunas (1.000 linhas e 12 colunas) e botões de ação para download do arquivo CSV e criação de nova versão.
+
+O painel central destaca o índice de usabilidade da publicação (9,5 de 10). Esse indicador quantitativo sintetiza três dimensões essenciais da curadoria de dados abertos:
+\begin{itemize}
+    \item \textbf{Completude (85\%):} avalia o preenchimento de metadados, detalhamento da descrição e presença de descrições no dicionário de colunas;
+    \item \textbf{Credibilidade:} valida a declaração de fonte, proveniência institucional (UFRRJ) e metodologia de coleta empregada;
+    \item \textbf{Compatibilidade:} confirma a adoção de formato aberto (CSV), licença permissiva e suporte a atualização contínua.
+\end{itemize}
+
+Abaixo dos indicadores, a aba de visualização apresenta o dicionário de colunas com estatísticas descritivas calculadas para cada atributo do CSV. Variáveis numéricas contínuas exibem valores mínimos, médios e máximos (como evidenciado no campo \textit{Id}), enquanto variáveis categóricas de texto informam a quantidade de valores distintos únicos e porcentagens relativas de preenchimento. A página apresenta ainda recomendações de datasets relacionados pertencentes à mesma linha de pesquisa institucional.
+
+O componente \textit{ViewerTab} implementa a prévia tabular interativa descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. O processamento é realizado no navegador: o componente interpreta o conteúdo do CSV no lado cliente e constrói a tabela apresentada ao usuário, permitindo reconhecer colunas e observar exemplos de valores antes do download completo.
 
 Usuários autenticados podem curtir ou favoritar datasets. As curtidas funcionam como uma forma simples de interação pública, enquanto os favoritos criam uma coleção pessoal para acesso posterior. As duas ações são armazenadas separadamente porque representam intenções diferentes e não alteram a propriedade ou a visibilidade do conjunto.
 
@@ -116,13 +203,33 @@ Versionamento e auditoria possuem finalidades relacionadas, mas não idênticas.
 
 \section{Principais interfaces}
 
-A interface foi organizada de acordo com as tarefas mais frequentes. A página inicial apresenta a finalidade do DataRural e direciona o visitante para a exploração dos conjuntos disponíveis. A listagem pública prioriza descoberta e filtragem, enquanto a página de detalhes concentra metadados, arquivos, versões e ações de interação.
+A interface do DataRural foi projetada com base em princípios modernos de usabilidade e arquitetura orientada a componentes, organizando as telas de acordo com as tarefas mais frequentes dos diferentes perfis de usuário.
 
-Na área autenticada, o formulário de publicação distribui as informações em campos coerentes com o modelo do dataset. Opções de licença, área e grupo utilizam seletores controlados, diminuindo divergências entre os valores armazenados. O componente de envio informa as restrições de formato e tamanho e permite acompanhar os arquivos incluídos antes da confirmação.
+A porta de entrada do sistema é a página inicial pública, apresentada na \reffigure{fig:pagina_inicial}.
 
-As páginas de gerenciamento apresentam ações de acordo com o contexto. O proprietário de um dataset encontra opções de edição, nova versão e controle de visibilidade. Um membro de grupo visualiza apenas as operações compatíveis com seu papel. Visitantes, por sua vez, recebem acesso às informações e downloads públicos sem visualizar controles de manutenção.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/pagina-inicial.png}
+    \caption{Página inicial e catálogo público de datasets institucionais.}
+    \label{fig:pagina_inicial}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
 
-O perfil público reúne dados fornecidos pelo usuário e os datasets públicos associados a ele. Já a área pessoal inclui favoritos e registros sob responsabilidade da conta. Essa separação permite disponibilizar informações úteis à comunidade.
+A página inicial cumpre papel fundamental na divulgação científica e transparência institucional da universidade. O topo da página traz uma barra de busca unificada com sugestões de termos frequentes de pesquisa (como produção agrícola, clima e solos), acompanhada de indicadores quantitativos em tempo real sobre o acervo (total de datasets públicos, áreas de conhecimento, grupos de pesquisa e pesquisadores cadastrados). A seção central disponibiliza um catálogo navegável segmentado pelos institutos e unidades da UFRRJ (Ciências Biológicas, Ciências Exatas, Veterinária, ICSA, Florestas, entre outros) e uma vitrine de datasets em destaque com cartões informativos. Na parte inferior, há um convite direto à submissão de novos dados pela comunidade acadêmica e um rodapé com dados de contato institucional do Instituto Multidisciplinar (IM/UFRRJ).
+
+Para os usuários autenticados que produzem dados, a aplicação disponibiliza o painel de controle pessoal ``Meus datasets'', ilustrado na \reffigure{fig:meus_datasets}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imagens/meus-datasets.jpeg}
+    \caption{Painel de gestão pessoal de conjuntos de dados do usuário autenticado.}
+    \label{fig:meus_datasets}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+O painel reúne métricas consolidadas sobre a produção do pesquisador, exibindo a contagem total de datasets publicados, rascunhos em elaboração, curtidas acumuladas e registros mantidos em caráter privado. A tela fornece controles dedicados para busca textual no acervo do próprio usuário, filtros combinados por status de publicação e faixa de usabilidade, atalho direto para iniciar uma nova submissão e sinalizações visuais claras para estados vazios ou pesquisas sem correspondência.
+
+O perfil público reúne dados fornecidos pelo usuário e os datasets públicos associados a ele, enquanto a área administrativa permite o gerenciamento global de usuários, papéis e áreas temáticas. Essa separação permite disponibilizar informações úteis à comunidade acadêmica, resguardando os controles de manutenção e governança interna.
 
 \section{Atendimento à proposta}
 
