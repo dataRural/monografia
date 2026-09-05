@@ -4,7 +4,7 @@ A produção de dados faz parte de diferentes atividades realizadas em uma unive
 
 Essa dependência cria dificuldades que ultrapassam o simples armazenamento. Mesmo quando um arquivo pode ser encontrado, nem sempre estão disponíveis informações suficientes para esclarecer sua origem, o período representado, a unidade responsável ou as condições de utilização. Os metadados fornecem esse contexto ao descrever características necessárias à localização, à interpretação e à administração dos dados \cite{riley2017metadata}. Além disso, alterações realizadas diretamente sobre um mesmo documento podem apagar estados anteriores e dificultar a identificação do material utilizado em uma pesquisa. A preservação de versões permite reconhecer mudanças e indicar com maior precisão o estado do conjunto empregado em determinado resultado \cite{klump2021versioning}. Como consequência da ausência desses cuidados, dados potencialmente úteis podem permanecer inacessíveis, ser interpretados de maneira incorreta ou exigir um novo processo de coleta.
 
-O compartilhamento por meios genéricos também não atende, de forma integrada, às diferentes situações encontradas no ambiente acadêmico. Alguns conjuntos devem ser divulgados publicamente, enquanto outros precisam permanecer restritos durante determinada etapa do trabalho. Os princípios FAIR reconhecem que a acessibilidade pode envolver procedimentos de autenticação e autorização, não exigindo que todos os dados sejam abertos indistintamente \cite{wilkinson2016fair}. Em atividades desenvolvidas por laboratórios, equipes ou unidades, ainda é necessário distinguir as responsabilidades de cada participante. Desse modo, uma solução institucional precisa conciliar descoberta, colaboração e controle, sem reduzir o conjunto de dados a um arquivo isolado de seu contexto.
+O compartilhamento por meios genéricos também não atende, de forma integrada, às diferentes situações encontradas no ambiente acadêmico. Alguns conjuntos devem ser divulgados publicamente, enquanto outros precisam permanecer restritos durante determinada etapa do trabalho. Os princípios FAIR --- acrônimo para \textit{Findable} (localizável), \textit{Accessible} (acessível), \textit{Interoperable} (interoperável) e \textit{Reusable} (reutilizável) --- orientam a descrição e a disponibilização de dados de forma a favorecer sua descoberta e reutilização \cite{wilkinson2016fair}. Esses princípios não exigem que todos os dados sejam abertos: a acessibilidade pode envolver procedimentos de autenticação e autorização, desde que as condições de acesso estejam documentadas. Em atividades desenvolvidas por laboratórios, equipes ou unidades, ainda é necessário distinguir as responsabilidades de cada participante. Desse modo, uma solução institucional precisa conciliar descoberta, colaboração e controle, sem reduzir o conjunto de dados a um arquivo isolado de seu contexto.
 
 Na Universidade Federal Rural do Rio de Janeiro (UFRRJ), a diversidade de áreas de atuação amplia a possibilidade de produção e reaproveitamento desses registros. Dados originados em diferentes setores podem interessar a pesquisadores, estudantes, gestores e ao público externo, desde que sejam apresentados de maneira organizada. Repositórios de dados contribuem para tornar os materiais de pesquisa mais visíveis e localizáveis, favorecendo sua reutilização \cite{pampel2013making}. Nesse contexto, este trabalho considera a necessidade de um ambiente próprio para reunir os conjuntos produzidos na instituição e apoiar a formação de um acervo que permaneça útil para além do projeto ou atividade que o originou.
 
@@ -18,16 +18,25 @@ Para alcançar esse objetivo, o sistema deve oferecer mecanismos de autenticaç�
 
 Além da disponibilização das funcionalidades, pretende-se estruturar a aplicação de maneira modular, separando as responsabilidades relacionadas à interface, às regras do sistema, à persistência das informações e ao armazenamento dos arquivos. Essa organização busca permitir a evolução gradual da plataforma e sua futura adaptação a novos formatos ou formas de integração institucional.
 
+
+\section{Uso de Inteligência Artificial}\label{sec:uso_ia}
+
+O desenvolvimento deste trabalho utilizou ferramentas baseadas em modelos de linguagem de grande escala (\textit{Large Language Models}) em diferentes etapas do processo. A presente seção registra essa utilização de forma transparente, em atendimento às boas práticas de integridade acadêmica.
+
+Na escrita do texto, modelos de linguagem foram empregados como auxílio à redação, revisão de coesão e sugestão de reformulações. A responsabilidade pelo conteúdo, pelas decisões conceituais e pela verificação das informações permaneceu integralmente com os autores. Na busca de referências, as ferramentas auxiliaram na identificação de termos, autores e publicações relacionadas ao tema, servindo como ponto de partida para consultas posteriores em bases acadêmicas.
+
+No desenvolvimento do sistema, modelos de linguagem foram utilizados como apoio à geração de código, à resolução de dúvidas técnicas e à exploração de alternativas de implementação. Os trechos sugeridos foram avaliados, adaptados e integrados ao projeto conforme as decisões de arquitetura definidas pelos autores. Na construção da interface, as ferramentas também auxiliaram na prototipação de componentes visuais e na definição de estilos.
+
 \section{Organização do Trabalho}
 
 Este trabalho está organizado da seguinte forma:
 
 \begin{compactitem}
-    \item \textbf{Capítulo~\ref{chp:FUNDAMENTACAO}:} apresenta a fundamentação teórica necessária à compreensão do projeto, abordando a gestão e o compartilhamento de dados, os mecanismos de preservação do histórico e do acesso, além dos conceitos técnicos que sustentam a aplicação;
+    \item \textbf{Capítulo~\ref{chp:FUNDAMENTACAO}:} apresenta a fundamentação teórica necessária à compreensão do projeto, discutindo dados, metadados, gestão de dados de pesquisa, os princípios FAIR, dados abertos e licenciamento, versionamento de dados e o formato CSV;
 
-    \item \textbf{Capítulo~\ref{chp:PROPOSTA}:} descreve a proposta do DataRural, sua visão geral, os trabalhos relacionados, os requisitos estabelecidos e a modelagem das entidades que compõem o sistema;
+    \item \textbf{Capítulo~\ref{chp:PROPOSTA}:} descreve a proposta do DataRural, sua visão geral, os trabalhos relacionados, os requisitos do sistema, o controle de acesso, a modelagem de dados e a arquitetura proposta;
 
-    \item \textbf{Capítulo~\ref{chp:EXPERIMENTOS}:} detalha a implementação da plataforma, as tecnologias adotadas, a organização do código e os principais fluxos disponibilizados aos usuários;
+    \item \textbf{Capítulo~\ref{chp:EXPERIMENTOS}:} detalha a implementação da plataforma, justifica as tecnologias adotadas, descreve a organização do código e apresenta os principais fluxos e interfaces disponibilizados aos usuários;
 
     \item \textbf{Capítulo~\ref{chp:CONCLUSAO}:} apresenta as considerações finais, as limitações identificadas e as possibilidades de continuidade e ampliação do trabalho.
 \end{compactitem}

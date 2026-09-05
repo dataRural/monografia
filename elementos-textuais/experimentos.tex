@@ -6,13 +6,15 @@ A implementação foi orientada por três preocupações principais. A primeira 
 
 \section{Tecnologias utilizadas}
 
-A seleção das tecnologias considerou as necessidades funcionais do DataRural e a integração entre as diferentes partes da aplicação. Como o sistema reúne autenticação, formulários, persistência de metadados, envio de arquivos e páginas interativas, optou-se por uma pilha \textit{fullstack} baseada em TypeScript. Essa escolha permite compartilhar conceitos e tipos entre servidor e interface, além de reduzir mudanças de contexto durante o desenvolvimento.
+A seleção das tecnologias considerou as necessidades funcionais do DataRural e a integração entre as diferentes partes da aplicação. Como o sistema reúne autenticação, formulários, persistência de metadados, envio de arquivos e páginas interativas, optou-se por uma pilha \textit{fullstack} baseada em TypeScript. Essa escolha permite compartilhar conceitos e tipos entre servidor e interface, além de reduzir mudanças de contexto durante o desenvolvimento. Uma alternativa comum seria separar a aplicação em uma API REST independente e um cliente dedicado, utilizando linguagens ou \textit{frameworks} distintos para cada camada. Neste estágio do projeto, a abordagem integrada reduz a superfície de manutenção e simplifica a comunicação entre servidor e interface, sem impedir que serviços externos sejam adicionados posteriormente.
 
-As tecnologias foram combinadas em uma aplicação monolítica modular. Nesse modelo, as páginas e as regras de negócio permanecem no mesmo projeto, mas o código é separado por domínio. A solução evita a manutenção de uma API independente neste estágio do trabalho, sem impedir que serviços externos sejam adicionados posteriormente.
+As tecnologias foram combinadas em uma aplicação monolítica modular. Nesse modelo, as páginas e as regras de negócio permanecem no mesmo projeto, mas o código é separado por domínio. As subseções a seguir apresentam cada componente da pilha adotada e justificam as decisões que motivaram sua escolha.
 
 \subsection{AdonisJS e TypeScript}
 
 O AdonisJS foi utilizado no lado servidor da aplicação. O \textit{framework} fornece uma estrutura para definição de rotas, controladores, validações, \textit{middlewares}, políticas de autorização e acesso ao banco de dados. Esses recursos atendem aos fluxos do DataRural, nos quais uma mesma operação precisa validar os dados recebidos, verificar a identidade do usuário, aplicar regras de permissão e persistir informações relacionadas.
+
+A escolha do AdonisJS considerou alternativas como NestJS, Express e Fastify. O NestJS oferece uma arquitetura baseada em decorators e injeção de dependências, mas adiciona uma camada de abstração que se mostrou desnecessária para o escopo deste projeto. O Express e o Fastify fornecem menor estrutura para rotas, validações e políticas de autorização, exigindo bibliotecas adicionais para funcionalidades que o AdonisJS oferece de forma integrada. A integração nativa com o Inertia.js e o suporte completo a sessões, autenticação e ORM foram fatores determinantes para a decisão.
 
 O uso de TypeScript contribui para explicitar os formatos esperados pelos métodos e pelas entidades. Essa característica é especialmente útil no tratamento de datasets, versões e arquivos, pois reduz ambiguidades entre os identificadores e os metadados manipulados em cada etapa. A tipagem não substitui as validações executadas no servidor, mas complementa esse processo durante o desenvolvimento.
 
@@ -20,9 +22,9 @@ A aplicação segue a separação de responsabilidades oferecida pelo AdonisJS. 
 
 \subsection{React e Inertia.js}
 
-O React foi adotado para a construção da interface. Sua organização baseada em componentes permite reutilizar elementos como campos de formulário, tabelas e cartões de dataset. A reutilização é importante para manter consistência entre as diferentes páginas da aplicação.
+O React foi adotado para a construção da interface. Sua organização baseada em componentes permite reutilizar elementos como campos de formulário, tabelas e cartões de dataset. A reutilização é importante para manter consistência entre as diferentes páginas da aplicação. Foram consideradas alternativas como Vue.js e Angular. O Vue oferece uma curva de aprendizado menor, mas possui um ecossistema de componentes relativamente menor para as necessidades do projeto. O Angular adota uma estrutura mais rígida e complexa. O React foi escolhido por combinar flexibilidade, ecossistema extenso de bibliotecas de componentes e familiaridade dos autores com sua abordagem.
 
-A comunicação entre o AdonisJS e o React é realizada pelo Inertia.js. Em vez de expor uma API REST específica para cada tela, o servidor resolve a rota, consulta os dados necessários e entrega as propriedades da página ao componente React correspondente. As navegações seguintes são realizadas sem uma recarga integral do documento, aproximando a experiência daquela oferecida por aplicações de página única.
+A comunicação entre o AdonisJS e o React é realizada pelo Inertia.js. Em vez de expor uma API REST específica para cada tela, o servidor resolve a rota, consulta os dados necessários e entrega as propriedades da página ao componente React correspondente. As navegações seguintes são realizadas sem uma recarga integral do documento, aproximando a experiência daquela oferecida por aplicações de página única. Essa abordagem foi preferida à implementação de uma API REST dedicada porque evita a duplicação de validações e permissões entre servidor e cliente, mantendo a autoridade dessas regras em um único local.
 
 Essa integração simplifica o fluxo de autenticação e de validação. As sessões e permissões continuam sob responsabilidade do servidor, enquanto a interface recebe apenas os dados necessários para representar a página. Erros de formulário também podem retornar pelo mesmo ciclo de requisição, permitindo informar ao usuário quais campos precisam ser corrigidos sem duplicar as regras no cliente.
 
@@ -50,7 +52,7 @@ Os componentes reutilizáveis ficam no pacote \texttt{packages/ui}. Essa organiz
 
 \subsection{Monorepo e ambiente de desenvolvimento}
 
-O código é mantido em um monorepo, conforme a organização descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. Na prática, o Turborepo orquestra as tarefas e o \textit{pnpm} resolve as dependências entre os pacotes. A aplicação web reside em \texttt{apps/web}, enquanto componentes reutilizáveis e configurações compartilhadas ficam em diretórios sob \texttt{packages/}.
+O código é mantido em um monorepo, conforme a arquitetura descrita no Capítulo~\ref{chp:PROPOSTA}. Na prática, o Turborepo orquestra as tarefas e o \textit{pnpm} resolve as dependências entre os pacotes. A aplicação web reside em \texttt{apps/web}, enquanto componentes reutilizáveis e configurações compartilhadas ficam em diretórios sob \texttt{packages/}. A adoção de um monorepo permite que alterações em componentes compartilhados, como o pacote \texttt{packages/ui}, sejam imediatamente visíveis na aplicação, sem necessidade de publicação intermediária. A alternativa de manter repositórios separados exigiria um processo de versionamento e publicação de pacotes entre os projetos, introduzindo complexidade que não se justifica neste estágio.
 
 No ambiente de desenvolvimento, o PostgreSQL, o pgAdmin e o Mailpit são executados em contêineres Docker. O pgAdmin auxilia na inspeção do banco de dados, e o Mailpit recebe as mensagens de e-mail. A utilização de contêineres torna esses serviços reproduzíveis e reduz diferenças de configuração entre as máquinas dos desenvolvedores.
 
@@ -64,7 +66,7 @@ As requisições seguem um fluxo comum. Inicialmente, a rota identifica a opera�
 
 \section{Autenticação e autorização}
 
-O DataRural permite a consulta de conteúdo público sem autenticação, mas exige uma conta para ações que alteram o estado da plataforma. Cadastro, autenticação e edição de perfil utilizam os recursos de sessão do AdonisJS, seguindo os princípios de armazenamento seguro de credenciais apresentados no Capítulo~\ref{chp:FUNDAMENTACAO}.
+O DataRural permite a consulta de conteúdo público sem autenticação, mas exige uma conta para ações que alteram o estado da plataforma. Cadastro, autenticação e edição de perfil utilizam os recursos de sessão do AdonisJS, seguindo os princípios de controle de acesso definidos na Seção~\ref{sec:controle_acesso} do Capítulo~\ref{chp:PROPOSTA}.
 
 Para ter acesso aos módulos restritos de publicação e administração, o usuário deve se autenticar na aplicação por meio da interface de login apresentada na \reffigure{fig:tela_login}.
 
@@ -82,7 +84,7 @@ Rotas de publicação, gerenciamento de grupos, favoritos e administração são
 
 Nos datasets individuais, o proprietário controla edição, alteração de visibilidade e exclusão. Nos datasets vinculados a grupos, a permissão é calculada a partir do papel registrado em \textit{group\_members}. Donos, administradores e editores podem colaborar na manutenção dos dados, enquanto ações de maior impacto, como a exclusão de versões, são limitadas aos papéis previstos pelas regras de negócio.
 
-O painel administrativo aplica uma verificação adicional baseada no papel global registrado na tabela \textit{roles}. A separação entre papel global e papel contextual, fundamentada no Capítulo~\ref{chp:FUNDAMENTACAO}, é implementada por meio de duas consultas distintas: uma ao campo \textit{role\_id} do usuário e outra à associação em \textit{group\_members}.
+O painel administrativo aplica uma verificação adicional baseada no papel global registrado na tabela \textit{roles}. A separação entre papel global e papel contextual, definida na Seção~\ref{sec:controle_acesso} do Capítulo~\ref{chp:PROPOSTA}, é implementada por meio de duas consultas distintas: uma ao campo \textit{role\_id} do usuário e outra à associação em \textit{group\_members}.
 
 \section{Publicação e versionamento de datasets}
 
@@ -152,7 +154,7 @@ Quando os dados são submetidos e validados pelo servidor, a aplicação cria o 
 
 Atualizações de conteúdo geram uma versão subsequente, conforme o mecanismo de versionamento fundamentado no Capítulo~\ref{chp:FUNDAMENTACAO}. O responsável acessa o dataset existente, envia os novos arquivos e confirma a criação. A página de detalhes apresenta o histórico disponível, possibilitando identificar o momento de criação e os arquivos pertencentes a cada versão.
 
-A exclusão de uma versão utiliza a estratégia de exclusão lógica descrita no Capítulo~\ref{chp:FUNDAMENTACAO}. Na prática, a aplicação altera o indicador \textit{is\_deleted} da entidade \textit{dataset\_versions}. Versões nessa condição deixam de aparecer nos fluxos comuns, mas ainda podem ser restauradas caso seja necessário.
+A exclusão de uma versão utiliza a estratégia de exclusão lógica descrita no Capítulo~\ref{chp:PROPOSTA}. Na prática, a aplicação altera o indicador \textit{is\_deleted} da entidade \textit{dataset\_versions}. Versões nessa condição deixam de aparecer nos fluxos comuns, mas ainda podem ser restauradas caso seja necessário.
 
 Para download, o usuário pode selecionar um arquivo específico ou solicitar todos os arquivos da versão. No segundo caso, a aplicação reúne os anexos em um pacote ZIP. O download respeita a mesma política de acesso usada na visualização: arquivos de datasets públicos ficam disponíveis aos visitantes, enquanto arquivos privados exigem autorização.
 

@@ -18,6 +18,11 @@ O sistema adota o versionamento como princípio estrutural. Cada atualização d
 
 Os grupos colaborativos constituem outro elemento central da plataforma. Eles representam laboratórios, equipes ou unidades institucionais e permitem que múltiplos usuários trabalhem de forma coordenada sobre os mesmos datasets, com papéis bem definidos — dono, administrador, editor e leitor. Essa estrutura de colaboração diferencia o DataRural de repositórios de uso individual, tornando-o adequado tanto para a divulgação pública de dados quanto para o trabalho interno de equipes acadêmicas.
 
+Após o acesso à plataforma, um usuário pode buscar datasets, aplicar filtros por área temática, visualizar metadados, consultar informações de licença, observar prévias tabulares das primeiras linhas dos arquivos CSV e realizar download individual ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados e não necessita de autenticação. Usuários autenticados podem ainda curtir datasets, salvá-los como favoritos e participar de grupos.
+
+Para publicar um dataset, o usuário acessa o formulário de criação, envia um ou mais arquivos CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset, gera automaticamente um arquivo \texttt{README.md} com a descrição provida e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas e restauradas.
+
+Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O acesso aos datasets privados de um grupo é validado por middleware que verifica a associação do usuário autenticado ao grupo proprietário, respeitando os papéis de membro (dono, administrador, editor e leitor). Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários, áreas temáticas e suporte operacional.
 
 \section{Trabalhos relacionados}
 
@@ -47,8 +52,10 @@ Os requisitos apresentados nesta seção organizam as capacidades esperadas para
 
 \subsection{Requisitos funcionais}
 
+A Tabela~\ref{tab:requisitos_funcionais} apresenta os requisitos funcionais definidos para o DataRural. Esses requisitos descrevem as operações que a plataforma deve disponibilizar aos seus usuários, incluindo publicação, consulta, versionamento, colaboração e administração.
+
 \begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
-\caption{Requisitos funcionais do DataRural.}\\
+\caption{Requisitos funcionais do DataRural.}\label{tab:requisitos_funcionais}\\
 \toprule
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
@@ -86,8 +93,10 @@ RF-24 & Exibir perfis públicos de usuários. \\
 
 \subsection{Requisitos não funcionais}
 
+Os requisitos não funcionais, apresentados na Tabela~\ref{tab:requisitos_nao_funcionais}, estabelecem restrições e qualidades esperadas para a plataforma. Eles orientam decisões de implementação relacionadas a segurança, organização do código, preservação do histórico e compatibilidade.
+
 \begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
-\caption{Requisitos não funcionais do DataRural.}\\
+\caption{Requisitos não funcionais do DataRural.}\label{tab:requisitos_nao_funcionais}\\
 \toprule
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
@@ -111,8 +120,10 @@ RNF-10 & A organização modular do sistema deve favorecer manutenção e expans
 
 \subsection{Regras de negócio}
 
+As regras de negócio, listadas na Tabela~\ref{tab:regras_negocio}, definem condições que devem ser respeitadas pela plataforma independentemente da tecnologia adotada. Elas delimitam permissões, restrições de formato e políticas de visibilidade que orientam o comportamento esperado do sistema.
+
 \begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
-\caption{Regras de negócio do DataRural.}\\
+\caption{Regras de negócio do DataRural.}\label{tab:regras_negocio}\\
 \toprule
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
@@ -133,18 +144,32 @@ RN-09 & A exclusão de versões é lógica (\textit{soft delete}), preservando o
 \bottomrule
 \end{longtable}
 
+\section{Controle de acesso}\label{sec:controle_acesso}
+
+A plataforma armazena tanto dados públicos quanto dados privados, o que exige a identificação dos usuários e a restrição de operações de acordo com suas responsabilidades. Para isso, é necessário diferenciar dois processos complementares: autenticação e autorização \cite{owasp2026auth}. A autenticação responde à pergunta ``quem é o usuário?'', enquanto a autorização determina ``o que esse usuário pode fazer?''.
+
+No DataRural, a autenticação ocorre quando o usuário apresenta suas credenciais. Após a verificação, o servidor mantém a identidade autenticada entre diferentes requisições por meio de uma sessão \cite{owasp2026session}. Um identificador de sessão é enviado ao navegador e utilizado nas interações seguintes, permitindo que o servidor reconheça o usuário sem solicitar novamente a senha em cada página. As senhas não são armazenadas em texto simples: utiliza-se uma função de derivação acompanhada de um valor aleatório (\textit{salt}), conforme recomendado pelo NIST \cite{nist2025passwords}.
+
+A autorização é organizada por meio do controle de acesso baseado em papéis, conhecido como RBAC (\textit{Role-Based Access Control}) \cite{nist2012rbac}. Nesse modelo, permissões são associadas a papéis, e cada usuário recebe um ou mais desses papéis. O acesso é decidido a partir das funções atribuídas, evitando que cada permissão precise ser configurada individualmente para cada pessoa.
+
+No DataRural, os papéis operam em dois níveis. Os \textbf{papéis globais} distinguem usuários comuns de administradores da plataforma, sendo registrados na entidade \textit{roles} e associados ao campo \textit{role\_id} do usuário. Os \textbf{papéis contextuais} são válidos apenas dentro de um grupo e definem o que cada membro pode fazer em relação aos datasets daquele grupo. Assim, a mesma pessoa pode administrar uma equipe e atuar apenas como leitora em outra.
+
+A verificação de acesso é aplicada pelo servidor antes que a requisição alcance a operação principal, por meio de componentes de \textit{middleware} \cite{bernstein1996middleware}. Um \textit{middleware} de autenticação impede o acesso de visitantes a rotas protegidas, enquanto a autorização mais específica também considera o recurso solicitado — estar autenticado não significa possuir permissão para alterar qualquer registro. A interface pode ocultar ou desabilitar ações não permitidas para tornar o sistema mais compreensível, mas essa medida não substitui a validação no servidor, pois requisições podem ser construídas sem utilizar os botões da página.
+
 \section{Modelagem de dados}
 
-A modelagem de dados foi organizada para refletir as principais responsabilidades do DataRural. O dataset ocupa a posição central do modelo, enquanto as demais entidades oferecem suporte a autenticação, autoria, licenciamento, versionamento e colaboração. Essa estrutura permite que a plataforma trate o arquivo enviado e suas informações descritivas como partes de um mesmo registro institucional.
+A modelagem de dados do DataRural foi orientada pelas responsabilidades identificadas ao longo da proposta. O dataset ocupa a posição central do modelo, enquanto as demais entidades oferecem suporte a autenticação, autoria, licenciamento, versionamento e colaboração. A estrutura permite que a plataforma trate o arquivo enviado e suas informações descritivas como partes de um mesmo registro institucional.
 
 A adoção de um banco de dados relacional se mostra adequada porque as relações do domínio são bem definidas. Usuários publicam datasets, datasets possuem versões, licenças são associadas a datasets e grupos reúnem usuários. Além disso, o modelo facilita a aplicação de restrições de integridade e a consulta estruturada das informações utilizadas pela plataforma.
 
+As subseções a seguir apresentam cada entidade, suas colunas e seus papéis no sistema. A entidade \textit{users} concentra os dados de autenticação e perfil. As entidades \textit{roles} e \textit{groups}/\textit{group\_members} organizam os dois níveis de permissão descritos na seção anterior. A entidade \textit{datasets} reúne os metadados do conjunto publicado, enquanto \textit{dataset\_versions} e \textit{dataset\_version\_files} implementam o mecanismo de versionamento discutido no Capítulo~\ref{chp:FUNDAMENTACAO}. A separação entre o dataset e suas versões merece atenção especial: em vez de tratar cada publicação como um arquivo substituível, o modelo preserva cada estado anterior como uma versão distinta, vinculada ao mesmo registro. Essa decisão foi motivada pela necessidade de rastreabilidade — um dos princípios centrais da gestão de dados de pesquisa — e pela possibilidade de restaurar versões excluídas logicamente, evitando perdas acidentais. Por fim, as entidades \textit{dataset\_likes} e \textit{dataset\_favorites} registram, respectivamente, as curtidas e os favoritos dos usuários, representando formas distintas de interação: a curtida funciona como uma valorização pública, enquanto o favorito cria uma coleção pessoal para acesso rápido. A entidade \textit{audits} registra alterações para fins de rastreabilidade interna.
+
 \subsection{Entidade \textit{users}}
 
-A entidade \textit{users} concentra os dados dos usuários cadastrados. Ela participa dos fluxos de autenticação, autoria, administração e associação com grupos.
+A entidade \textit{users} concentra os dados dos usuários cadastrados. Ela participa dos fluxos de autenticação, autoria, administração e associação com grupos. A Tabela~\ref{tab:entity_users} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade users.}\\
+\caption{Entidade users.}\label{tab:entity_users}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -171,10 +196,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{roles}}
 
-A entidade \textit{roles} define os papéis globais disponíveis na aplicação, distinguindo usuários comuns de administradores.
+A entidade \textit{roles} define os papéis globais disponíveis na aplicação, distinguindo usuários comuns de administradores. A Tabela~\ref{tab:entity_roles} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade roles.}\\
+\caption{Entidade roles.}\label{tab:entity_roles}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -193,10 +218,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{groups}}
 
-A entidade \textit{groups} representa espaços colaborativos vinculados a equipes, laboratórios, projetos ou unidades institucionais.
+A entidade \textit{groups} representa espaços colaborativos vinculados a equipes, laboratórios, projetos ou unidades institucionais. A Tabela~\ref{tab:entity_groups} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade groups.}\\
+\caption{Entidade groups.}\label{tab:entity_groups}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -216,10 +241,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{group\_members}}
 
-A entidade \textit{group\_members} registra a participação de usuários em grupos e informa o papel exercido por cada membro naquele contexto.
+A entidade \textit{group\_members} registra a participação de usuários em grupos e informa o papel exercido por cada membro naquele contexto. A Tabela~\ref{tab:entity_group_members} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade group\_members.}\\
+\caption{Entidade group\_members.}\label{tab:entity_group_members}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -239,10 +264,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{licenses}}
 
-A entidade \textit{licenses} mantém as licenças que podem ser vinculadas aos datasets, tornando explícitas as condições de uso e redistribuição.
+A entidade \textit{licenses} mantém as licenças que podem ser vinculadas aos datasets, tornando explícitas as condições de uso e redistribuição. A Tabela~\ref{tab:entity_licenses} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade licenses.}\\
+\caption{Entidade licenses.}\label{tab:entity_licenses}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -261,10 +286,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_areas}}
 
-A entidade \textit{dataset\_areas} armazena as áreas temáticas disponíveis para classificação dos datasets, permitindo filtragem e navegação por categoria.
+A entidade \textit{dataset\_areas} armazena as áreas temáticas disponíveis para classificação dos datasets, permitindo filtragem e navegação por categoria. A Tabela~\ref{tab:entity_dataset_areas} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_areas.}\\
+\caption{Entidade dataset\_areas.}\label{tab:entity_dataset_areas}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -286,10 +311,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{datasets}}
 
-A entidade \textit{datasets} reúne os metadados e configurações centrais de cada conjunto de dados publicado. Por meio dela são definidos autoria, licença, visibilidade, status, área, unidade responsável e demais informações necessárias para contextualização.
+A entidade \textit{datasets} reúne os metadados e configurações centrais de cada conjunto de dados publicado. Por meio dela são definidos autoria, licença, visibilidade, status, área, unidade responsável e demais informações necessárias para contextualização. A Tabela~\ref{tab:entity_datasets} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade datasets.}\\
+\caption{Entidade datasets.}\label{tab:entity_datasets}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -320,10 +345,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_versions}}
 
-A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a um dataset. Com essa separação, uma atualização não elimina o histórico anterior e o sistema preserva a rastreabilidade do arquivo utilizado. Versões excluídas são mantidas com marcação lógica.
+A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a um dataset, conforme discutido na Seção~\ref{sec:versionamento}. Com essa separação, uma atualização não elimina o histórico anterior e o sistema preserva a rastreabilidade do arquivo utilizado. A exclusão lógica (\textit{soft delete}) é aplicada por meio do campo \textit{is\_deleted}: em vez de remover definitivamente o registro, o sistema marca a versão como excluída, mantendo os dados necessários para auditoria ou restauração. Essa estratégia reduz o risco de perda acidental, mas exige que registros marcados como excluídos não apareçam como ativos e que sua restauração respeite as mesmas permissões das demais operações. A Tabela~\ref{tab:entity_dataset_versions} apresenta a estrutura da entidade.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_versions.}\\
+\caption{Entidade dataset\_versions.}\label{tab:entity_dataset_versions}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -344,10 +369,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_version\_files}}
 
-A entidade \textit{dataset\_version\_files} armazena os arquivos individuais de cada versão do dataset, suportando múltiplos arquivos CSV por versão.
+A entidade \textit{dataset\_version\_files} armazena os arquivos individuais de cada versão do dataset, suportando múltiplos arquivos CSV por versão (conforme o requisito RF-02 da Tabela~\ref{tab:requisitos_funcionais}). A Tabela~\ref{tab:entity_dataset_version_files} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_version\_files.}\\
+\caption{Entidade dataset\_version\_files.}\label{tab:entity_dataset_version_files}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -369,10 +394,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_likes}}
 
-A entidade \textit{dataset\_likes} registra as curtidas dos usuários em datasets, permitindo a valorização social dos conjuntos de dados.
+A entidade \textit{dataset\_likes} registra as curtidas dos usuários em datasets. As curtidas funcionam como uma forma simples de interação pública, permitindo que a comunidade sinalize interesse e relevância. A Tabela~\ref{tab:entity_dataset_likes} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_likes.}\\
+\caption{Entidade dataset\_likes.}\label{tab:entity_dataset_likes}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -391,10 +416,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_favorites}}
 
-A entidade \textit{dataset\_favorites} registra os datasets favoritados por cada usuário, possibilitando acesso rápido a conjuntos de dados de interesse.
+A entidade \textit{dataset\_favorites} registra os datasets favoritados por cada usuário, possibilitando acesso rápido a conjuntos de interesse pessoal. Diferentemente das curtidas, os favoritos criam uma coleção privada que não altera a propriedade nem a visibilidade do conjunto. A Tabela~\ref{tab:entity_dataset_favorites} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_favorites.}\\
+\caption{Entidade dataset\_favorites.}\label{tab:entity_dataset_favorites}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -413,10 +438,10 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{audits}}
 
-A entidade \textit{audits} registra as alterações realizadas nas entidades do sistema para fins de auditoria e rastreabilidade.
+A entidade \textit{audits} registra as alterações realizadas nas entidades do sistema para fins de auditoria e rastreabilidade. Cada evento armazena o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição. A Tabela~\ref{tab:entity_audits} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade audits.}\\
+\caption{Entidade audits.}\label{tab:entity_audits}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -474,11 +499,3 @@ A estrutura do monorepo está organizada conforme apresentado a seguir:
 .3 typescript-config/ \DTcomment{Configuração compartilhada de TypeScript}.
 .2 docker-compose.yaml.
 }
-
-\section{Fluxo principal de uso}
-
-Após o acesso da plataforma, um usuário pode buscar datasets, aplicar filtros por área temática, visualizar metadados, consultar informações de licença, observar prévias tabulares das primeiras linhas dos arquivos CSV e realizar download individual ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados. e não necessita de autenticação. Usuários autenticados pode ainda curtir datasets, salvá-los e participar de grupos.
-
-Para publicar um dataset, o usuário acessa o formulário de criação, envia um ou mais arquivos CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset, gera automaticamente um arquivo \texttt{README.md} com a descrição provida e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas e restauradas.
-
-Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O acesso aos datasets privados de um grupo é validado por middleware que verifica a associação do usuário autenticado ao grupo proprietário, respeitando os papéis de membro (dono, administrador, editor e leitor). Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários, áreas temáticas e suporte operacional.
