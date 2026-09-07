@@ -65,7 +65,7 @@ Os arquivos CSV não são armazenados nas tabelas relacionais. O banco mantém o
 
 \subsection{Armazenamento de arquivos}
 
-O envio e a recuperação dos arquivos são tratados pelo pacote \texttt{@jrmc/adonis-attachment}. Na configuração adotada, os anexos são mantidos em \texttt{storage/uploads}, e o banco registra os metadados necessários para localizá-los. A abstração de armazenamento impede que os controladores dependam diretamente de operações específicas do sistema de arquivos, facilitando uma eventual migração para armazenamento em nuvem.
+O envio e a recuperação dos arquivos são tratados pelo pacote \texttt{@jrmc/\allowbreak adonis-\allowbreak attachment}. Na configuração adotada, os anexos são mantidos em \texttt{storage/uploads}, e o banco registra os metadados necessários para localizá-los. A abstração de armazenamento impede que os controladores dependam diretamente de operações específicas do sistema de arquivos, facilitando uma eventual migração para armazenamento em nuvem.
 
 Cada versão pode possuir mais de um CSV, conforme previsto pelo requisito RF-02. A entidade \textit{dataset\_version\_files} registra cada anexo individualmente, incluindo seu nome, posição e indicação de arquivo principal. Além dos CSV enviados, o sistema gera um arquivo \texttt{README.md} para cada nova versão, consolidando informações descritivas existentes no momento da publicação.
 

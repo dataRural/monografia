@@ -44,8 +44,8 @@
 
 \RequirePackage{csquotes}           % citações de frases
 
-\RequirePackage[printonlyused]{acronym}   % criar lista de acrônimos 
-\RequirePackage{ccaption}                 % adicionar legendas numeradas e não numeradas (ex. fonte da imagem)
+\RequirePackage{acronym}            % criar lista de acrônimos 
+\RequirePackage{ccaption}           % adicionar legendas numeradas e não numeradas (ex. fonte da imagem)
 
 \newcommand*{\eg}{\textit{e.g.}\@\xspace}
 \newcommand*{\ie}{\textit{i.e.}\@\xspace}
