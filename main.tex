@@ -3,15 +3,12 @@
 %P A C O T E S
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Adicione aqui seus pacotes
-\usepackage[]{algorithm2e}
 \usepackage[olditem,oldenum]{paralist}
 \usepackage{float}
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{dirtree}
 
-\renewcommand{\algorithmcfname}{Algoritmo}
-\renewcommand{\listalgorithmcfname}{Lista de Algoritmos}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %I N I C I O  D O  D O C U M E N T O
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,8 +39,8 @@
 %\coadvisor[Prof.]{Nome do co-orientador,~M.Sc.}{}{a} % co-orientadora
 
 % máximo de 3 integrantes da banca (orientador e co-orientador já são adicionados automaticamente)
-\banca[Prof.]{Nome do participante banca 1,~D.Sc.}{DCC~-~UFRRJ}
-\banca[Prof.]{Nome do participante banca 2,~Ph.D.}{DCC~-~UFRRJ}
+\banca[Prof.]{Bruno José Dembogurski,~D.Sc.}{DCC~-~UFRRJ}
+\banca[Prof.]{Marcel William Rocha da Silva,~D.Sc.}{DCC~-~UFRRJ}
 %\banca[Prof.]{Nome do participante banca 3,~Ph.D.}{DCC~-~UFRRJ}
 
 \location{Nova Iguaçu}{RJ}{Brasil}
@@ -83,14 +80,8 @@
 % Tabelas
 \maketablespage
 
-% Algoritmos
-\listofalgorithms
-
 % Abreviaturas (devem estar em ordem alfabética)
 \makeabrevpage{\input{elementos-pretextuais/abreviaturas}}
-
-% Símbolos (devem estar em ordem alfabética)
-\makesymbolspage{\input{elementos-pretextuais/simbolos}}
 
 % Sumário 
 \maketocpage
@@ -111,12 +102,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Retirar esta parte se o trabalho não tiver bibliografia
 \makebibspage{elementos-postextuais/referencias}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% A P E N D I C E
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Retirar esta parte se o trabalho não tiver anexos
-\appendix
-\input{elementos-postextuais/apendice}
 
 \end{document}
