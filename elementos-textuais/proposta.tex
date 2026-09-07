@@ -8,22 +8,6 @@ Com base nessa necessidade, este trabalho propõe a Plataforma Institucional de 
 
 O DataRural parte de referências conhecidas no ecossistema de dados, como Kaggle, portais de dados abertos e repositórios científicos. No entanto, seu foco não é reproduzir integralmente nenhuma dessas soluções. A intenção é adaptar conceitos consolidados, como publicação de datasets, hierarquia de usuários e licenciamento, para uma realidade universitária específica. Dessa forma, a plataforma busca apoiar tanto a divulgação pública de dados quanto o trabalho colaborativo de grupos, laboratórios e unidades acadêmicas.
 
-\section{Visão geral do sistema}
-
-O DataRural é uma aplicação web que centraliza a publicação, consulta e gestão de datasets institucionais. A plataforma foi concebida para atender a dois perfis principais de usuário: o usuário comum, que publica e reutiliza dados, e o administrador, responsável pela manutenção da plataforma, gerenciamento de usuários e configuração de áreas temáticas. A aplicação foi pensada para ser acessada por meio de autenticação, no entanto, alguns recursos, como a consulta e o download de datasets públicos, estão disponíveis mesmo para usuários não autenticados, ampliando o alcance da informação.
-
-A unidade central do sistema é o dataset. Cada conjunto de dados é descrito por um conjunto de metadados — título, descrição, área temática, unidade responsável, região, período, palavras-chave e licença — que fornecem o contexto necessário para sua compreensão e reutilização. A visibilidade controla o acesso: datasets públicos são acessíveis a qualquer visitante, enquanto datasets privados ficam restritos ao proprietário ou ao grupo ao qual estão vinculados.
-
-O sistema adota o versionamento como princípio estrutural. Cada atualização de um conjunto de dados gera uma nova versão, preservando o histórico completo de modificações e permitindo rastrear qual versão foi utilizada em determinada análise ou relatório. Versões podem ser excluídas de forma lógica e restauradas quando necessário.
-
-Os grupos colaborativos constituem outro elemento central da plataforma. Eles representam laboratórios, equipes ou unidades institucionais e permitem que múltiplos usuários trabalhem de forma coordenada sobre os mesmos datasets, com papéis bem definidos — dono, administrador, editor e leitor. Essa estrutura de colaboração diferencia o DataRural de repositórios de uso individual, tornando-o adequado tanto para a divulgação pública de dados quanto para o trabalho interno de equipes acadêmicas.
-
-Após o acesso à plataforma, um usuário pode buscar datasets, aplicar filtros por área temática, visualizar metadados, consultar informações de licença, observar prévias tabulares das primeiras linhas dos arquivos CSV e realizar download individual ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Esse fluxo atende ao usuário que deseja localizar e reutilizar dados já publicados e não necessita de autenticação. Usuários autenticados podem ainda curtir datasets, salvá-los como favoritos e participar de grupos.
-
-Para publicar um dataset, o usuário acessa o formulário de criação, envia um ou mais arquivos CSV e informa os metadados necessários. Após a submissão, o sistema registra a primeira versão do dataset, gera automaticamente um arquivo \texttt{README.md} com a descrição provida e passa a disponibilizá-lo conforme a visibilidade definida. Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas e restauradas.
-
-Em situações colaborativas, grupos permitem que datasets sejam compartilhados com equipes específicas. O acesso aos datasets privados de um grupo é validado por middleware que verifica a associação do usuário autenticado ao grupo proprietário, respeitando os papéis de membro (dono, administrador, editor e leitor). Administradores, por sua vez, atuam na manutenção geral da plataforma, incluindo gerenciamento de usuários, áreas temáticas e suporte operacional.
-
 \section{Trabalhos relacionados}
 
 Antes da definição das funcionalidades do DataRural, foram observadas plataformas que já atuam no compartilhamento, preservação ou exploração de dados. Essa análise contribui para compreender quais recursos são relevantes e, ao mesmo tempo, quais limitações aparecem quando essas soluções são consideradas para um uso institucional específico. Entre as referências analisadas, destacam-se Kaggle, Zenodo e Figshare, por representarem abordagens distintas para publicação e reutilização de dados.
@@ -45,6 +29,144 @@ Entretanto, o uso do Zenodo está mais próximo da publicação de artefatos con
 O Figshare também se insere no campo dos repositórios científicos, oferecendo armazenamento, compartilhamento e métricas relacionadas a diferentes tipos de arquivo. Sua proposta contribui para a disseminação de resultados de pesquisa e para a valorização de dados como produtos acadêmicos. Nesse sentido, aproxima-se da preocupação deste trabalho com documentação, licenciamento e reutilização.
 
 Ainda assim, o Figshare não resolve, por si só, demandas específicas de uma plataforma institucional customizada. Em uma universidade, pode ser necessário definir papéis internos, organizar grupos, restringir acesso a determinados datasets, associar registros a unidades acadêmicas e planejar integrações futuras com sistemas próprios. O DataRural é proposto para atuar nesse espaço, articulando práticas de repositórios científicos com necessidades locais de gestão e colaboração.
+
+\section{Visão geral do sistema}
+
+O DataRural é uma aplicação web que centraliza a publicação, consulta e gestão de datasets institucionais. A plataforma foi concebida para atender a dois perfis principais de usuário: o usuário comum, que publica e reutiliza dados, e o administrador, responsável pela manutenção da plataforma, gerenciamento de usuários e configuração de áreas temáticas. Alguns recursos, como a consulta e o download de datasets públicos, estão disponíveis mesmo para usuários não autenticados, ampliando o alcance da informação.
+
+A unidade central do sistema é o dataset. Cada conjunto de dados é descrito por um conjunto de metadados — título, descrição, área temática, unidade responsável, região, período, palavras-chave e licença — que fornecem o contexto necessário para sua compreensão e reutilização. A visibilidade controla o acesso: datasets públicos são acessíveis a qualquer visitante, enquanto datasets privados ficam restritos ao proprietário ou ao grupo ao qual estão vinculados.
+
+O sistema adota o versionamento como princípio estrutural. Cada atualização de um conjunto de dados gera uma nova versão, preservando o histórico completo de modificações e permitindo rastrear qual versão foi utilizada em determinada análise ou relatório. Versões podem ser excluídas de forma lógica e restauradas quando necessário.
+
+Os grupos colaborativos constituem outro elemento central da plataforma. Eles representam laboratórios, equipes ou unidades institucionais e permitem que múltiplos usuários trabalhem de forma coordenada sobre os mesmos datasets, com papéis bem definidos — dono, administrador, editor e leitor. Essa estrutura de colaboração diferencia o DataRural de repositórios de uso individual, tornando-o adequado tanto para a divulgação pública de dados quanto para o trabalho interno de equipes acadêmicas.
+
+\section{Principais fluxos e interfaces}\label{sec:fluxos}
+
+As subseções a seguir apresentam os fluxos que a plataforma oferece aos seus usuários e ilustram as interfaces correspondentes. O objetivo é demonstrar como os conceitos discutidos nas seções anteriores se traduzem em funcionalidades concretas, desde a página inicial até a publicação, exploração e gestão dos dados.
+
+\subsection{Página inicial e catálogo público}
+
+A porta de entrada do sistema é a página inicial pública, apresentada na \reffigure{fig:pagina_inicial}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/pagina-inicial.png}
+    \caption{Página inicial e catálogo público de datasets institucionais.}
+    \label{fig:pagina_inicial}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+A página inicial oferece uma barra de busca unificada com sugestões de termos frequentes de pesquisa, acompanhada de indicadores quantitativos sobre o acervo (total de datasets públicos, áreas de conhecimento, grupos de pesquisa e pesquisadores cadastrados). A seção central disponibiliza um catálogo navegável segmentado pelos institutos e unidades da UFRRJ e uma vitrine de datasets em destaque. Na parte inferior, há um convite direto à submissão de novos dados pela comunidade acadêmica.
+
+A partir da página inicial, qualquer visitante pode buscar datasets, aplicar filtros por área temática, visualizar metadados e consultar informações de licença, sem necessidade de autenticação.
+
+\subsection{Autenticação e acesso}
+
+Para publicar datasets ou acessar funcionalidades restritas, o usuário deve autenticar-se na plataforma por meio da interface apresentada na \reffigure{fig:tela_login}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{imagens/login.jpeg}
+    \caption{Tela de autenticação de usuários do DataRural.}
+    \label{fig:tela_login}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+A interface de autenticação oferece campos para e-mail e senha, recursos de recuperação de acesso e integração com provedores de autenticação externa (\textit{OAuth}), como o Google. Após a autenticação, o usuário passa a ter acesso aos módulos de publicação, gerenciamento de grupos, favoritos e, quando autorizado, ao painel administrativo.
+
+\subsection{Publicação de datasets}
+
+O processo de publicação foi estruturado na forma de um assistente guiado (\textit{wizard}) composto por cinco etapas sequenciais, de modo a assegurar a completude dos metadados e a conformidade com as diretrizes institucionais.
+
+Na primeira etapa, apresentada na \reffigure{fig:publicar_etapa1}, o usuário realiza o envio do arquivo CSV por meio de uma área interativa de carregamento. A aplicação executa uma inspeção imediata, identificando as dimensões do arquivo, os tipos dos atributos e uma prévia das primeiras linhas. Uma validação preliminar de qualidade verifica ausência de linhas vazias, caracteres inválidos e presença de cabeçalhos nomeados, gerando uma nota inicial de usabilidade.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-01.png}
+    \caption{Assistente de publicação — Etapa 1: Envio do arquivo CSV, detecção e pré-visualização tabular.}
+    \label{fig:publicar_etapa1}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Na segunda etapa (\reffigure{fig:publicar_etapa2}), são informados os metadados contextuais e institucionais: título descritivo, unidade ou instituto de vínculo, descrição detalhada, área de conhecimento, cobertura temporal e espacial, e palavras-chave.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-02.png}
+    \caption{Assistente de publicação — Etapa 2: Preenchimento de metadados descritivos, temporais e espaciais.}
+    \label{fig:publicar_etapa2}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+A terceira etapa (\reffigure{fig:publicar_etapa3}) é dedicada ao dicionário de dados: a aplicação lista cada coluna detectada no CSV, permitindo validar ou alterar o tipo inferido e fornecer uma descrição em linguagem natural para cada variável. Essa funcionalidade alinha a plataforma às diretrizes FAIR de reusabilidade ao evitar atributos sem significado documentado.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-03.png}
+    \caption{Assistente de publicação — Etapa 3: Refinamento de esquema e dicionário de dados.}
+    \label{fig:publicar_etapa3}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Na quarta etapa (\reffigure{fig:publicar_etapa4}), são definidas a licença de uso e a visibilidade do conjunto. O sistema oferece cartões visuais para seleção entre licenças padronizadas (CC BY 4.0, CC BY-SA 4.0, CC BY-NC 4.0, CC0, ODbL e Licença Personalizada). O usuário escolhe entre o modo público e o modo privado.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-04.png}
+    \caption{Assistente de publicação — Etapa 4: Seleção de licença de uso e visibilidade.}
+    \label{fig:publicar_etapa4}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Por fim, a quinta etapa (\reffigure{fig:publicar_etapa5}) consolida todas as informações cadastradas para conferência. Antes do envio definitivo, o usuário deve assinalar o termo de conformidade institucional, confirmando autorização para divulgação e atestando que os dados atendem à Política de Dados Abertos da UFRRJ e à Lei Geral de Proteção de Dados (LGPD).
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-05.png}
+    \caption{Assistente de publicação — Etapa 5: Revisão geral e declaração de conformidade.}
+    \label{fig:publicar_etapa5}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas logicamente e restauradas quando necessário.
+
+\subsection{Exploração e detalhes de um dataset}
+
+A área de exploração apresenta os datasets públicos e oferece busca e filtragem por área temática. Ao selecionar um conjunto, o usuário é direcionado para a página de detalhes, demonstrada na \reffigure{fig:dataset_dashboard}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/dataset-detalhes-dashboard.png}
+    \caption{Página de visualização detalhada e exploração de um dataset publicado.}
+    \label{fig:dataset_dashboard}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+Na página de detalhes, os metadados são organizados para responder a questões básicas sobre o conjunto: quem o publicou, qual unidade é responsável, qual período e região são cobertos e sob qual licença os dados podem ser utilizados. O painel central destaca o índice de usabilidade da publicação, que sintetiza dimensões de completude, credibilidade e compatibilidade. Abaixo dos indicadores, a aba de visualização apresenta o dicionário de colunas com estatísticas descritivas calculadas para cada atributo do CSV. A página também apresenta uma prévia tabular interativa, que permite reconhecer colunas e observar exemplos de valores antes do download completo.
+
+O download pode ser realizado de forma individual por arquivo ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Usuários autenticados podem ainda curtir datasets e salvá-los como favoritos para acesso rápido.
+
+\subsection{Gestão pessoal de datasets}
+
+Para os usuários autenticados, a aplicação disponibiliza o painel de controle pessoal ``Meus datasets'', ilustrado na \reffigure{fig:meus_datasets}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imagens/meus-datasets.jpeg}
+    \caption{Painel de gestão pessoal de conjuntos de dados do usuário autenticado.}
+    \label{fig:meus_datasets}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+\end{figure}
+
+O painel reúne métricas consolidadas sobre a produção do pesquisador, exibindo a contagem total de datasets publicados, rascunhos em elaboração, curtidas acumuladas e registros mantidos em caráter privado. A tela fornece controles dedicados para busca textual, filtros combinados por status de publicação e faixa de usabilidade, e atalho direto para iniciar uma nova submissão.
+
+\subsection{Colaboração por grupos}
+
+Os grupos permitem que múltiplos usuários compartilhem o acesso a datasets privados. Um grupo possui um proprietário e uma lista de membros, cada um com um papel que determina as operações permitidas. Ao publicar ou editar um dataset, o usuário pode vinculá-lo a um grupo no qual possua permissão, fazendo com que a autorização passe a considerar toda a equipe. Essa decisão evita que a continuidade de um conjunto institucional fique condicionada a uma única conta.
+
+\subsection{Painel administrativo e auditoria}
+
+O painel administrativo reúne operações que afetam a organização global do DataRural. Administradores podem consultar e gerenciar usuários e áreas temáticas. As alterações sobre entidades relevantes produzem registros de auditoria, que documentam o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição, auxiliando a investigação de mudanças indevidas.
 
 \section{Requisitos do sistema}
 
@@ -394,7 +516,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_likes}}
 
-A entidade \textit{dataset\_likes} registra as curtidas dos usuários em datasets. As curtidas funcionam como uma forma simples de interação pública, permitindo que a comunidade sinalize interesse e relevância. A Tabela~\ref{tab:entity_dataset_likes} apresenta sua estrutura.
+A entidade \textit{dataset\_likes} registra as curtidas dos usuários em datasets. A Tabela~\ref{tab:entity_dataset_likes} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
 \caption{Entidade dataset\_likes.}\label{tab:entity_dataset_likes}\\
@@ -416,7 +538,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 
 \subsection{Entidade \textit{dataset\_favorites}}
 
-A entidade \textit{dataset\_favorites} registra os datasets favoritados por cada usuário, possibilitando acesso rápido a conjuntos de interesse pessoal. Diferentemente das curtidas, os favoritos criam uma coleção privada que não altera a propriedade nem a visibilidade do conjunto. A Tabela~\ref{tab:entity_dataset_favorites} apresenta sua estrutura.
+A entidade \textit{dataset\_favorites} registra os datasets favoritados por cada usuário, possibilitando acesso rápido a conjuntos de interesse pessoal. A Tabela~\ref{tab:entity_dataset_favorites} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
 \caption{Entidade dataset\_favorites.}\label{tab:entity_dataset_favorites}\\
@@ -464,38 +586,3 @@ created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
 \end{longtable}
-
-\section{Arquitetura proposta}
-
-A arquitetura do DataRural é estruturada como um \textbf{monorepo} gerenciado com \textbf{Turborepo} e \textbf{pnpm workspaces}, adotando uma abordagem \textit{fullstack} que prioriza a integridade dos dados e a performance na entrega de grandes volumes de informação.
-
-A aplicação principal reside em \texttt{apps/web} e utiliza o \textit{framework} AdonisJS integrado ao React via Inertia.js, eliminando a necessidade de uma API REST separada para o \textit{frontend}. O servidor renderiza as páginas com suporte a SSR (\textit{Server-Side Rendering}), reduzindo a latência percebida pelo usuário e facilitando a indexação do conteúdo. Os componentes de interface são mantidos em um pacote compartilhado (\texttt{packages/ui}) baseado em Shadcn UI, Radix UI e Tailwind CSS, garantindo uma interface modular, customizável e responsiva.
-
-O gerenciamento de arquivos dos datasets é feito pelo AdonisJS Drive em conjunto com o pacote \texttt{@jrmc/adonis-attachment}, que cuida do armazenamento no sistema de arquivos local (\texttt{storage/uploads}) e da associação dos anexos aos modelos. O banco de dados utilizado é o PostgreSQL, executado em contêiner Docker, acompanhado de pgAdmin para administração e Mailpit para captura de e-mails em ambiente de desenvolvimento.
-
-O versionamento de dados é implementado por meio dos modelos \textit{DatasetVersion} e \textit{DatasetVersionFile}, que rastreiam cada versão e seus respectivos arquivos. Um arquivo \texttt{README.md} é gerado automaticamente para cada nova versão, consolidando os metadados do dataset no momento da publicação.
-
-A estrutura do monorepo está organizada conforme apresentado a seguir:
-
-\dirtree{%
-.1 Raiz/.
-.2 apps/.
-.3 web/ \DTcomment{Aplicação AdonisJS + Inertia + React}.
-.4 app/.
-.5 auth/ \DTcomment{Módulo de autenticação}.
-.5 common/ \DTcomment{Utilitários e modelos base}.
-.5 core/ \DTcomment{Hooks, middleware, políticas, UI base}.
-.5 dataset/ \DTcomment{Módulo de datasets}.
-.5 groups/ \DTcomment{Módulo de grupos (times)}.
-.5 marketing/ \DTcomment{Páginas de marketing}.
-.5 users/ \DTcomment{Módulo de usuários}.
-.4 config/ \DTcomment{Configurações do AdonisJS}.
-.4 database/ \DTcomment{Schemas e migrações}.
-.4 resources/ \DTcomment{Views Edge e assets estáticos}.
-.4 storage/ \DTcomment{Arquivos enviados pelos usuários}.
-.2 packages/.
-.3 ui/ \DTcomment{Componentes compartilhados (Shadcn UI)}.
-.3 eslint-config/ \DTcomment{Configuração compartilhada de lint}.
-.3 typescript-config/ \DTcomment{Configuração compartilhada de TypeScript}.
-.2 docker-compose.yaml.
-}
