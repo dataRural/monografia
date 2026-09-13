@@ -1,12 +1,12 @@
 \chapter{Implementação}\label{chp:EXPERIMENTOS}
 
-Este capítulo apresenta as decisões técnicas adotadas na implementação do DataRural. A partir dos requisitos e da modelagem definidos no Capítulo~\ref{chp:PROPOSTA}, são discutidas a arquitetura da aplicação, as tecnologias selecionadas e as justificativas que motivaram cada escolha. O foco não é apenas descrever os componentes utilizados, mas argumentar por que determinadas abordagens foram preferidas a outras, considerando o contexto e as restrições do projeto.
+Este capítulo apresenta o sistema desenvolvido a partir dos requisitos e da modelagem definidos no Capítulo~\ref{chp:PROPOSTA}. Inicialmente, são descritas a arquitetura e as decisões tecnológicas que sustentam a aplicação. Em seguida, as funcionalidades são apresentadas por meio dos fluxos de uso, das interfaces e dos mecanismos de persistência e controle de acesso envolvidos em cada operação. Ao final, uma síntese relaciona as funcionalidades descritas aos requisitos da proposta e delimita o alcance da implementação.
 
 \section{Arquitetura da aplicação}\label{sec:arquitetura}
 
-A arquitetura do DataRural adota uma abordagem \textit{fullstack} monolítica modular, na qual servidor, interface e persistência residem em um mesmo projeto, mas são organizados em domínios independentes. Essa decisão foi tomada em vez de separar a aplicação em uma API REST e um cliente dedicado porque, neste estágio do projeto, a complexidade de manter dois sistemas sincronizados — com duplicação de validações, permissões e contratos de dados — não se justifica. A abordagem integrada permite que uma alteração em uma regra de negócio seja refletida imediatamente na interface, sem necessidade de atualizar também um contrato de API.
+A arquitetura do DataRural adota uma abordagem \textit{fullstack} monolítica modular, na qual servidor, interface e persistência residem em um mesmo projeto, mas são organizados em domínios independentes. Essa decisão foi tomada em vez de separar a aplicação em uma API REST e um cliente dedicado porque, neste estágio do projeto, não se justifica a complexidade de manter dois sistemas sincronizados, com duplicação de validações, permissões e contratos de dados. A abordagem integrada permite que uma alteração em uma regra de negócio seja refletida imediatamente na interface, sem necessidade de atualizar também um contrato de API.
 
-O código é mantido em um \textbf{monorepo} gerenciado com \textbf{Turborepo} e \textbf{pnpm workspaces}. A aplicação web reside em \texttt{apps/web}, enquanto componentes reutilizáveis e configurações compartilhadas ficam em diretórios sob \texttt{packages/}. A alternativa de manter repositórios separados exigiria um processo de versionamento e publicação de pacotes entre os projetos, introduzindo complexidade que não se justifica para uma equipe pequena. Com o monorepo, alterações em componentes compartilhados, como o pacote \texttt{packages/ui}, são imediatamente visíveis na aplicação.
+O código é mantido em um monorepo gerenciado com Turborepo e pnpm workspaces. A aplicação web reside em \texttt{apps/web}, enquanto componentes reutilizáveis e configurações compartilhadas ficam em diretórios sob \texttt{packages/}. A alternativa de manter repositórios separados exigiria um processo de versionamento e publicação de pacotes entre os projetos, introduzindo complexidade que não se justifica para uma equipe pequena. Com o monorepo, alterações em componentes compartilhados, como o pacote \texttt{packages/ui}, são imediatamente visíveis na aplicação.
 
 A estrutura do monorepo está organizada conforme apresentado a seguir:
 
@@ -43,15 +43,15 @@ A seleção das tecnologias considerou as necessidades funcionais do DataRural e
 
 \subsection{Servidor: AdonisJS e TypeScript}
 
-O AdonisJS foi escolhido como \textit{framework} do lado servidor. O problema a ser resolvido nesta camada envolve validar entrada de dados, verificar identidade e permissões, orquestrar operações sobre múltiplas entidades relacionais e gerenciar anexos de arquivos — tudo isso em cada requisição. Um \textit{framework} que oferece esses recursos de forma integrada reduz o número de decisões de cola e diminui a superfície de incompatibilidades entre bibliotecas independentes.
+O AdonisJS foi escolhido como \textit{framework} do lado servidor. O problema a ser resolvido nesta camada envolve, a cada requisição, validar entrada de dados, verificar identidade e permissões, orquestrar operações sobre múltiplas entidades relacionais e gerenciar anexos de arquivos. Um \textit{framework} que oferece esses recursos de forma integrada reduz o número de decisões de cola e diminui a superfície de incompatibilidades entre bibliotecas independentes.
 
-A escolha considerou alternativas como NestJS, Express e Fastify. O NestJS oferece uma arquitetura baseada em decorators e injeção de dependências, mas adiciona uma camada de abstração que se mostrou desnecessária para o escopo deste projeto. O Express e o Fastify fornecem menor estrutura nativa: cada funcionalidade — validação, ORM, autenticação, autorização — precisa ser adicionada por meio de bibliotecas de terceiros, o que aumenta o custo de integração e manutenção. O AdonisJS foi preferido porque integra nativamente rotas, controladores, validações, \textit{middlewares}, políticas de autorização, ORM (Lucid) e suporte a sessões, além de oferecer integração direta com o Inertia.js.
+A escolha considerou alternativas como NestJS, Express e Fastify. O NestJS oferece uma arquitetura baseada em decorators e injeção de dependências, mas adiciona uma camada de abstração que se mostrou desnecessária para o escopo deste projeto. O Express e o Fastify fornecem menor estrutura nativa: funcionalidades como validação, ORM, autenticação e autorização precisam ser adicionadas por meio de bibliotecas de terceiros, o que aumenta o custo de integração e manutenção. O AdonisJS foi preferido porque integra nativamente rotas, controladores, validações, \textit{middlewares}, políticas de autorização, ORM (Lucid) e suporte a sessões, além de oferecer integração direta com o Inertia.js.
 
 O uso de TypeScript contribui para explicitar os formatos esperados pelos métodos e pelas entidades. Essa característica é especialmente útil no tratamento de datasets, versões e arquivos, pois reduz ambiguidades entre os identificadores e os metadados manipulados em cada etapa.
 
 \subsection{Interface: React e Inertia.js}
 
-O React foi adotado para a construção da interface. A principal decisão nesta camada não foi qual biblioteca de componentes usar, mas como conectar o servidor à interface sem duplicar regras de negócio. A abordagem convencional — uma API REST consumida por um cliente separado — exige que validações, permissões e transformações de dados sejam expressas duas vezes: uma no servidor e outra no cliente. O Inertia.js resolve esse problema ao eliminar a API intermediária. O servidor resolve a rota, consulta os dados necessários e entrega as propriedades da página ao componente React correspondente. As navegações seguintes são realizadas sem recarga integral do documento, mantendo a experiência de uma aplicação de página única.
+O React foi adotado para a construção da interface. A principal decisão nesta camada não foi qual biblioteca de componentes usar, mas como conectar o servidor à interface sem duplicar regras de negócio. A abordagem convencional, baseada em uma API REST consumida por um cliente separado, exige que validações, permissões e transformações de dados sejam expressas duas vezes: uma no servidor e outra no cliente. O Inertia.js resolve esse problema ao eliminar a API intermediária. O servidor resolve a rota, consulta os dados necessários e entrega as propriedades da página ao componente React correspondente. As navegações seguintes são realizadas sem recarga integral do documento, mantendo a experiência de uma aplicação de página única.
 
 Foram consideradas alternativas como Vue.js e Angular para a camada de componentes. O Vue oferece uma curva de aprendizado menor, mas possui um ecossistema relativamente menor para as necessidades do projeto. O Angular adota uma estrutura mais rígida e complexa. O React foi escolhido por combinar flexibilidade, ecossistema extenso de bibliotecas de componentes e familiaridade dos autores com sua abordagem.
 
@@ -77,40 +77,183 @@ A interface utiliza um sistema de design próprio, desenvolvido com CSS convenci
 
 No ambiente de desenvolvimento, o PostgreSQL, o pgAdmin e o Mailpit são executados em contêineres Docker. O pgAdmin auxilia na inspeção do banco de dados, e o Mailpit recebe as mensagens de e-mail geradas pela aplicação. A utilização de contêineres torna esses serviços reproduzíveis e reduz diferenças de configuração entre as máquinas dos desenvolvedores.
 
-\section{Implementação do controle de acesso}
+\section{Funcionalidades implementadas e interfaces}\label{sec:fluxos}
 
-O DataRural permite a consulta de conteúdo público sem autenticação, mas exige uma conta para ações que alteram o estado da plataforma. Cadastro, autenticação e edição de perfil utilizam os recursos de sessão do AdonisJS, seguindo os princípios definidos na Seção~\ref{sec:controle_acesso} do Capítulo~\ref{chp:PROPOSTA}.
+A apresentação das funcionalidades acompanha o percurso de utilização do DataRural: acesso ao catálogo, autenticação, publicação, consulta e manutenção dos conjuntos de dados. Diferentemente do mockup discutido na Seção~\ref{sec:prototipacao}, as capturas de tela a seguir ilustram a interface desenvolvida e são acompanhadas da descrição das operações correspondentes. Os valores exibidos nas imagens contextualizam a navegação, mas não são utilizados como resultados de uma avaliação experimental ou como indicadores de adoção institucional.
 
-Os dados informados na tela de autenticação são transmitidos sob proteção contra \textit{Cross-Site Request Forgery} (CSRF) gerenciada pelo módulo Shield do AdonisJS, assegurando que apenas requisições originadas na própria aplicação possam estabelecer sessões autenticadas.
+\subsection{Página inicial e consulta ao catálogo}\label{sec:impl_catalogo}
 
-Rotas de publicação, gerenciamento de grupos, favoritos e administração são protegidas por \textit{middleware} de autenticação. A autorização específica considera a autoria do dataset, o grupo associado e o papel exercido pelo usuário na tabela \textit{group\_members}. Nos datasets individuais, o proprietário controla edição, alteração de visibilidade e exclusão. Nos datasets vinculados a grupos, a permissão é calculada a partir do papel registrado em \textit{group\_members}.
+O acesso público começa pela página inicial, apresentada na \reffigure{fig:pagina_inicial}. A tela reúne uma barra de busca, indicadores do acervo, categorias de conhecimento e cartões de datasets. Cada cartão apresenta informações resumidas da publicação, como título, unidade responsável, palavras-chave e licença, permitindo uma primeira seleção sem abrir individualmente todos os conjuntos.
 
-O painel administrativo aplica uma verificação adicional baseada no papel global registrado na tabela \textit{roles}. A separação entre papel global e papel contextual, definida na Seção~\ref{sec:controle_acesso} do Capítulo~\ref{chp:PROPOSTA}, é implementada por meio de duas consultas distintas: uma ao campo \textit{role\_id} do usuário e outra à associação em \textit{group\_members}.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/pagina-inicial.png}
+    \caption{Página inicial do DataRural, com busca de datasets públicos, indicadores do acervo e catálogo organizado por áreas de conhecimento da UFRRJ.}
+    \label{fig:pagina_inicial}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
 
-\section{Implementação do versionamento}
+O visitante pode utilizar a busca e a filtragem por área temática para localizar publicações e, em seguida, acessar a página de detalhes do conjunto escolhido. A consulta e o download de conteúdo público não exigem autenticação. Dessa forma, a separação entre navegação pública e operações de gerenciamento concretiza a distinção de acesso prevista na proposta: a identificação do usuário é exigida quando ele pretende publicar ou utilizar recursos pessoais, e não apenas para conhecer o acervo.
 
-O fluxo de publicação cria o registro do dataset, sua versão inicial e os registros correspondentes aos arquivos em uma única transação relacional. Essas operações formam uma unidade lógica atômica: não é permitido manter um dataset sem versão ou uma versão sem seus anexos físicos correspondentes.
+\subsection{Autenticação e controle de acesso}\label{sec:impl_acesso}
 
-Atualizações de conteúdo geram uma versão subsequente, conforme o mecanismo de versionamento fundamentado no Capítulo~\ref{chp:FUNDAMENTACAO}. O responsável acessa o dataset existente, envia os novos arquivos e confirma a criação.
+A tela de autenticação, apresentada na \reffigure{fig:tela_login}, oferece entrada por e-mail e senha, recuperação de acesso, encaminhamento para cadastro e a opção de acesso por conta Google. Após a autenticação, o usuário passa a acessar os recursos de publicação, grupos e favoritos. O acesso ao painel administrativo depende, adicionalmente, do papel global atribuído à conta.
 
-A exclusão de uma versão utiliza exclusão lógica. Na prática, a aplicação altera o indicador \textit{is\_deleted} da entidade \textit{dataset\_versions}. Versões nessa condição deixam de aparecer nos fluxos comuns, mas ainda podem ser restauradas caso seja necessário.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.65\textwidth]{imagens/login.jpeg}
+    \caption{Tela de autenticação do DataRural, com acesso por e-mail e senha ou conta Google para utilização das funcionalidades restritas a usuários autenticados.}
+    \label{fig:tela_login}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
 
-Para download, o usuário pode selecionar um arquivo específico ou solicitar todos os arquivos da versão, que são reunidos em um pacote ZIP. O download respeita a mesma política de acesso usada na visualização.
+No servidor, a identidade autenticada é mantida por meio dos recursos de sessão do AdonisJS. O módulo Shield fornece proteção contra \textit{cross-site request forgery} (CSRF), complementando os mecanismos de autenticação. As rotas de publicação, gerenciamento de grupos, favoritos e administração aplicam \textit{middleware} de autenticação antes de executar as operações correspondentes.
 
-\section{Implementação da exploração de dados}
+A autorização considera também o recurso solicitado. Nos datasets individuais, a verificação utiliza a associação entre o conjunto e seu proprietário; nos datasets vinculados a grupos, considera a participação do usuário e o papel registrado em \textit{group\_members}. O papel global, associado ao campo \textit{role\_id} de \textit{users}, controla as operações administrativas. Essa separação implementa os dois níveis de permissão definidos na Seção~\ref{sec:controle_acesso}, evitando que a autenticação, isoladamente, seja suficiente para modificar qualquer publicação.
 
-A prévia tabular interativa é processada no navegador: o componente interpreta o conteúdo do CSV no lado cliente e constrói a tabela apresentada ao usuário, permitindo reconhecer colunas e observar exemplos de valores antes do download completo.
+\subsection{Publicação de datasets}\label{sec:impl_publicacao}
 
-As curtidas e os favoritos são armazenados separadamente porque representam intenções diferentes. As curtidas funcionam como interação pública, enquanto os favoritos criam uma coleção pessoal. Nenhuma das duas ações altera a propriedade ou a visibilidade do conjunto.
+A publicação é realizada por um assistente guiado de cinco etapas. O fluxo reúne a seleção dos arquivos, o preenchimento dos metadados, a descrição das colunas, a definição da licença e a revisão final. A divisão permite que o usuário confira separadamente o conteúdo enviado e as informações que contextualizam sua utilização.
 
-\section{Implementação da auditoria}
+Na primeira etapa, apresentada na \reffigure{fig:publicar_etapa1}, o usuário seleciona os arquivos CSV. A interface identifica o arquivo principal e oferece um controle para adicionar outros arquivos à mesma publicação. A captura mostra um arquivo com 1.000 linhas e 12 colunas, acompanhado de uma prévia das três primeiras linhas e dos tipos identificados. Também são apresentados indicadores de leitura do arquivo e uma estimativa de usabilidade, permitindo uma inspeção inicial antes do preenchimento dos metadados. O escopo adotado limita o envio ao formato CSV, com até 25~MB por arquivo.
 
-As alterações sobre entidades relevantes produzem registros de auditoria. Para cada evento, são armazenados o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição. Versionamento e auditoria possuem finalidades relacionadas, mas não idênticas: o primeiro preserva a evolução dos arquivos de um dataset, a segunda registra mudanças nas entidades da aplicação. Uma edição de descrição, por exemplo, pode gerar um evento de auditoria sem criar uma nova versão de arquivos. A combinação dos dois mecanismos amplia a rastreabilidade da plataforma.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-01.png}
+    \caption{Etapa 1 do assistente de publicação de datasets do DataRural: envio do arquivo CSV, identificação de sua estrutura e pré-visualização das primeiras linhas.}
+    \label{fig:publicar_etapa1}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
 
-\section{Atendimento à proposta}
+A segunda etapa, ilustrada na \reffigure{fig:publicar_etapa2}, reúne título, descrição, unidade ou instituto, área de conhecimento, período de cobertura, região e palavras-chave. Esses campos correspondem às informações descritivas da entidade \textit{datasets}. Seu preenchimento permite que a publicação seja identificada por características do conteúdo, e não apenas pelo nome do arquivo armazenado.
 
-A implementação concretiza os elementos centrais definidos no capítulo anterior. A publicação de múltiplos CSV, os metadados, as licenças e a prévia tabular atendem à organização e à compreensão dos conjuntos. O histórico de versões, a exclusão lógica e a auditoria oferecem mecanismos de rastreabilidade. Os grupos e a distinção entre conteúdo público e privado atendem aos cenários de colaboração e controle de acesso.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-02.png}
+    \caption{Etapa 2 do assistente de publicação de datasets do DataRural: preenchimento dos metadados que descrevem o conjunto de dados, seu vínculo institucional e sua abrangência temporal e espacial.}
+    \label{fig:publicar_etapa2}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
 
-Em relação aos trabalhos relacionados, o DataRural incorpora práticas encontradas em plataformas de dados, mas as aplica a um escopo institucional. A exploração e as interações lembram recursos presentes em plataformas comunitárias; o registro de metadados e licenças aproxima a solução de repositórios científicos; e os grupos acrescentam uma camada voltada ao trabalho interno de equipes da universidade.
+Na terceira etapa, apresentada na \reffigure{fig:publicar_etapa3}, a interface lista as colunas do CSV e disponibiliza controles para revisão dos tipos e preenchimento das descrições. Esse dicionário de colunas complementa os metadados gerais: enquanto o título e a descrição contextualizam o conjunto, a documentação por coluna esclarece o significado de cada atributo. A revisão pelo responsável continua necessária, pois um tipo identificado automaticamente não determina, por si só, o significado científico da variável.
 
-O estágio atual também delimita o alcance da solução. O CSV é o formato inicialmente suportado, o armazenamento utiliza o sistema de arquivos local e a análise apresentada na interface é intencionalmente limitada a uma prévia. Essas decisões mantêm a implementação compatível com o escopo do projeto e deixam pontos de extensão para formatos adicionais, armazenamento de objetos e mecanismos mais avançados de validação e visualização.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-03.png}
+    \caption{Etapa 3 do assistente de publicação de datasets do DataRural: revisão dos tipos e preenchimento das descrições das colunas do CSV para compor o dicionário de dados.}
+    \label{fig:publicar_etapa3}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
+
+A quarta etapa, ilustrada na \reffigure{fig:publicar_etapa4}, separa a escolha da licença da definição de visibilidade. A tela apresenta opções como CC BY 4.0, CC BY-SA 4.0, CC BY-NC 4.0, CC0 e ODbL, além de uma alternativa personalizada. A visibilidade determina se o conteúdo será público ou restrito; no controle de acesso descrito neste trabalho, os conjuntos privados são acessíveis ao proprietário ou aos membros autorizados do grupo associado. A seleção realizada nessa etapa é utilizada em conjunto com as verificações de autorização do servidor.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-04.png}
+    \caption{Etapa 4 do assistente de publicação de datasets do DataRural: seleção da licença de uso e definição da visibilidade pública ou privada do conjunto de dados.}
+    \label{fig:publicar_etapa4}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
+
+Na quinta etapa, apresentada na \reffigure{fig:publicar_etapa5}, o usuário confere um resumo do arquivo, dos metadados e das condições de uso e acesso. A interface oferece atalhos para revisar as informações e exige o aceite da declaração de conformidade antes da confirmação. Esse aceite registra a manifestação do responsável, mas não substitui a análise do conteúdo que ele pretende disponibilizar.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-05.png}
+    \caption{Etapa 5 do assistente de publicação de datasets do DataRural: conferência das informações cadastradas e aceite da declaração de conformidade institucional antes de concluir a publicação.}
+    \label{fig:publicar_etapa5}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
+
+A conclusão do fluxo associa os metadados da publicação ao usuário responsável e cria a versão inicial do dataset. Os registros de \textit{datasets}, \textit{dataset\_versions} e \textit{dataset\_version\_files} são criados em uma transação relacional, enquanto os anexos são mantidos no armazenamento de arquivos descrito anteriormente. Essa divisão distingue o registro institucional do conjunto, o estado de seus dados em uma versão e cada arquivo que compõe esse estado. O arquivo \texttt{README.md}, gerado para a versão, reúne as informações descritivas disponíveis no momento da publicação.
+
+\subsection{Exploração e download dos dados}\label{sec:impl_exploracao}
+
+Após selecionar um dataset, o usuário acessa a página de detalhes apresentada na \reffigure{fig:dataset_dashboard}. A interface reúne descrição, licença, informações sobre o arquivo e um dicionário de colunas. As abas separam a visão geral, o visualizador, a relação de arquivos e as versões, organizando em uma mesma página a consulta ao conteúdo e ao histórico da publicação.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/dataset-detalhes-dashboard.png}
+    \caption{Página de detalhes de um dataset no DataRural, com metadados, índice de usabilidade, dicionário de colunas e acesso às abas de visualização, arquivos e versões.}
+    \label{fig:dataset_dashboard}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
+
+A visão geral apresenta o índice de usabilidade e informações resumidas por coluna. Esses elementos auxiliam a inspeção do material, mas não constituem uma validação da qualidade científica dos dados. Em particular, a pontuação exibida não deve ser interpretada como resultado de um teste de usabilidade da aplicação com participantes, pois sua finalidade é caracterizar aspectos da publicação.
+
+A prévia tabular é processada no navegador: o componente interpreta o conteúdo do CSV e constrói a tabela de visualização. Assim, o usuário pode observar a estrutura e exemplos de valores antes de realizar o download. Essa funcionalidade não substitui ferramentas externas de análise e não corresponde à execução de consultas analíticas sobre o banco de dados da plataforma.
+
+O download pode ser realizado por arquivo ou para todos os arquivos de uma versão, reunidos em um pacote ZIP. A disponibilização respeita a política de acesso do conjunto. Usuários autenticados podem também curtir a publicação ou adicioná-la aos favoritos. Essas ações são persistidas nas entidades \textit{dataset\_likes} e \textit{dataset\_favorites}, respectivamente, sem modificar a autoria ou a visibilidade do dataset. A separação permite distinguir uma interação pública de uma seleção pessoal de conjuntos para consulta posterior.
+
+\subsection{Gestão pessoal de datasets}\label{sec:impl_gestao}
+
+O painel \textit{Meus datasets}, apresentado na \reffigure{fig:meus_datasets}, concentra o acompanhamento das publicações pelo usuário autenticado. A tela apresenta indicadores de datasets publicados e curtidas, busca textual, seleção entre conjuntos pessoais e de grupos e categorias para publicações, rascunhos e conteúdos privados. A listagem organiza título, situação, curtidas e usabilidade de cada conjunto.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imagens/meus-datasets.jpeg}
+    \caption{Painel \textit{Meus datasets} do DataRural, com indicadores dos conjuntos de dados do usuário autenticado e controles de busca, filtragem e início de nova publicação.}
+    \label{fig:meus_datasets}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
+
+A captura apresenta o estado vazio da listagem, com orientação para ajustar os filtros ou iniciar uma publicação. Esse estado também faz parte do fluxo de uso: antes de possuir conjuntos cadastrados, o usuário já encontra o caminho para criar seu primeiro dataset. Quando há publicações disponíveis, o painel funciona como ponto de acesso à consulta e à manutenção do acervo sob sua responsabilidade, enquanto as permissões continuam sendo verificadas pelo servidor.
+
+\subsection{Versionamento e manutenção do histórico}\label{sec:impl_versionamento}
+
+A atualização dos arquivos ocorre a partir de um dataset existente. Na página de detalhes, a ação de criação de uma nova versão permite enviar o conteúdo atualizado sem substituir o registro principal do conjunto. O usuário confirma o envio, e a versão subsequente permanece vinculada ao mesmo dataset. Na \reffigure{fig:dataset_dashboard}, o acesso à criação de versão aparece junto às ações de gerenciamento, enquanto uma aba específica organiza a consulta ao histórico.
+
+A modelagem separa as responsabilidades dessa operação. A entidade \textit{datasets} mantém a identificação do conjunto; \textit{dataset\_versions} registra cada versão e sua associação ao dataset; e \textit{dataset\_version\_files} identifica os arquivos pertencentes a cada versão. Dessa forma, a inclusão de novos dados não exige criar outra publicação independente, e os arquivos anteriores mantêm sua vinculação ao histórico.
+
+A exclusão de uma versão é lógica e utiliza o campo \textit{is\_deleted}. O registro deixa de aparecer como ativo nos fluxos comuns, mas permanece armazenado para possibilitar sua restauração. A manutenção do histórico preserva a possibilidade de recuperar uma versão anterior sem confundi-la com a mais recente. Tanto a criação de versões quanto as demais operações de manutenção dependem da autorização do proprietário ou do membro habilitado no grupo.
+
+\subsection{Colaboração por grupos}\label{sec:impl_grupos}
+
+A colaboração é implementada pelas entidades \textit{groups} e \textit{group\_members}. A primeira registra o grupo, sua finalidade e seu proprietário; a segunda associa cada participante ao grupo e mantém o papel que ele exerce naquele contexto. A vinculação de um dataset ao grupo é registrada em \textit{group\_id}, permitindo aplicar as permissões da equipe ao conjunto de dados.
+
+Na utilização da plataforma, o responsável pode vincular um dataset a um grupo no qual possua permissão. A consulta e a manutenção desse conjunto passam então a considerar a participação e o papel de cada membro, conforme descrito na Seção~\ref{sec:impl_acesso}. Esse mecanismo permite compartilhar conjuntos privados sem torná-los públicos e sem atribuir a todos os participantes a condição de administrador da plataforma.
+
+\subsection{Administração e auditoria}\label{sec:impl_auditoria}
+
+O painel administrativo reúne a gestão de usuários e de áreas temáticas. Seu acesso é controlado pelo papel global da conta, distinguindo operações que afetam a organização da plataforma das atividades de publicação realizadas pelos usuários comuns. A manutenção das áreas temáticas, por exemplo, fornece as categorias utilizadas na classificação e na busca de datasets.
+
+As alterações sobre entidades relevantes geram registros em \textit{audits}. Cada registro identifica a entidade alterada, o tipo de operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição. A auditoria permite, portanto, acompanhar mudanças nos registros da aplicação, e não apenas nos arquivos enviados.
+
+Versionamento e auditoria atendem a necessidades distintas de rastreabilidade. Uma edição da descrição pode gerar um evento de auditoria sem criar uma versão de arquivos; o envio de novos CSV, por sua vez, produz uma nova versão vinculada ao dataset. Essa distinção evita tratar toda alteração de metadados como uma atualização do conteúdo e permite acompanhar separadamente a evolução dos arquivos e as modificações nos registros que os descrevem.
+
+\section{Síntese da implementação e atendimento à proposta}\label{sec:atendimento_proposta}
+
+A implementação reúne publicação, consulta, manutenção de versões, colaboração e administração em uma mesma aplicação. A Tabela~\ref{tab:implementacao_requisitos} relaciona as funcionalidades descritas neste capítulo aos requisitos funcionais definidos na Tabela~\ref{tab:requisitos_funcionais}. Essa relação explicita como a proposta se traduz em operações e componentes do sistema, sem substituir a verificação sistemática de cada requisito por meio de testes.
+
+\begin{longtable}{p{0.22\textwidth}p{0.18\textwidth}p{0.50\textwidth}}
+\caption{Relação entre funcionalidades descritas na implementação do DataRural, requisitos funcionais da proposta e mecanismos utilizados para realizá-las.}\label{tab:implementacao_requisitos}\\
+\toprule
+\textbf{Funcionalidade} & \textbf{Requisitos} & \textbf{Implementação descrita} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Funcionalidade} & \textbf{Requisitos} & \textbf{Implementação descrita} \\
+\midrule
+\endhead
+Consulta ao catálogo & RF-17, RF-18 & Busca, filtragem por área e visualização prévia do CSV (Seções~\ref{sec:impl_catalogo} e~\ref{sec:impl_exploracao}). \\
+Autenticação & RF-13 & Cadastro, entrada e manutenção da identidade por sessão, com proteção das rotas restritas (Seção~\ref{sec:impl_acesso}). \\
+Publicação e documentação & RF-01, RF-02, RF-09, RF-10 & Assistente de envio de CSV, preenchimento de metadados e escolha de licença, associado aos registros do dataset e de sua versão inicial (Seção~\ref{sec:impl_publicacao}). \\
+Controle de acesso e colaboração & RF-03, RF-04, RF-05, RF-19, RF-20 & Associação de datasets a grupos e verificação de propriedade, visibilidade e papéis para as operações de consulta e manutenção (Seções~\ref{sec:impl_acesso} e~\ref{sec:impl_grupos}). \\
+Histórico de versões & RF-06, RF-07, RF-08 & Criação de versões vinculadas ao dataset, exclusão lógica e restauração (Seção~\ref{sec:impl_versionamento}). \\
+Download e interações & RF-11, RF-12, RF-15, RF-16 & Download por arquivo ou em ZIP, com curtidas e favoritos registrados separadamente (Seção~\ref{sec:impl_exploracao}). \\
+Administração e auditoria & RF-21, RF-22 & Gestão de usuários e áreas temáticas, com registros das alterações nas entidades relevantes (Seção~\ref{sec:impl_auditoria}). \\
+\bottomrule
+\end{longtable}
+
+O escopo descrito utiliza CSV e armazenamento local de arquivos. A documentação das colunas, os indicadores da publicação e a prévia tabular apoiam a inspeção inicial, mas não substituem a análise científica do conteúdo nem constituem um ambiente completo de processamento de dados. A ampliação para outros formatos, a adoção de armazenamento de objetos e o consumo programático por uma API externa permanecem como possibilidades de continuidade.
+
+As interfaces e os mecanismos apresentados demonstram a organização da solução desenvolvida, mas o trabalho não inclui uma avaliação sistemática com usuários da universidade. Também não são apresentados resultados de testes de carga ou uma avaliação abrangente de segurança. Assim, a descrição funcional não deve ser tomada como comprovação de desempenho, facilidade de uso ou prontidão para adoção institucional em larga escala. Essas limitações são retomadas no Capítulo~\ref{chp:CONCLUSAO}.

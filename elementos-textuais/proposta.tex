@@ -34,139 +34,50 @@ Ainda assim, o Figshare não resolve, por si só, demandas específicas de uma p
 
 O DataRural é uma aplicação web que centraliza a publicação, consulta e gestão de datasets institucionais. A plataforma foi concebida para atender a dois perfis principais de usuário: o usuário comum, que publica e reutiliza dados, e o administrador, responsável pela manutenção da plataforma, gerenciamento de usuários e configuração de áreas temáticas. Alguns recursos, como a consulta e o download de datasets públicos, estão disponíveis mesmo para usuários não autenticados, ampliando o alcance da informação.
 
-A unidade central do sistema é o dataset. Cada conjunto de dados é descrito por um conjunto de metadados — título, descrição, área temática, unidade responsável, região, período, palavras-chave e licença — que fornecem o contexto necessário para sua compreensão e reutilização. A visibilidade controla o acesso: datasets públicos são acessíveis a qualquer visitante, enquanto datasets privados ficam restritos ao proprietário ou ao grupo ao qual estão vinculados.
+A unidade central do sistema é o dataset. Cada conjunto de dados é descrito por metadados como título, descrição, área temática, unidade responsável, região, período, palavras-chave e licença. Essas informações fornecem o contexto necessário para sua compreensão e reutilização. A visibilidade controla o acesso: datasets públicos são acessíveis a qualquer visitante, enquanto datasets privados ficam restritos ao proprietário ou ao grupo ao qual estão vinculados.
 
 O sistema adota o versionamento como princípio estrutural. Cada atualização de um conjunto de dados gera uma nova versão, preservando o histórico completo de modificações e permitindo rastrear qual versão foi utilizada em determinada análise ou relatório. Versões podem ser excluídas de forma lógica e restauradas quando necessário.
 
-Os grupos colaborativos constituem outro elemento central da plataforma. Eles representam laboratórios, equipes ou unidades institucionais e permitem que múltiplos usuários trabalhem de forma coordenada sobre os mesmos datasets, com papéis bem definidos — dono, administrador, editor e leitor. Essa estrutura de colaboração diferencia o DataRural de repositórios de uso individual, tornando-o adequado tanto para a divulgação pública de dados quanto para o trabalho interno de equipes acadêmicas.
+Os grupos colaborativos constituem outro elemento central da plataforma. Eles representam laboratórios, equipes ou unidades institucionais e permitem que múltiplos usuários trabalhem de forma coordenada sobre os mesmos datasets, com papéis bem definidos: dono, administrador, editor e leitor. Essa estrutura de colaboração diferencia o DataRural de repositórios de uso individual, tornando-o adequado tanto para a divulgação pública de dados quanto para o trabalho interno de equipes acadêmicas.
 
-\section{Principais fluxos e interfaces}\label{sec:fluxos}
+\section{Concepção da interface e prototipação}\label{sec:prototipacao}
 
-As subseções a seguir apresentam os fluxos que a plataforma oferece aos seus usuários e ilustram as interfaces correspondentes. O objetivo é demonstrar como os conceitos discutidos nas seções anteriores se traduzem em funcionalidades concretas, desde a página inicial até a publicação, exploração e gestão dos dados.
+A concepção da interface incluiu a elaboração de um \textit{mockup}, utilizado como representação visual inicial da plataforma. Nessa etapa, o objetivo foi explorar a organização das informações e os caminhos de navegação antes de sua implementação. O protótipo permitiu discutir como apresentar um dataset como um recurso documentado, com contexto, responsáveis e condições de reutilização, em vez de restringir sua apresentação a um arquivo disponível para download.
 
-\subsection{Página inicial e catálogo público}
+\subsection{Geração e revisão do protótipo}
 
-A porta de entrada do sistema é a página inicial pública, apresentada na \reffigure{fig:pagina_inicial}.
+O mockup foi gerado com auxílio do Claude a partir do minimundo do projeto, entendido como a descrição do contexto institucional, dos usuários, das entidades e das regras que delimitam o sistema. Esse contexto reúne as necessidades de publicação de arquivos CSV, descrição dos conjuntos, consulta pública, colaboração por grupos e preservação do histórico. Sua utilização como entrada para a geração visual buscou aproximar a proposta de interface das necessidades do DataRural, e não apenas produzir uma composição gráfica genérica.
 
-\begin{figure}[!ht]
+A geração foi acompanhada pela participação dos autores na análise da proposta e no fornecimento de feedback para seu refinamento. Essa participação caracteriza a revisão humana no processo, também denominada \textit{human in the loop}: a ferramenta auxilia na elaboração visual, enquanto a avaliação da adequação ao minimundo e as decisões sobre o que incorporar ao projeto permanecem sob responsabilidade dos autores. Trata-se de uma atividade de concepção, e não de uma avaliação de usabilidade com usuários da universidade.
+
+A \reffigure{fig:mockup_dataset} apresenta um recorte do protótipo da página de detalhes de um dataset. A imagem registra uma proposta de organização da interface, não uma captura do sistema em funcionamento. Os nomes, valores, gráficos e contagens exibidos têm função ilustrativa e não representam resultados de testes nem indicadores de utilização do DataRural.
+
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/pagina-inicial.png}
-    \caption{Página inicial e catálogo público de datasets institucionais.}
-    \label{fig:pagina_inicial}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{imagens/claude-design.png}
+    \caption{Recorte do mockup da página de detalhes de um dataset do DataRural, com dicionário de colunas, indicadores e informações dos responsáveis. Os dados exibidos são ilustrativos.}
+    \label{fig:mockup_dataset}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores com auxílio do Claude.}
 \end{figure}
+\FloatBarrier
 
-A página inicial oferece uma barra de busca unificada com sugestões de termos frequentes de pesquisa, acompanhada de indicadores quantitativos sobre o acervo (total de datasets públicos, áreas de conhecimento, grupos de pesquisa e pesquisadores cadastrados). A seção central disponibiliza um catálogo navegável segmentado pelos institutos e unidades da UFRRJ e uma vitrine de datasets em destaque. Na parte inferior, há um convite direto à submissão de novos dados pela comunidade acadêmica.
+\subsection{Discussão da proposta visual}
 
-A partir da página inicial, qualquer visitante pode buscar datasets, aplicar filtros por área temática, visualizar metadados e consultar informações de licença, sem necessidade de autenticação.
+No protótipo, o dicionário de colunas ocupa a região central, associando nomes de variáveis a descrições, tipos, unidades de medida e representações resumidas dos valores. Essa disposição dá destaque à interpretação dos dados: antes de obter o arquivo, o visitante deve encontrar informações que o ajudem a reconhecer o conteúdo e a avaliar sua adequação ao uso pretendido. A composição visual expressa, portanto, a preocupação com a documentação por atributo, complementar aos metadados gerais do conjunto.
 
-\subsection{Autenticação e acesso}
+A coluna lateral agrupa informações sobre mantenedores, palavras-chave, atividade e citação. A presença desses elementos permite discutir diferentes dimensões da publicação: a identificação dos responsáveis, a localização por tema, as formas de referência ao conjunto e o acompanhamento das interações. Já a organização em abas separa a visão geral de áreas destinadas à visualização e aos arquivos. Esses elementos funcionam como referências para a organização da experiência de consulta, sem que sua presença no mockup comprove a implementação dos mecanismos correspondentes.
 
-Para publicar datasets ou acessar funcionalidades restritas, o usuário deve autenticar-se na plataforma por meio da interface apresentada na \reffigure{fig:tela_login}.
+O protótipo também apresenta abas de \textit{notebooks} e discussão, que não são apresentadas como funcionalidades implementadas neste trabalho. A distinção evidencia que a exploração visual contemplou possibilidades mais amplas do que a entrega descrita no Capítulo~\ref{chp:EXPERIMENTOS}. A solução desenvolvida prioriza publicação e consulta de CSV, metadados, controle de acesso, grupos e histórico de versões. Na página de detalhes implementada, apresentada na Seção~\ref{sec:impl_exploracao}, a navegação reúne visão geral, visualizador, arquivos e versões. Assim, o mockup é tratado como apoio à concepção, e não como uma especificação de que todos os elementos ilustrados seriam entregues nesta etapa.
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.65\textwidth]{imagens/login.jpeg}
-    \caption{Tela de autenticação de usuários do DataRural.}
-    \label{fig:tela_login}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
+\subsection{Fluxos de uso previstos}\label{sec:fluxos_propostos}
 
-A interface de autenticação oferece campos para e-mail e senha, recursos de recuperação de acesso e integração com provedores de autenticação externa (\textit{OAuth}), como o Google. Após a autenticação, o usuário passa a ter acesso aos módulos de publicação, gerenciamento de grupos, favoritos e, quando autorizado, ao painel administrativo.
+A proposta organiza o uso da plataforma em três fluxos complementares: descoberta de dados, publicação e manutenção do acervo. Essa organização relaciona as necessidades dos usuários aos requisitos apresentados na seção seguinte, sem vincular sua descrição a uma tela específica.
 
-\subsection{Publicação de datasets}
+No fluxo de descoberta, o visitante deve poder localizar datasets públicos, consultar seus metadados e obter os arquivos de interesse. A busca e a classificação por área temática devem facilitar a seleção dos conjuntos, enquanto a apresentação da licença e de uma prévia tabular deve apoiar a avaliação inicial do material antes de sua reutilização.
 
-O processo de publicação foi estruturado na forma de um assistente guiado (\textit{wizard}) composto por cinco etapas sequenciais, de modo a assegurar a completude dos metadados e a conformidade com as diretrizes institucionais.
+O fluxo de publicação deve reunir o envio dos arquivos, a descrição do conjunto e a definição das condições de uso e de acesso. A identificação do responsável permite associar a publicação a um usuário e, quando necessário, a um grupo. A manutenção do acervo deve permitir atualizar os dados sem perder suas versões anteriores, além de controlar alterações de visibilidade e operações de exclusão conforme as permissões atribuídas.
 
-Na primeira etapa, apresentada na \reffigure{fig:publicar_etapa1}, o usuário realiza o envio do arquivo CSV por meio de uma área interativa de carregamento. A aplicação executa uma inspeção imediata, identificando as dimensões do arquivo, os tipos dos atributos e uma prévia das primeiras linhas. Uma validação preliminar de qualidade verifica ausência de linhas vazias, caracteres inválidos e presença de cabeçalhos nomeados, gerando uma nota inicial de usabilidade.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-01.png}
-    \caption{Assistente de publicação — Etapa 1: Envio do arquivo CSV, detecção e pré-visualização tabular.}
-    \label{fig:publicar_etapa1}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-Na segunda etapa (\reffigure{fig:publicar_etapa2}), são informados os metadados contextuais e institucionais: título descritivo, unidade ou instituto de vínculo, descrição detalhada, área de conhecimento, cobertura temporal e espacial, e palavras-chave.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-02.png}
-    \caption{Assistente de publicação — Etapa 2: Preenchimento de metadados descritivos, temporais e espaciais.}
-    \label{fig:publicar_etapa2}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-A terceira etapa (\reffigure{fig:publicar_etapa3}) é dedicada ao dicionário de dados: a aplicação lista cada coluna detectada no CSV, permitindo validar ou alterar o tipo inferido e fornecer uma descrição em linguagem natural para cada variável. Essa funcionalidade alinha a plataforma às diretrizes FAIR de reusabilidade ao evitar atributos sem significado documentado.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-03.png}
-    \caption{Assistente de publicação — Etapa 3: Refinamento de esquema e dicionário de dados.}
-    \label{fig:publicar_etapa3}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-Na quarta etapa (\reffigure{fig:publicar_etapa4}), são definidas a licença de uso e a visibilidade do conjunto. O sistema oferece cartões visuais para seleção entre licenças padronizadas (CC BY 4.0, CC BY-SA 4.0, CC BY-NC 4.0, CC0, ODbL e Licença Personalizada). O usuário escolhe entre o modo público e o modo privado.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-04.png}
-    \caption{Assistente de publicação — Etapa 4: Seleção de licença de uso e visibilidade.}
-    \label{fig:publicar_etapa4}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-Por fim, a quinta etapa (\reffigure{fig:publicar_etapa5}) consolida todas as informações cadastradas para conferência. Antes do envio definitivo, o usuário deve assinalar o termo de conformidade institucional, confirmando autorização para divulgação e atestando que os dados atendem à Política de Dados Abertos da UFRRJ e à Lei Geral de Proteção de Dados (LGPD).
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{imagens/publicar-dataset-05.png}
-    \caption{Assistente de publicação — Etapa 5: Revisão geral e declaração de conformidade.}
-    \label{fig:publicar_etapa5}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-Caso haja correções ou novas coletas, o responsável pode incluir uma nova versão, preservando o histórico da publicação. Versões podem ser excluídas logicamente e restauradas quando necessário.
-
-\subsection{Exploração e detalhes de um dataset}
-
-A área de exploração apresenta os datasets públicos e oferece busca e filtragem por área temática. Ao selecionar um conjunto, o usuário é direcionado para a página de detalhes, demonstrada na \reffigure{fig:dataset_dashboard}.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth,height=0.72\textheight,keepaspectratio]{imagens/dataset-detalhes-dashboard.png}
-    \caption{Página de visualização detalhada e exploração de um dataset publicado.}
-    \label{fig:dataset_dashboard}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-Na página de detalhes, os metadados são organizados para responder a questões básicas sobre o conjunto: quem o publicou, qual unidade é responsável, qual período e região são cobertos e sob qual licença os dados podem ser utilizados. O painel central destaca o índice de usabilidade da publicação, que sintetiza dimensões de completude, credibilidade e compatibilidade. Abaixo dos indicadores, a aba de visualização apresenta o dicionário de colunas com estatísticas descritivas calculadas para cada atributo do CSV. A página também apresenta uma prévia tabular interativa, que permite reconhecer colunas e observar exemplos de valores antes do download completo.
-
-O download pode ser realizado de forma individual por arquivo ou em lote, com todos os arquivos de uma versão empacotados em formato ZIP. Usuários autenticados podem ainda curtir datasets e salvá-los como favoritos para acesso rápido.
-
-\subsection{Gestão pessoal de datasets}
-
-Para os usuários autenticados, a aplicação disponibiliza o painel de controle pessoal ``Meus datasets'', ilustrado na \reffigure{fig:meus_datasets}.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.85\textwidth]{imagens/meus-datasets.jpeg}
-    \caption{Painel de gestão pessoal de conjuntos de dados do usuário autenticado.}
-    \label{fig:meus_datasets}
-    \centerline{\footnotesize Fonte: Elaborado pelos autores (2026).}
-\end{figure}
-
-O painel reúne métricas consolidadas sobre a produção do pesquisador, exibindo a contagem total de datasets publicados, rascunhos em elaboração, curtidas acumuladas e registros mantidos em caráter privado. A tela fornece controles dedicados para busca textual, filtros combinados por status de publicação e faixa de usabilidade, e atalho direto para iniciar uma nova submissão.
-
-\subsection{Colaboração por grupos}
-
-Os grupos permitem que múltiplos usuários compartilhem o acesso a datasets privados. Um grupo possui um proprietário e uma lista de membros, cada um com um papel que determina as operações permitidas. Ao publicar ou editar um dataset, o usuário pode vinculá-lo a um grupo no qual possua permissão, fazendo com que a autorização passe a considerar toda a equipe. Essa decisão evita que a continuidade de um conjunto institucional fique condicionada a uma única conta.
-
-\subsection{Painel administrativo e auditoria}
-
-O painel administrativo reúne operações que afetam a organização global do DataRural. Administradores podem consultar e gerenciar usuários e áreas temáticas. As alterações sobre entidades relevantes produzem registros de auditoria, que documentam o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição, auxiliando a investigação de mudanças indevidas.
+Esses fluxos orientam a concepção da plataforma. As interfaces do sistema desenvolvido e os mecanismos utilizados para realizá-los são apresentados na Seção~\ref{sec:fluxos} do Capítulo~\ref{chp:EXPERIMENTOS}, distinguindo a definição da proposta da apresentação de sua implementação.
 
 \section{Requisitos do sistema}
 
@@ -177,7 +88,7 @@ Os requisitos apresentados nesta seção organizam as capacidades esperadas para
 A Tabela~\ref{tab:requisitos_funcionais} apresenta os requisitos funcionais definidos para o DataRural. Esses requisitos descrevem as operações que a plataforma deve disponibilizar aos seus usuários, incluindo publicação, consulta, versionamento, colaboração e administração.
 
 \begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
-\caption{Requisitos funcionais do DataRural.}\label{tab:requisitos_funcionais}\\
+\caption{Requisitos funcionais do DataRural: operações previstas para publicação, consulta e gestão de datasets, colaboração entre usuários e administração da plataforma.}\label{tab:requisitos_funcionais}\\
 \toprule
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
@@ -218,7 +129,7 @@ RF-24 & Exibir perfis públicos de usuários. \\
 Os requisitos não funcionais, apresentados na Tabela~\ref{tab:requisitos_nao_funcionais}, estabelecem restrições e qualidades esperadas para a plataforma. Eles orientam decisões de implementação relacionadas a segurança, organização do código, preservação do histórico e compatibilidade.
 
 \begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
-\caption{Requisitos não funcionais do DataRural.}\label{tab:requisitos_nao_funcionais}\\
+\caption{Requisitos não funcionais do DataRural: critérios de segurança, compatibilidade, clareza da interface, rastreabilidade e organização do software.}\label{tab:requisitos_nao_funcionais}\\
 \toprule
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
@@ -245,7 +156,7 @@ RNF-10 & A organização modular do sistema deve favorecer manutenção e expans
 As regras de negócio, listadas na Tabela~\ref{tab:regras_negocio}, definem condições que devem ser respeitadas pela plataforma independentemente da tecnologia adotada. Elas delimitam permissões, restrições de formato e políticas de visibilidade que orientam o comportamento esperado do sistema.
 
 \begin{longtable}{p{0.15\textwidth}p{0.75\textwidth}}
-\caption{Regras de negócio do DataRural.}\label{tab:regras_negocio}\\
+\caption{Regras de negócio do DataRural: condições de publicação, licenciamento e acesso aos datasets e restrições que orientam o funcionamento da plataforma.}\label{tab:regras_negocio}\\
 \toprule
 \textbf{Código} & \textbf{Descrição} \\
 \midrule
@@ -268,15 +179,15 @@ RN-09 & A exclusão de versões é lógica (\textit{soft delete}), preservando o
 
 \section{Controle de acesso}\label{sec:controle_acesso}
 
-A plataforma armazena tanto dados públicos quanto dados privados, o que exige a identificação dos usuários e a restrição de operações de acordo com suas responsabilidades. Para isso, é necessário diferenciar dois processos complementares: autenticação e autorização \cite{owasp2026auth}. A autenticação responde à pergunta ``quem é o usuário?'', enquanto a autorização determina ``o que esse usuário pode fazer?''.
+A plataforma armazena tanto dados públicos quanto dados privados, o que exige a identificação dos usuários e a restrição de operações de acordo com suas responsabilidades. Para isso, é necessário diferenciar dois processos complementares: autenticação e autorização \cite{owasp2026auth}. A autenticação verifica a identidade do usuário, enquanto a autorização determina quais recursos ele pode acessar e quais operações pode executar, de acordo com as permissões atribuídas.
 
 No DataRural, a autenticação ocorre quando o usuário apresenta suas credenciais. Após a verificação, o servidor mantém a identidade autenticada entre diferentes requisições por meio de uma sessão \cite{owasp2026session}. Um identificador de sessão é enviado ao navegador e utilizado nas interações seguintes, permitindo que o servidor reconheça o usuário sem solicitar novamente a senha em cada página. As senhas não são armazenadas em texto simples: utiliza-se uma função de derivação acompanhada de um valor aleatório (\textit{salt}), conforme recomendado pelo NIST \cite{nist2025passwords}.
 
-A autorização é organizada por meio do controle de acesso baseado em papéis, conhecido como RBAC (\textit{Role-Based Access Control}) \cite{nist2012rbac}. Nesse modelo, permissões são associadas a papéis, e cada usuário recebe um ou mais desses papéis. O acesso é decidido a partir das funções atribuídas, evitando que cada permissão precise ser configurada individualmente para cada pessoa.
+A autorização é organizada por meio do controle de acesso baseado em papéis, conhecido como RBAC (\textit{role-based access control}) \cite{nist2012rbac}. Nesse modelo, permissões são associadas a papéis, e cada usuário recebe um ou mais desses papéis. O acesso é decidido a partir das funções atribuídas, evitando que cada permissão precise ser configurada individualmente para cada pessoa.
 
-No DataRural, os papéis operam em dois níveis. Os \textbf{papéis globais} distinguem usuários comuns de administradores da plataforma, sendo registrados na entidade \textit{roles} e associados ao campo \textit{role\_id} do usuário. Os \textbf{papéis contextuais} são válidos apenas dentro de um grupo e definem o que cada membro pode fazer em relação aos datasets daquele grupo. Assim, a mesma pessoa pode administrar uma equipe e atuar apenas como leitora em outra.
+No DataRural, os papéis operam em dois níveis. Os papéis globais distinguem usuários comuns de administradores da plataforma, sendo registrados na entidade \textit{roles} e associados ao campo \textit{role\_id} do usuário. Os papéis contextuais são válidos apenas dentro de um grupo e definem o que cada membro pode fazer em relação aos datasets daquele grupo. Assim, a mesma pessoa pode administrar uma equipe e atuar apenas como leitora em outra.
 
-A verificação de acesso é aplicada pelo servidor antes que a requisição alcance a operação principal, por meio de componentes de \textit{middleware} \cite{bernstein1996middleware}. Um \textit{middleware} de autenticação impede o acesso de visitantes a rotas protegidas, enquanto a autorização mais específica também considera o recurso solicitado — estar autenticado não significa possuir permissão para alterar qualquer registro. A interface pode ocultar ou desabilitar ações não permitidas para tornar o sistema mais compreensível, mas essa medida não substitui a validação no servidor, pois requisições podem ser construídas sem utilizar os botões da página.
+A verificação de acesso é aplicada pelo servidor antes que a requisição alcance a operação principal, por meio de componentes de \textit{middleware} \cite{bernstein1996middleware}. Um \textit{middleware} de autenticação impede o acesso de visitantes a rotas protegidas, enquanto a autorização mais específica também considera o recurso solicitado, pois estar autenticado não significa possuir permissão para alterar qualquer registro. A interface pode ocultar ou desabilitar ações não permitidas para tornar o sistema mais compreensível, mas essa medida não substitui a validação no servidor, pois requisições podem ser construídas sem utilizar os botões da página.
 
 \section{Modelagem de dados}
 
@@ -284,14 +195,14 @@ A modelagem de dados do DataRural foi orientada pelas responsabilidades identifi
 
 A adoção de um banco de dados relacional se mostra adequada porque as relações do domínio são bem definidas. Usuários publicam datasets, datasets possuem versões, licenças são associadas a datasets e grupos reúnem usuários. Além disso, o modelo facilita a aplicação de restrições de integridade e a consulta estruturada das informações utilizadas pela plataforma.
 
-As subseções a seguir apresentam cada entidade, suas colunas e seus papéis no sistema. A entidade \textit{users} concentra os dados de autenticação e perfil. As entidades \textit{roles} e \textit{groups}/\textit{group\_members} organizam os dois níveis de permissão descritos na seção anterior. A entidade \textit{datasets} reúne os metadados do conjunto publicado, enquanto \textit{dataset\_versions} e \textit{dataset\_version\_files} implementam o mecanismo de versionamento discutido no Capítulo~\ref{chp:FUNDAMENTACAO}. A separação entre o dataset e suas versões merece atenção especial: em vez de tratar cada publicação como um arquivo substituível, o modelo preserva cada estado anterior como uma versão distinta, vinculada ao mesmo registro. Essa decisão foi motivada pela necessidade de rastreabilidade — um dos princípios centrais da gestão de dados de pesquisa — e pela possibilidade de restaurar versões excluídas logicamente, evitando perdas acidentais. Por fim, as entidades \textit{dataset\_likes} e \textit{dataset\_favorites} registram, respectivamente, as curtidas e os favoritos dos usuários, representando formas distintas de interação: a curtida funciona como uma valorização pública, enquanto o favorito cria uma coleção pessoal para acesso rápido. A entidade \textit{audits} registra alterações para fins de rastreabilidade interna.
+As subseções a seguir apresentam cada entidade, suas colunas e seus papéis no sistema. A entidade \textit{users} concentra os dados de autenticação e perfil. As entidades \textit{roles} e \textit{groups}/\textit{group\_members} organizam os dois níveis de permissão descritos na seção anterior. A entidade \textit{datasets} reúne os metadados do conjunto publicado, enquanto \textit{dataset\_versions} e \textit{dataset\_version\_files} implementam o mecanismo de versionamento discutido no Capítulo~\ref{chp:FUNDAMENTACAO}. A separação entre o dataset e suas versões merece atenção especial: em vez de tratar cada publicação como um arquivo substituível, o modelo preserva cada estado anterior como uma versão distinta, vinculada ao mesmo registro. Essa decisão foi motivada pela necessidade de rastreabilidade, um dos princípios centrais da gestão de dados de pesquisa, e pela possibilidade de restaurar versões excluídas logicamente, evitando perdas acidentais. Por fim, as entidades \textit{dataset\_likes} e \textit{dataset\_favorites} registram, respectivamente, as curtidas e os favoritos dos usuários, representando formas distintas de interação: a curtida funciona como uma valorização pública, enquanto o favorito cria uma coleção pessoal para acesso rápido. A entidade \textit{audits} registra alterações para fins de rastreabilidade interna.
 
 \subsection{Entidade \textit{users}}
 
 A entidade \textit{users} concentra os dados dos usuários cadastrados. Ela participa dos fluxos de autenticação, autoria, administração e associação com grupos. A Tabela~\ref{tab:entity_users} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade users.}\label{tab:entity_users}\\
+\caption{Estrutura da entidade \textit{users} do DataRural, que armazena os dados de autenticação e perfil dos usuários e sua associação a um papel global.}\label{tab:entity_users}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -321,7 +232,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{roles} define os papéis globais disponíveis na aplicação, distinguindo usuários comuns de administradores. A Tabela~\ref{tab:entity_roles} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade roles.}\label{tab:entity_roles}\\
+\caption{Estrutura da entidade \textit{roles} do DataRural, que define os papéis globais de acesso, distinguindo usuários comuns de administradores da plataforma.}\label{tab:entity_roles}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -343,7 +254,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{groups} representa espaços colaborativos vinculados a equipes, laboratórios, projetos ou unidades institucionais. A Tabela~\ref{tab:entity_groups} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade groups.}\label{tab:entity_groups}\\
+\caption{Estrutura da entidade \textit{groups} do DataRural, que registra os grupos colaborativos, suas finalidades e os usuários responsáveis por eles.}\label{tab:entity_groups}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -366,7 +277,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{group\_members} registra a participação de usuários em grupos e informa o papel exercido por cada membro naquele contexto. A Tabela~\ref{tab:entity_group_members} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade group\_members.}\label{tab:entity_group_members}\\
+\caption{Estrutura da entidade \textit{group\_members} do DataRural, que associa usuários a grupos colaborativos e registra o papel de cada membro no respectivo grupo.}\label{tab:entity_group_members}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -389,7 +300,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{licenses} mantém as licenças que podem ser vinculadas aos datasets, tornando explícitas as condições de uso e redistribuição. A Tabela~\ref{tab:entity_licenses} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade licenses.}\label{tab:entity_licenses}\\
+\caption{Estrutura da entidade \textit{licenses} do DataRural, que registra as licenças associáveis aos datasets e suas condições de uso e redistribuição.}\label{tab:entity_licenses}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -411,7 +322,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{dataset\_areas} armazena as áreas temáticas disponíveis para classificação dos datasets, permitindo filtragem e navegação por categoria. A Tabela~\ref{tab:entity_dataset_areas} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_areas.}\label{tab:entity_dataset_areas}\\
+\caption{Estrutura da entidade \textit{dataset\_areas} do DataRural, que registra as áreas temáticas utilizadas na classificação dos conjuntos de dados.}\label{tab:entity_dataset_areas}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -436,7 +347,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{datasets} reúne os metadados e configurações centrais de cada conjunto de dados publicado. Por meio dela são definidos autoria, licença, visibilidade, status, área, unidade responsável e demais informações necessárias para contextualização. A Tabela~\ref{tab:entity_datasets} apresenta suas colunas.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade datasets.}\label{tab:entity_datasets}\\
+\caption{Estrutura da entidade \textit{datasets} do DataRural, que reúne os metadados descritivos e as associações de autoria, grupo e licença, além das configurações de visibilidade de cada conjunto de dados.}\label{tab:entity_datasets}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -470,7 +381,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{dataset\_versions} guarda as diferentes versões associadas a um dataset, conforme discutido na Seção~\ref{sec:versionamento}. Com essa separação, uma atualização não elimina o histórico anterior e o sistema preserva a rastreabilidade do arquivo utilizado. A exclusão lógica (\textit{soft delete}) é aplicada por meio do campo \textit{is\_deleted}: em vez de remover definitivamente o registro, o sistema marca a versão como excluída, mantendo os dados necessários para auditoria ou restauração. Essa estratégia reduz o risco de perda acidental, mas exige que registros marcados como excluídos não apareçam como ativos e que sua restauração respeite as mesmas permissões das demais operações. A Tabela~\ref{tab:entity_dataset_versions} apresenta a estrutura da entidade.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_versions.}\label{tab:entity_dataset_versions}\\
+\caption{Estrutura da entidade \textit{dataset\_versions} do DataRural, que registra as versões de cada conjunto de dados e sua marcação de exclusão lógica, preservando o histórico.}\label{tab:entity_dataset_versions}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -494,7 +405,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{dataset\_version\_files} armazena os arquivos individuais de cada versão do dataset, suportando múltiplos arquivos CSV por versão (conforme o requisito RF-02 da Tabela~\ref{tab:requisitos_funcionais}). A Tabela~\ref{tab:entity_dataset_version_files} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_version\_files.}\label{tab:entity_dataset_version_files}\\
+\caption{Estrutura da entidade \textit{dataset\_version\_files} do DataRural, que registra os arquivos CSV de cada versão de um dataset, identificando o arquivo principal e a ordem de exibição.}\label{tab:entity_dataset_version_files}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -519,7 +430,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{dataset\_likes} registra as curtidas dos usuários em datasets. A Tabela~\ref{tab:entity_dataset_likes} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_likes.}\label{tab:entity_dataset_likes}\\
+\caption{Estrutura da entidade \textit{dataset\_likes} do DataRural, que registra as curtidas por meio da associação entre cada dataset e o usuário que o curtiu.}\label{tab:entity_dataset_likes}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -541,7 +452,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{dataset\_favorites} registra os datasets favoritados por cada usuário, possibilitando acesso rápido a conjuntos de interesse pessoal. A Tabela~\ref{tab:entity_dataset_favorites} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade dataset\_favorites.}\label{tab:entity_dataset_favorites}\\
+\caption{Estrutura da entidade \textit{dataset\_favorites} do DataRural, que associa usuários aos datasets salvos como favoritos para acesso pessoal rápido.}\label{tab:entity_dataset_favorites}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -563,7 +474,7 @@ updated\_at & Timestamp & Data da alteração mais recente. \\
 A entidade \textit{audits} registra as alterações realizadas nas entidades do sistema para fins de auditoria e rastreabilidade. Cada evento armazena o tipo da operação, os valores anteriores e posteriores, o usuário responsável e informações da requisição. A Tabela~\ref{tab:entity_audits} apresenta sua estrutura.
 
 \begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
-\caption{Entidade audits.}\label{tab:entity_audits}\\
+\caption{Estrutura da entidade \textit{audits} do DataRural, que registra alterações nas entidades do sistema, incluindo a operação realizada, os valores alterados e a identificação do responsável.}\label{tab:entity_audits}\\
 \toprule
 \textbf{Coluna} & \textbf{Tipo} & \textbf{Descrição} \\
 \midrule
@@ -581,7 +492,7 @@ new\_values & JSON & Valores posteriores à alteração. \\
 user\_id & Varchar & ID do usuário responsável pela alteração. \\
 url & Varchar & URL da requisição que gerou a alteração. \\
 ip\_address & Varchar & Endereço IP da requisição. \\
-user\_agent & Varchar & User Agent da requisição. \\
+user\_agent & Varchar & User agent da requisição. \\
 created\_at & Timestamp & Data de criação do registro. \\
 updated\_at & Timestamp & Data da alteração mais recente. \\
 \bottomrule
