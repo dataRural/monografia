@@ -72,7 +72,23 @@ Os grupos colaborativos constituem outro elemento central da plataforma. Eles re
 
 \section{Concepção da interface e prototipação}\label{sec:prototipacao}
 
-A concepção da interface incluiu a elaboração de um \textit{mockup}, utilizado como representação visual inicial da plataforma. Nessa etapa, o objetivo foi explorar a organização das informações e os caminhos de navegação antes de sua implementação. O protótipo permitiu discutir como apresentar um dataset como um recurso documentado, com contexto, responsáveis e condições de reutilização, em vez de restringir sua apresentação a um arquivo disponível para download.
+A evolução da interface do DataRural é apresentada a partir de dois registros distintos: a primeira interface do projeto, centrada no envio de arquivos CSV, e um \textit{mockup} elaborado com auxílio do Claude para explorar a organização das informações e os caminhos de navegação. A primeira registra uma versão inicial do sistema; o segundo representa uma proposta visual, cujos elementos não correspondem necessariamente às funcionalidades implementadas. Essa distinção permite contextualizar as escolhas de interface e sua relação com a solução descrita no Capítulo~\ref{chp:EXPERIMENTOS}.
+
+\subsection{Primeira interface do projeto}
+
+A \reffigure{fig:interface_inicial} apresenta a primeira interface do DataRural, com um formulário de envio de conjuntos de dados. A tela reúne campos para o nome do dataset, a versão, a seleção de um arquivo CSV e observações destinadas ao \texttt{README.md}, além de um botão de acesso ao visualizador. A identidade visual ainda mantém a identificação do \textit{Starter Kit} do AdonisJS, diferentemente das telas da plataforma apresentadas no capítulo de implementação.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.60\textheight,keepaspectratio]{imagens/interface-inicial.png}
+    \caption{Primeira interface do DataRural, com formulário de envio de CSV, identificação do dataset, versão e observações para o README.}
+    \label{fig:interface_inicial}
+\end{figure}
+\FloatBarrier
+
+Nesse registro, o envio do arquivo e sua identificação estão concentrados em um único formulário, e a documentação aparece como um campo de observações livres. Na versão apresentada na Seção~\ref{sec:impl_publicacao}, a publicação é organizada em cinco etapas, com espaços específicos para metadados, dicionário de dados, licença e visibilidade. O contraste documenta a ampliação das informações solicitadas e a mudança na organização do fluxo, sem constituir, por si só, evidência de melhoria de usabilidade.
+
+A concepção da interface também incluiu a exploração da experiência de consulta aos conjuntos publicados. O mockup discutido a seguir aborda essa dimensão: em vez de representar outra versão do formulário de envio, apresenta uma proposta para a página de detalhes de um dataset, destacando sua documentação e as informações necessárias à reutilização.
 
 \subsection{Geração e revisão do protótipo}
 
