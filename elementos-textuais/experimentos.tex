@@ -8,8 +8,12 @@ A arquitetura do DataRural adota uma abordagem \textit{fullstack} monolítica mo
 
 O código é mantido em um monorepo gerenciado com Turborepo e pnpm workspaces. A aplicação web reside em \texttt{apps/web}, enquanto componentes reutilizáveis e configurações compartilhadas ficam em diretórios sob \texttt{packages/}. A alternativa de manter repositórios separados exigiria um processo de versionamento e publicação de pacotes entre os projetos, introduzindo complexidade que não se justifica para uma equipe pequena. Com o monorepo, alterações em componentes compartilhados, como o pacote \texttt{packages/ui}, são imediatamente visíveis na aplicação.
 
-A estrutura do monorepo está organizada conforme apresentado a seguir:
+A \reffigure{fig:estrutura_monorepo} apresenta a organização do monorepo do DataRural, distinguindo os módulos da aplicação web dos pacotes compartilhados de componentes e configurações.
 
+\begin{figure}[!htbp]
+    \centering
+    \begin{minipage}{\textwidth}
+    \small
 \dirtree{%
 .1 Raiz/.
 .2 apps/.
@@ -32,6 +36,12 @@ A estrutura do monorepo está organizada conforme apresentado a seguir:
 .3 typescript-config/ \DTcomment{Configuração compartilhada de TypeScript}.
 .2 docker-compose.yaml.
 }
+    \end{minipage}
+    \caption{Estrutura de diretórios do monorepo do DataRural, com os módulos da aplicação web e os pacotes de componentes e configurações compartilhadas.}
+    \label{fig:estrutura_monorepo}
+    \centerline{\footnotesize Fonte: Elaborado pelos autores.}
+\end{figure}
+\FloatBarrier
 
 A estrutura interna da aplicação foi dividida por domínios. Em vez de manter todos os modelos, controladores e componentes em diretórios globais, os recursos relacionados são aproximados em módulos como \textit{auth}, \textit{dataset}, \textit{groups} e \textit{users}. O módulo \textit{auth} concentra cadastro, entrada, recuperação de acesso e demais operações relacionadas à sessão. O módulo \textit{dataset} reúne os modelos e fluxos de publicação, consulta, edição e versionamento. O módulo \textit{groups} trata a criação de equipes e a associação de membros, enquanto o módulo \textit{users} mantém perfil e operações administrativas sobre contas. Essa divisão favorece a identificação do local responsável por uma regra e acompanha os conceitos apresentados no modelo de dados.
 

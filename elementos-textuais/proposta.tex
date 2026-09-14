@@ -10,25 +10,58 @@ O DataRural parte de referências conhecidas no ecossistema de dados, como Kaggl
 
 \section{Trabalhos relacionados}
 
-Antes da definição das funcionalidades do DataRural, foram observadas plataformas que já atuam no compartilhamento, preservação ou exploração de dados. Essa análise contribui para compreender quais recursos são relevantes e, ao mesmo tempo, quais limitações aparecem quando essas soluções são consideradas para um uso institucional específico. Entre as referências analisadas, destacam-se Kaggle, Zenodo e Figshare, por representarem abordagens distintas para publicação e reutilização de dados.
+Antes da definição das funcionalidades do DataRural, foram observadas plataformas voltadas ao compartilhamento, à preservação ou à exploração de dados. A análise a seguir combina estudos publicados e observação das interfaces, distinguindo as contribuições da literatura dos elementos visíveis nas capturas de tela. Kaggle, Zenodo e Figshare são discutidos como referências para a concepção do projeto, e não como soluções submetidas a uma avaliação experimental neste trabalho.
 
 \subsection{Kaggle}
 
-O Kaggle é reconhecido por reunir datasets, competições, notebooks e interações entre usuários interessados em ciência de dados. Sua relevância para este trabalho está na forma como coloca o dataset no centro da experiência: os usuários podem localizar dados, avaliá-los, reutilizá-los em análises e produzir materiais derivados dentro da própria plataforma. Esse modelo reforça a ideia de que um conjunto de dados pode ser tratado como um recurso ativo, capaz de gerar colaboração e novos estudos.
+O Kaggle reúne datasets, competições e notebooks utilizados em atividades de ciência de dados. Sua dimensão colaborativa é examinada por \citeonline{quaranta2022notebooks}, que analisaram 1.380 notebooks da plataforma em um estudo sobre boas práticas de colaboração. Os autores identificaram diferenças entre o conhecimento das práticas e sua adoção, destacando a importância da documentação e do suporte oferecido pelas ferramentas. Para o DataRural, essa discussão reforça que disponibilizar dados deve ser acompanhado de informações que permitam compreendê-los e reutilizá-los.
 
-Apesar dessa contribuição conceitual, o Kaggle não foi pensado como um repositório institucional universitário. Sua lógica está associada a uma comunidade ampla e heterogênea, e não a estruturas administrativas, unidades acadêmicas, grupos internos de pesquisa ou políticas locais de acesso. Além disso, a plataforma não oferece, como foco principal, uma governança voltada à curadoria de dados produzidos dentro de uma universidade. O DataRural se diferencia justamente por trazer a centralidade dos datasets para um ambiente controlado pela instituição.
+A \reffigure{fig:kaggle_interface} apresenta a página inicial do Kaggle\footnote{Disponível em: \url{https://www.kaggle.com/}. Acesso em: 14 set. 2026.}, com acesso à busca, às competições e ao cadastro, além de uma apresentação dos públicos atendidos. Na captura, a plataforma destaca desenvolvedores de inteligência artificial, organizações e pesquisadores. Essa organização visual contextualiza sua orientação comunitária e a articulação entre dados, desafios e atividades de aprendizagem, que serviram de referência para a concepção do DataRural.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.60\textheight,keepaspectratio]{imagens/kaggle_img.jpg}
+    \caption{Página inicial do Kaggle, com navegação para competições, busca e cadastro, além da apresentação dos públicos de desenvolvedores, organizações e pesquisadores.}
+    \label{fig:kaggle_interface}
+    \centerline{\footnotesize Fonte: Kaggle.}
+\end{figure}
+\FloatBarrier
+
+O aspecto do Kaggle tomado como referência neste trabalho é a articulação entre dados e materiais de análise compartilhados. O DataRural adota um recorte distinto: concentra-se na publicação e na gestão de datasets vinculados à UFRRJ, sem propor competições ou um ambiente de execução de notebooks. A diferença de escopo não implica ausência de colaboração ou de controle de acesso no Kaggle, mas delimita quais conceitos são aproveitados na solução institucional proposta.
 
 \subsection{Zenodo}
 
-O Zenodo é amplamente utilizado para preservar e divulgar artefatos científicos, incluindo artigos, softwares e conjuntos de dados. Seu papel é relevante no contexto da ciência aberta, principalmente por possibilitar a publicação de materiais com identificação persistente e condições formais de citação. Para este projeto, o Zenodo evidencia a importância de registrar autoria, licença e informações que favoreçam a preservação de longo prazo.
+O Zenodo é um repositório de propósito geral para divulgação de produtos de pesquisa. \citeonline{conrad2024repositories} o incluem entre as infraestruturas multidisciplinares que apoiam o compartilhamento e a identificação persistente de recursos. Para o DataRural, essa referência destaca a importância de tratar o conjunto de dados como um produto documentado e citável, com autoria e informações que favoreçam sua reutilização.
 
-Entretanto, o uso do Zenodo está mais próximo da publicação de artefatos concluídos do que da gestão cotidiana de datasets em uma instituição. A plataforma não prioriza funcionalidades como pré-visualização tabular, estatísticas descritivas por coluna, controle de acesso por grupos internos ou atualização incremental orientada a equipes de trabalho. Assim, embora seja uma referência importante para preservação científica, não contempla integralmente as necessidades operacionais previstas para o DataRural.
+Além da publicação de artefatos, o Zenodo oferece recursos de organização por comunidades. A \reffigure{fig:zenodo_comunidade} apresenta a tela de gerenciamento de membros da comunidade \textit{Biodiversity Literature Repository}, utilizada como exemplo na documentação oficial da plataforma\footnote{Disponível em: \url{https://help.zenodo.org/docs/communities/manage-members/}. Acesso em: 14 set. 2026.}. A interface reúne busca e filtros, opções de convite e remoção de participantes e a indicação do papel de cada membro. A visibilidade exibida nessa tela diz respeito à participação do membro na comunidade, não à visibilidade de um dataset.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.60\textheight,keepaspectratio]{imagens/zenodo_img.jpg}
+    \caption{Gerenciamento de membros de uma comunidade no Zenodo, com identificação dos participantes, papéis, visibilidade da participação e controles de convite e remoção.}
+    \label{fig:zenodo_comunidade}
+    \centerline{\footnotesize Fonte: Zenodo.}
+\end{figure}
+\FloatBarrier
+
+Esse exemplo evidencia que a colaboração e a diferenciação de responsabilidades também fazem parte do Zenodo. Para o DataRural, a referência contribui para discutir a organização de equipes e o controle das operações sobre conjuntos compartilhados. A proposta deste trabalho não se diferencia pela simples existência de grupos ou papéis, mas pela concepção de uma aplicação própria voltada ao contexto da UFRRJ, na qual os fluxos de publicação, os metadados e as regras de acesso são definidos em função do escopo institucional do projeto.
 
 \subsection{Figshare}
 
-O Figshare também se insere no campo dos repositórios científicos, oferecendo armazenamento, compartilhamento e métricas relacionadas a diferentes tipos de arquivo. Sua proposta contribui para a disseminação de resultados de pesquisa e para a valorização de dados como produtos acadêmicos. Nesse sentido, aproxima-se da preocupação deste trabalho com documentação, licenciamento e reutilização.
+O Figshare também integra o conjunto de repositórios de propósito geral discutido por \citeonline{conrad2024repositories}. O estudo registra seu uso como base tecnológica do repositório 4TU.ResearchData, evidenciando que uma infraestrutura geral pode sustentar serviços voltados a uma comunidade específica. Essa experiência é pertinente ao DataRural por aproximar o compartilhamento de produtos acadêmicos das necessidades de organização institucional.
 
-Ainda assim, o Figshare não resolve, por si só, demandas específicas de uma plataforma institucional customizada. Em uma universidade, pode ser necessário definir papéis internos, organizar grupos, restringir acesso a determinados datasets, associar registros a unidades acadêmicas e planejar integrações futuras com sistemas próprios. O DataRural é proposto para atuar nesse espaço, articulando práticas de repositórios científicos com necessidades locais de gestão e colaboração.
+A \reffigure{fig:figshare_interface} apresenta uma captura da página inicial do Figshare\footnote{Disponível em: \url{https://figshare.com/}. Acesso em: 14 set. 2026.}. Na parte superior, a interface reúne navegação pelo acervo, busca, autenticação e cadastro. A área central destaca o armazenamento, o compartilhamento e a descoberta de resultados de pesquisa, além de indicar soluções destinadas a instituições e editoras. Para a concepção do DataRural, essa apresentação contribui como referência para reunir, na entrada da plataforma, os caminhos de consulta ao acervo e de participação dos usuários.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.60\textheight,keepaspectratio]{imagens/figshare_img.jpg}
+    \caption{Página inicial do Figshare, com busca e navegação pelo acervo, acesso à conta e destaque para o compartilhamento de resultados de pesquisa e as soluções para instituições e editoras.}
+    \label{fig:figshare_interface}
+    \centerline{\footnotesize Fonte: Figshare.}
+\end{figure}
+\FloatBarrier
+
+A indicação de soluções institucionais na própria página reforça que o atendimento a universidades não é uma característica exclusiva do DataRural. A contribuição pretendida neste trabalho está na concepção de uma aplicação própria para a UFRRJ, com metadados, organização de grupos e regras de acesso definidos para o contexto do projeto. Assim, o Figshare serve como referência para a divulgação de produtos acadêmicos, enquanto o DataRural explora a articulação dessas práticas com as necessidades locais de gestão e colaboração.
 
 \section{Visão geral do sistema}
 
@@ -179,15 +212,15 @@ RN-09 & A exclusão de versões é lógica (\textit{soft delete}), preservando o
 
 \section{Controle de acesso}\label{sec:controle_acesso}
 
-A plataforma armazena tanto dados públicos quanto dados privados, o que exige a identificação dos usuários e a restrição de operações de acordo com suas responsabilidades. Para isso, é necessário diferenciar dois processos complementares: autenticação e autorização \cite{owasp2026auth}. A autenticação verifica a identidade do usuário, enquanto a autorização determina quais recursos ele pode acessar e quais operações pode executar, de acordo com as permissões atribuídas.
+A plataforma armazena tanto dados públicos quanto dados privados, o que exige a identificação dos usuários e a restrição de operações de acordo com suas responsabilidades. A autenticação verifica o controle dos autenticadores associados à conta, conforme a abordagem das diretrizes de identidade digital do NIST \cite{nist2025passwords}. A autorização determina quais recursos e operações são permitidos e pode ser organizada por papéis, conforme o modelo de \citeonline{sandhu2000rbac}.
 
-No DataRural, a autenticação ocorre quando o usuário apresenta suas credenciais. Após a verificação, o servidor mantém a identidade autenticada entre diferentes requisições por meio de uma sessão \cite{owasp2026session}. Um identificador de sessão é enviado ao navegador e utilizado nas interações seguintes, permitindo que o servidor reconheça o usuário sem solicitar novamente a senha em cada página. As senhas não são armazenadas em texto simples: utiliza-se uma função de derivação acompanhada de um valor aleatório (\textit{salt}), conforme recomendado pelo NIST \cite{nist2025passwords}.
+No DataRural, a autenticação ocorre quando o usuário apresenta suas credenciais. Após a verificação, o servidor mantém a identidade autenticada entre diferentes requisições por meio de uma sessão \cite{nist2025passwords}. Um identificador de sessão é enviado ao navegador e utilizado nas interações seguintes, permitindo que o servidor reconheça o usuário sem solicitar novamente a senha em cada página. As senhas não são armazenadas em texto simples: utiliza-se uma função de derivação acompanhada de um valor aleatório (\textit{salt}), conforme recomendado pelo NIST \cite{nist2025passwords}.
 
-A autorização é organizada por meio do controle de acesso baseado em papéis, conhecido como RBAC (\textit{role-based access control}) \cite{nist2012rbac}. Nesse modelo, permissões são associadas a papéis, e cada usuário recebe um ou mais desses papéis. O acesso é decidido a partir das funções atribuídas, evitando que cada permissão precise ser configurada individualmente para cada pessoa.
+A autorização é organizada por meio do controle de acesso baseado em papéis, conhecido como RBAC (\textit{role-based access control}) \cite{sandhu2000rbac}. Nesse modelo, permissões são associadas a papéis, e cada usuário recebe um ou mais desses papéis. O acesso é decidido a partir das funções atribuídas, evitando que cada permissão precise ser configurada individualmente para cada pessoa.
 
 No DataRural, os papéis operam em dois níveis. Os papéis globais distinguem usuários comuns de administradores da plataforma, sendo registrados na entidade \textit{roles} e associados ao campo \textit{role\_id} do usuário. Os papéis contextuais são válidos apenas dentro de um grupo e definem o que cada membro pode fazer em relação aos datasets daquele grupo. Assim, a mesma pessoa pode administrar uma equipe e atuar apenas como leitora em outra.
 
-A verificação de acesso é aplicada pelo servidor antes que a requisição alcance a operação principal, por meio de componentes de \textit{middleware} \cite{bernstein1996middleware}. Um \textit{middleware} de autenticação impede o acesso de visitantes a rotas protegidas, enquanto a autorização mais específica também considera o recurso solicitado, pois estar autenticado não significa possuir permissão para alterar qualquer registro. A interface pode ocultar ou desabilitar ações não permitidas para tornar o sistema mais compreensível, mas essa medida não substitui a validação no servidor, pois requisições podem ser construídas sem utilizar os botões da página.
+A verificação de acesso é aplicada pelo servidor antes que a requisição alcance a operação principal, por meio de componentes de \textit{middleware}. Um \textit{middleware} de autenticação impede o acesso de visitantes a rotas protegidas, enquanto a autorização mais específica também considera o recurso solicitado, pois estar autenticado não significa possuir permissão para alterar qualquer registro. A interface pode ocultar ou desabilitar ações não permitidas para tornar o sistema mais compreensível, mas essa medida não substitui a validação no servidor, pois requisições podem ser construídas sem utilizar os botões da página.
 
 \section{Modelagem de dados}
 
